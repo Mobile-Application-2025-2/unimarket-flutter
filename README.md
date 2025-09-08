@@ -1,6 +1,10 @@
-# unimarket
+# Unimarket - Flutter group 43
 
-Unimarket
+| Nombre|  |
+|---|---|
+|Daniel Felipe Ortiz| df.ortizv1 |
+| Julian Rolon | j.rolont |
+| Javier Barrera | js.barrerat1 |
 
 ## Getting Started
 
@@ -14,3 +18,4 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
