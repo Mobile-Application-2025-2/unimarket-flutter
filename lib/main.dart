@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'views/explore_buyer.dart';
+import 'ui/catalog/view/explore_buyer.dart';
 
 void main() {
   runApp(const MyApp());

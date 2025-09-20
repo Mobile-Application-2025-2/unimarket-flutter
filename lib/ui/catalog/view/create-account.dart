@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../components/back_button.dart';
-import '../components/title_section.dart';
-import '../components/social_button.dart';
-import '../components/custom_textfield.dart';
-import '../components/primary_button.dart';
-import '../components/divider_text.dart';
+import '../../core/widgets/back_button.dart';
+import '../../core/widgets/title_section.dart';
+import '../../core/widgets/social_button.dart';
+import '../../core/widgets/custom_textfield.dart';
+import '../../core/widgets/primary_button.dart';
+import '../../core/widgets/divider_text.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
