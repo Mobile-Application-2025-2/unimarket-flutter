@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'views/student_code.dart';
+import 'views/chats.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
         )
       ),
-      home: const StudentCodeScreen(),
+      home: const ChatsScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
