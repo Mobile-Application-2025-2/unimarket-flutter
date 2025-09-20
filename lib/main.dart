@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'views/chats.dart';
+import 'views/explore_buyer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
         )
       ),
-      home: const ChatsScreen(),
+      home: const ExploreBuyerScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
