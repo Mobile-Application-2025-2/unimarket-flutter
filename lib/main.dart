@@ -12,17 +12,22 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'UniMarket',
       theme: ThemeData(
+        textTheme: TextTheme(
+          bodyLarge: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Poppins'),
+          bodyMedium: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Poppins'),
+          bodySmall: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Poppins'),
+          headlineLarge: const TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Poppins'),
+          headlineMedium: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Poppins'),
+          headlineSmall: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Poppins'),
+          titleLarge: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
+          titleMedium: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
+          titleSmall: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
+        ),
         colorScheme: const ColorScheme.light(
           primary: Color(0xFFFFC436), // Color principal
           onPrimary: Colors.white,
           secondary: Color(0xFFF7D547),
-          onSecondary: Colors.black,
           tertiary: Color(0xFFFFD27C),
-          onTertiary: Colors.black,
-          surface: Color(0xFFFFF72),
-          onSurface: Colors.black,
-          background: Color(0xFFFFF72),
-          onBackground: Colors.black,
           error: Colors.red,
           onError: Colors.white,
           outline: Color(0xFFB57C00),
@@ -43,12 +48,7 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color(0xFFFFC436),
           foregroundColor: Colors.white,
-        ),
-        cardTheme: CardTheme(
-          color: const Color(0xFFFFF72),
-          elevation: 4,
-          shadowColor: const Color(0xFFD09306),
-        ),
+        )
       ),
       home: const MyHomePage(title: 'UniMarket'),
       debugShowCheckedModeBanner: false,
@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text('You have pushed the button this many times:'),
+            Text('You have pushed the button this many times:', style: Theme.of(context).textTheme.bodyMedium),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
