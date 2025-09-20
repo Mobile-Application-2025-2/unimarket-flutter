@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'views/sign-up.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
         )
       ),
-      home: const MyHomePage(title: 'UniMarket'),
+      home: const SignUpScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
