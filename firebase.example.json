@@ -17,5 +17,11 @@
         }
       }
     }
+  },
+  "emulators": {
+    "singleProjectMode": true,
+    "auth": {
+      "port": 9099
+    }
   }
 }

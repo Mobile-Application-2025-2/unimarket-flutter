@@ -1,0 +1,27 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "unimarket-isis3510-20252",
+          "appId": "1:1064769007840:android:f7414d86ab1a3fc8572085",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "unimarket-isis3510-20252",
+          "configurations": {
+            "android": "1:1064769007840:android:f7414d86ab1a3fc8572085"
+          }
+        }
+      }
+    }
+  },
+  "emulators": {
+    "singleProjectMode": true,
+    "auth": {
+      "port": 9099
+    }
+  }
+}
