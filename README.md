@@ -19,15 +19,6 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-## To work with flutter
-
-Each developer has to run the following commands:
-```sh
-dart pub global activate flutterfire_cli
-flutterfire configure --project=<PROJECT_NAME>
-flutter pub get
-```
-
 ## Setup Firebase
 
 Install de CLI of firebase.
@@ -48,6 +39,17 @@ Install FlutterFire:
 dart pub global activate flutterfire_cli
 ```
 
+Configure the project with flutterfire:
+```sh
+flutterfire configure
+```
+
+Install the new dependencies:
+
+```sh
+flutter pub get
+```
+
 > [!note]
 > Each time you add a new service or product in your Firebase app you need to run `flutterfire configure` again.
 > ```sh
@@ -55,3 +57,10 @@ dart pub global activate flutterfire_cli
 > flutterfire configure
 > flutter run
 > ```
+
+## Use emulators
+With the purpose of save costs we can use emulators. The emulators are configured in the ``firebase.json`. For example, to run the auth emulator you can use the following command. 
+
+```sh
+firebase emulators:start --only auth
+```
