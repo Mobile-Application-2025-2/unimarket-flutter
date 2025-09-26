@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'ui/catalog/view/explore_buyer.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -14,15 +19,60 @@ class MyApp extends StatelessWidget {
       title: 'UniMarket',
       theme: ThemeData(
         textTheme: TextTheme(
-          bodyLarge: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Poppins'),
-          bodyMedium: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Poppins'),
-          bodySmall: const TextStyle(fontSize: 14.0, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Poppins'),
-          headlineLarge: const TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Poppins'),
-          headlineMedium: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Poppins'),
-          headlineSmall: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Poppins'),
-          titleLarge: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
-          titleMedium: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
-          titleSmall: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
+          bodyLarge: const TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.normal,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
+          bodyMedium: const TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.normal,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
+          bodySmall: const TextStyle(
+            fontSize: 14.0,
+            fontWeight: FontWeight.normal,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
+          headlineLarge: const TextStyle(
+            fontSize: 32.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
+          headlineMedium: const TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
+          headlineSmall: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
+          titleLarge: const TextStyle(
+            fontSize: 22.0,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
+          titleMedium: const TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
+          titleSmall: const TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+            fontFamily: 'Poppins',
+          ),
         ),
         colorScheme: const ColorScheme.light(
           primary: Color(0xFFFFC436), // Color principal
@@ -49,7 +99,7 @@ class MyApp extends StatelessWidget {
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color(0xFFFFC436),
           foregroundColor: Colors.white,
-        )
+        ),
       ),
       home: const ExploreBuyerScreen(),
       debugShowCheckedModeBanner: false,
@@ -85,7 +135,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text('You have pushed the button this many times:', style: Theme.of(context).textTheme.bodyMedium),
+            Text(
+              'You have pushed the button this many times:',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
