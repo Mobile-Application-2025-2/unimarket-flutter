@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'create-account.dart';
+import 'create_account.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -57,7 +57,7 @@ class LoginScreen extends StatelessWidget {
                             width: 100,
                             height: 100,
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFFC436).withOpacity(0.1),
+                              color: const Color(0xFFFFC436),
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -69,7 +69,7 @@ class LoginScreen extends StatelessWidget {
                             width: 80,
                             height: 80,
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF7D547).withOpacity(0.15),
+                              color: const Color(0xFFF7D547),
                               shape: BoxShape.circle,
                             ),
                           ),
