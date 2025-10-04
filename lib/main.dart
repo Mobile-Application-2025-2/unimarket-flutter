@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ui/catalog/view/explore_buyer.dart';
+import 'ui/catalog/view/sign_up.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
         )
       ),
-      home: const ExploreBuyerScreen(),
+      home: const SignUpScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

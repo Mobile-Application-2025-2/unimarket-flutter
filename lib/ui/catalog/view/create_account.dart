@@ -5,6 +5,7 @@ import '../../core/widgets/social_button.dart';
 import '../../core/widgets/custom_textfield.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/divider_text.dart';
+import 'student_code.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -202,7 +203,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 child: PrimaryButton(
                   text: 'SIGN IN',
                   onPressed: () {
-                    // Handle sign in
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const StudentCodeScreen(),
+                      ),
+                    );
                   },
                 ),
               ),
