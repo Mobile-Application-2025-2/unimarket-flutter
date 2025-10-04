@@ -17,7 +17,7 @@ class CreateAccountScreen extends StatefulWidget {
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _nameController = TextEditingController(text: 'Camilo Martinez');
   final TextEditingController _emailController = TextEditingController(text: 'camimartinez@gmail.com');
-  final TextEditingController _passwordController = TextEditingController(text: '••••••••••');
+  final TextEditingController _passwordController = TextEditingController(text: '********');
   
   bool _isPasswordVisible = false;
   bool _isPrivacyPolicyAccepted = false;
@@ -25,7 +25,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   @override
   void initState() {
     super.initState();
-    _passwordController.text = '••••••••••';
+    _passwordController.text = '********';
   }
 
   @override
