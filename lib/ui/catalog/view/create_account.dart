@@ -5,6 +5,7 @@ import '../../core/widgets/social_button.dart';
 import '../../core/widgets/custom_textfield.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/divider_text.dart';
+import 'student_code.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -16,7 +17,7 @@ class CreateAccountScreen extends StatefulWidget {
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _nameController = TextEditingController(text: 'Camilo Martinez');
   final TextEditingController _emailController = TextEditingController(text: 'camimartinez@gmail.com');
-  final TextEditingController _passwordController = TextEditingController(text: '••••••••••');
+  final TextEditingController _passwordController = TextEditingController(text: '********');
   
   bool _isPasswordVisible = false;
   bool _isPrivacyPolicyAccepted = false;
@@ -24,7 +25,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   @override
   void initState() {
     super.initState();
-    _passwordController.text = '••••••••••';
+    _passwordController.text = '********';
   }
 
   @override
@@ -202,7 +203,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 child: PrimaryButton(
                   text: 'SIGN IN',
                   onPressed: () {
-                    // Handle sign in
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const StudentCodeScreen(),
+                      ),
+                    );
                   },
                 ),
               ),

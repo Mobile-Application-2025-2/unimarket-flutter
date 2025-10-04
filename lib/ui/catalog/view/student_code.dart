@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'explore_buyer.dart';
 
 class StudentCodeScreen extends StatelessWidget {
   const StudentCodeScreen({super.key});
@@ -172,8 +173,12 @@ class StudentCodeScreen extends StatelessWidget {
                       height: 56,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle get started action
-                          // TODO: Navigate to next screen
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ExploreBuyerScreen(),
+                            ),
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFFFFB300),
