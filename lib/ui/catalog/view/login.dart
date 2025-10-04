@@ -338,9 +338,9 @@ class LoginScreen extends StatelessWidget {
                         fontFamily: 'Poppins',
                       ),
                       children: [
-                        TextSpan(text: 'ALREADY HAVE AN ACCOUNT? '),
+                        TextSpan(text: 'DON\'T HAVE AN ACCOUNT? '),
                         TextSpan(
-                          text: 'SIGN UP',
+                          text: 'CREATE ACCOUNT',
                           style: TextStyle(
                             color: Color(0xFFFFC436),
                             fontWeight: FontWeight.w600,
