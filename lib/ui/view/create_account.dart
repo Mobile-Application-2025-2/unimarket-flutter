@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../core/widgets/back_button.dart';
-import '../../core/widgets/title_section.dart';
-import '../../core/widgets/social_button.dart';
-import '../../core/widgets/custom_textfield.dart';
-import '../../core/widgets/primary_button.dart';
-import '../../core/widgets/divider_text.dart';
+import '../../ui/widgets/back_button.dart';
+import '../../ui/widgets/title_section.dart';
+import '../../ui/widgets/social_button.dart';
+import '../../ui/widgets/custom_textfield.dart';
+import '../../ui/widgets/primary_button.dart';
+import '../../ui/widgets/divider_text.dart';
 import '../../../core/user_session.dart';
 import 'student_code.dart';
 
