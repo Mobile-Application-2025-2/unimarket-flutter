@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'create_account.dart';
 import 'explore_buyer.dart';
-import '../../../core/user_session.dart';
+import '../../../controllers/session_controller.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,15 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _signInWithEmail() async {
-    // CHANGED: Enhanced validation with email format check
+    // CHANGED: Use SessionController for login logic
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       _showErrorSnackBar('Please fill in all fields');
-      return;
-    }
-
-    // CHANGED: Email format validation
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text.trim())) {
-      _showErrorSnackBar('Please enter a valid email');
       return;
     }
 
@@ -42,38 +36,22 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      // CHANGED: Email normalization - trim and lowercase before signIn
-      final response = await Supabase.instance.client.auth.signInWithPassword(
-        email: _emailController.text.trim().toLowerCase(),
+      await SessionController.instance.login(
+        email: _emailController.text,
         password: _passwordController.text,
       );
-
-      if (response.user != null) {
-        // CHANGED: Save user data to Singleton after successful login
-        UserSession.instance.setUser({
-          'id': response.user!.id,
-          'email': response.user!.email,
-          'name': response.user!.userMetadata?['name'],
-          'type': response.user!.userMetadata?['type'],
-        });
-        
-        _showSuccessSnackBar('Welcome back!');
-        
-        // Navigate to home screen on successful login
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const ExploreBuyerScreen(),
-            ),
-          );
-        }
-      } else {
-        // CHANGED: Handle case where user is null
-        _showErrorSnackBar('Invalid login credentials');
+      
+      _showSuccessSnackBar('Welcome back!');
+      
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const ExploreBuyerScreen(),
+          ),
+        );
       }
     } on AuthException catch (error) {
-      // CHANGED: Enhanced error handling with statusCode
       String errorMessage = error.message;
       if (error.statusCode != null) {
         errorMessage = '${error.statusCode} $errorMessage';
@@ -96,17 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // CHANGED: Email format validation for password reset
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text.trim())) {
-      _showErrorSnackBar('Please enter a valid email');
-      return;
-    }
-
     try {
-      // CHANGED: Email normalization for password reset
-      await Supabase.instance.client.auth.resetPasswordForEmail(
-        _emailController.text.trim().toLowerCase(),
-      );
+      // CHANGED: Use SessionController for password reset
+      await SessionController.instance.resetPassword(_emailController.text);
       _showSuccessSnackBar('Password reset email sent! Check your inbox.');
     } on AuthException catch (error) {
       // CHANGED: Enhanced error handling for password reset
@@ -182,7 +152,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(height: 30),
-                    // Welcome text with decorative background
                     Stack(
                       children: [
                         // Decorative background shapes
@@ -228,19 +197,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               
-              // Social login buttons
               Column(
                 children: [
-                  // Outlook button
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle Outlook login
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0078D4), // Outlook blue
+                        backgroundColor: const Color(0xFF0078D4),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -278,13 +244,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   
-                  // Google button
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle Google login
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
@@ -333,7 +297,6 @@ class _LoginScreenState extends State<LoginScreen> {
               
               const SizedBox(height: 32),
               
-              // Divider text
               const Text(
                 'OR LOG IN WITH EMAIL',
                 style: TextStyle(
@@ -345,10 +308,8 @@ class _LoginScreenState extends State<LoginScreen> {
               
               const SizedBox(height: 32),
               
-              // Email and password fields
               Column(
                 children: [
-                  // Email field
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
@@ -378,7 +339,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   
-                  // Password field
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
@@ -422,7 +382,6 @@ class _LoginScreenState extends State<LoginScreen> {
               
               const SizedBox(height: 32),
               
-              // Sign In button
               SizedBox(
                 width: double.infinity,
                 height: 56,
