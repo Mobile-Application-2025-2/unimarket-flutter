@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'create_account.dart';
 import 'explore_buyer.dart';
+import '../../../core/user_session.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,6 +49,14 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (response.user != null) {
+        // CHANGED: Save user data to Singleton after successful login
+        UserSession.instance.setUser({
+          'id': response.user!.id,
+          'email': response.user!.email,
+          'name': response.user!.userMetadata?['name'],
+          'type': response.user!.userMetadata?['type'],
+        });
+        
         _showSuccessSnackBar('Welcome back!');
         
         // Navigate to home screen on successful login
