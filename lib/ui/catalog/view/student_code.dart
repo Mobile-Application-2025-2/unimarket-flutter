@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'explore_buyer.dart';
 
 class StudentCodeScreen extends StatelessWidget {
-  const StudentCodeScreen({super.key});
+
+  final String userName;
+  
+  const StudentCodeScreen({
+    super.key,
+    required this.userName,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final greetingText = userName.isNotEmpty ? 'Hi $userName!' : 'Hi there!';
+    
     return Scaffold(
       resizeToAvoidBottomInset: false, // Prevent keyboard overflow
       body: Column(
@@ -64,10 +72,9 @@ class StudentCodeScreen extends StatelessWidget {
 
                         const SizedBox(height: 30),
 
-                        // Greeting
-                        const Text(
-                          'Hi Camilo!',
-                          style: TextStyle(
+                        Text(
+                          greetingText,
+                          style: const TextStyle(
                             fontSize: 25,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

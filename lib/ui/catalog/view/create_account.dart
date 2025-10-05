@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../core/widgets/back_button.dart';
 import '../../core/widgets/title_section.dart';
 import '../../core/widgets/social_button.dart';
@@ -15,17 +16,117 @@ class CreateAccountScreen extends StatefulWidget {
 }
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
-  final TextEditingController _nameController = TextEditingController(text: 'Camilo Martinez');
-  final TextEditingController _emailController = TextEditingController(text: 'camimartinez@gmail.com');
-  final TextEditingController _passwordController = TextEditingController(text: '********');
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   
   bool _isPasswordVisible = false;
   bool _isPrivacyPolicyAccepted = false;
+  bool _isLoading = false;
+  String? _accountType; // CHANGED: Added account type state
 
   @override
   void initState() {
     super.initState();
-    _passwordController.text = '********';
+  }
+
+  Future<void> _createAccount() async {
+    // CHANGED: Enhanced validation with account type and email format
+    if (_nameController.text.isEmpty || 
+        _emailController.text.isEmpty || 
+        _passwordController.text.isEmpty) {
+      _showErrorSnackBar('Please fill in all fields');
+      return;
+    }
+
+    if (_accountType == null) {
+      _showErrorSnackBar('Please select an account type');
+      return;
+    }
+
+    if (!_isPrivacyPolicyAccepted) {
+      _showErrorSnackBar('Please accept the Privacy Policy');
+      return;
+    }
+
+    if (_passwordController.text.length < 6) {
+      _showErrorSnackBar('Password must be at least 6 characters');
+      return;
+    }
+
+    // Email format validation
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text.trim())) {
+      _showErrorSnackBar('Please enter a valid email address');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // CHANGED: Updated signUp with proper metadata including account type
+      final response = await Supabase.instance.client.auth.signUp(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        data: {
+          'name': _nameController.text.trim(),
+          'type': _accountType, // buyer | deliver | business
+        },
+      );
+
+      if (response.user != null) {
+        _showSuccessSnackBar('Account created! Please check your email to verify your account.');
+        
+        // Navigate to student code screen after successful account creation
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => StudentCodeScreen(
+                userName: _nameController.text.trim(),
+              ),
+            ),
+          );
+        }
+      }
+    } on AuthException catch (error) {
+      // CHANGED: Enhanced error handling with statusCode
+      String errorMessage = error.message;
+      if (error.statusCode != null) {
+        errorMessage = '${error.statusCode} $errorMessage';
+      }
+      _showErrorSnackBar(errorMessage);
+    } catch (error) {
+      _showErrorSnackBar('An unexpected error occurred');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 4),
+      ),
+    );
   }
 
   @override
@@ -71,7 +172,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       size: 16,
                     ),
                     onPressed: () {
-                      // Handle Outlook login
+                      // TODO: Handle Outlook login
                     },
                   ),
                   const SizedBox(height: 16),
@@ -92,7 +193,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       textAlign: TextAlign.center,
                     ),
                     onPressed: () {
-                      // Handle Google login
+                      // TODO: Handle Google login
                     },
                   ),
                 ],
@@ -101,7 +202,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               const SizedBox(height: 32),
               
               // Divider text
-              const DividerText(text: 'OR LOG IN WITH EMAIL'),
+              const DividerText(text: 'OR CREATE ACCOUNT WITH EMAIL'),
               
               const SizedBox(height: 32),
               
@@ -147,6 +248,60 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       onPressed: () {
                         setState(() {
                           _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // CHANGED: Added Account Type dropdown
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: Colors.grey.shade300),
+                    ),
+                    child: DropdownButtonFormField<String>(
+                      value: _accountType,
+                      decoration: const InputDecoration(
+                        hintText: 'Select Account Type',
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontFamily: 'Poppins',
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 16,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.person_outline,
+                          color: Color(0xFFFFC436),
+                          size: 20,
+                        ),
+                      ),
+                      style: const TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
+                        color: Colors.black,
+                      ),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'buyer',
+                          child: Text('Buyer'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'deliver',
+                          child: Text('Deliver'),
+                        ),
+                        DropdownMenuItem(
+                          value: 'business',
+                          child: Text('Business'),
+                        ),
+                      ],
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _accountType = newValue;
                         });
                       },
                     ),
@@ -197,19 +352,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               
               const SizedBox(height: 40),
               
-              // Sign In button
+              // Create Account button
               Padding(
                 padding: const EdgeInsets.only(bottom: 32.0),
                 child: PrimaryButton(
-                  text: 'SIGN IN',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const StudentCodeScreen(),
-                      ),
-                    );
-                  },
+                  text: 'CREATE ACCOUNT',
+                  onPressed: _isLoading ? null : _createAccount,
+                  backgroundColor: _isLoading ? Colors.grey : const Color(0xFFFFC436),
                 ),
               ),
             ],
