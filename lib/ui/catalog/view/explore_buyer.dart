@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unimarket/ui/catalog/view/home_deliver.dart';
 
 class ExploreBuyerScreen extends StatefulWidget {
   const ExploreBuyerScreen({super.key});
@@ -12,26 +13,10 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
 
   // Categorías para el scroll horizontal
   final List<Map<String, dynamic>> categories = [
-    {
-      'name': 'Todos',
-      'icon': Icons.shopping_bag,
-      'isSelected': true,
-    },
-    {
-      'name': 'Comida',
-      'icon': Icons.restaurant,
-      'isSelected': false,
-    },
-    {
-      'name': 'Papelería',
-      'icon': Icons.content_cut,
-      'isSelected': false,
-    },
-    {
-      'name': 'Tutorías',
-      'icon': Icons.school,
-      'isSelected': false,
-    },
+    {'name': 'Todos', 'icon': Icons.shopping_bag, 'isSelected': true},
+    {'name': 'Comida', 'icon': Icons.restaurant, 'isSelected': false},
+    {'name': 'Papelería', 'icon': Icons.content_cut, 'isSelected': false},
+    {'name': 'Tutorías', 'icon': Icons.school, 'isSelected': false},
   ];
 
   // Productos para el grid vertical
@@ -97,7 +82,7 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                     ),
                   ),
                   const SizedBox(width: 8),
-                  
+
                   // Title
                   const Text(
                     'Explorar',
@@ -108,9 +93,9 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                       fontFamily: 'Poppins',
                     ),
                   ),
-                  
+
                   const Spacer(),
-                  
+
                   // Icons
                   Row(
                     children: [
@@ -135,7 +120,7 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                 ],
               ),
             ),
-            
+
             // Search Bar
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -159,14 +144,17 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                       size: 20,
                     ),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                   ),
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Categories (Horizontal Scroll)
             SizedBox(
               height: 40,
@@ -177,7 +165,7 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                 itemBuilder: (context, index) {
                   final category = categories[index];
                   final isSelected = category['name'] == selectedCategory;
-                  
+
                   return Padding(
                     padding: const EdgeInsets.only(right: 12.0),
                     child: GestureDetector(
@@ -187,12 +175,19 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                         });
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFFFFC436) : Colors.white,
+                          color: isSelected
+                              ? const Color(0xFFFFC436)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: isSelected ? const Color(0xFFFFC436) : Colors.grey[300]!,
+                            color: isSelected
+                                ? const Color(0xFFFFC436)
+                                : Colors.grey[300]!,
                           ),
                         ),
                         child: Row(
@@ -201,7 +196,9 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                             Icon(
                               category['icon'] as IconData,
                               size: 16,
-                              color: isSelected ? Colors.white : Colors.grey[600],
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.grey[600],
                             ),
                             const SizedBox(width: 6),
                             Text(
@@ -221,9 +218,9 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                 },
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Products Grid (Vertical Scroll)
             Expanded(
               child: Padding(
@@ -238,7 +235,7 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                   itemCount: products.length,
                   itemBuilder: (context, index) {
                     final product = products[index];
-                    
+
                     return Container(
                       decoration: BoxDecoration(
                         color: product['backgroundColor'] as Color,
@@ -258,18 +255,21 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                               ),
                               child: Image.asset(
                                 'assets/images/explore-buyer-image.png',
-                                
+
                                 width: 40,
                                 height: 40,
                               ),
                             ),
                           ),
-                          
+
                           // Title
                           Expanded(
                             flex: 1,
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                                vertical: 8.0,
+                              ),
                               child: Text(
                                 product['title'] as String,
                                 style: const TextStyle(
@@ -294,7 +294,7 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
           ],
         ),
       ),
-      
+
       // Bottom Navigation Bar
       bottomNavigationBar: Container(
         height: 60,
@@ -310,14 +310,14 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
           children: [
             // Home
             IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.home,
-                color: Colors.white,
-                size: 24,
-              ),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MapBackgroundPage()),
+                );
+              },
+              icon: const Icon(Icons.home, color: Colors.white, size: 24),
             ),
-            
+
             // Search (Selected)
             Container(
               padding: const EdgeInsets.all(8),
@@ -325,13 +325,9 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                 color: Colors.white.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 24,
-              ),
+              child: const Icon(Icons.search, color: Colors.white, size: 24),
             ),
-            
+
             // Cart
             IconButton(
               onPressed: () {},
@@ -341,15 +337,11 @@ class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
                 size: 24,
               ),
             ),
-            
+
             // Profile
             IconButton(
               onPressed: () {},
-              icon: const Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 24,
-              ),
+              icon: const Icon(Icons.person, color: Colors.white, size: 24),
             ),
           ],
         ),

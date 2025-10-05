@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:unimarket/ui/catalog/view/explore_buyer.dart';
 
 class MapBackgroundPage extends StatefulWidget {
   const MapBackgroundPage({super.key});
@@ -316,27 +317,19 @@ class _FooterBar extends StatelessWidget {
             // Home
             IconButton(
               onPressed: () {},
-              icon: const Icon(
-                Icons.home,
-                color: Colors.white,
-                size: 24,
-              ),
+              icon: const Icon(Icons.home, color: Colors.white, size: 24),
             ),
-            
+
             // Search (Selected)
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Icon(
-                Icons.search,
-                color: Colors.white,
-                size: 24,
-              ),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ExploreBuyerScreen()),
+                );
+              },
+              icon: const Icon(Icons.search, color: Colors.white, size: 24),
             ),
-            
+
             // Cart
             IconButton(
               onPressed: () {},
@@ -346,15 +339,11 @@ class _FooterBar extends StatelessWidget {
                 size: 24,
               ),
             ),
-            
+
             // Profile
             IconButton(
               onPressed: () {},
-              icon: const Icon(
-                Icons.person,
-                color: Colors.white,
-                size: 24,
-              ),
+              icon: const Icon(Icons.person, color: Colors.white, size: 24),
             ),
           ],
         ),
