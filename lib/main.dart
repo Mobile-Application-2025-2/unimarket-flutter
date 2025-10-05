@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'ui/catalog/view/sign_up.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:unimarket/ui/catalog/view/sign_up.dart';
 import 'config/supabase_config.dart';
 
 void main() async {

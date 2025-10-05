@@ -1,351 +1,486 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket/ui/catalog/view/home_deliver.dart';
+import 'package:provider/provider.dart';
+import '../controller/explore_buyer_controller.dart';
+import '../../../data/models/category.dart';
+import 'home_deliver.dart';
 
-class ExploreBuyerScreen extends StatefulWidget {
+class ExploreBuyerScreen extends StatelessWidget {
   const ExploreBuyerScreen({super.key});
 
   @override
-  State<ExploreBuyerScreen> createState() => _ExploreBuyerScreenState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => ExploreBuyerController(),
+      child: const _ExploreBuyerContent(),
+    );
+  }
 }
 
-class _ExploreBuyerScreenState extends State<ExploreBuyerScreen> {
-  String selectedCategory = 'Todos';
-
-  // Categorías para el scroll horizontal
-  final List<Map<String, dynamic>> categories = [
-    {'name': 'Todos', 'icon': Icons.shopping_bag, 'isSelected': true},
-    {'name': 'Comida', 'icon': Icons.restaurant, 'isSelected': false},
-    {'name': 'Papelería', 'icon': Icons.content_cut, 'isSelected': false},
-    {'name': 'Tutorías', 'icon': Icons.school, 'isSelected': false},
-  ];
-
-  // Productos para el grid vertical
-  final List<Map<String, dynamic>> products = [
-    {
-      'title': 'Tutorias IIND-2106',
-      'backgroundColor': const Color(0xFFFFF9C4), // Light yellow
-    },
-    {
-      'title': 'Tutorias ISIS-1221',
-      'backgroundColor': const Color(0xFFE8F5E8), // Light green
-    },
-    {
-      'title': 'Venta de brownies',
-      'backgroundColor': const Color(0xFFFFE4E1), // Light pink
-    },
-    {
-      'title': 'Venta de funkos',
-      'backgroundColor': const Color(0xFFF3E5F5), // Light purple
-    },
-    {
-      'title': 'Comida mexicana',
-      'backgroundColor': const Color(0xFFE3F2FD), // Light blue
-    },
-    {
-      'title': 'Comida italiana',
-      'backgroundColor': const Color(0xFFFFF9C4), // Light yellow
-    },
-    {
-      'title': 'Tutorias IIND-2106',
-      'backgroundColor': const Color(0xFFFFF9C4), // Light yellow
-    },
-    {
-      'title': 'Tutorias ISIS-1221',
-      'backgroundColor': const Color(0xFFE8F5E8), // Light green
-    },
-  ];
+class _ExploreBuyerContent extends StatelessWidget {
+  const _ExploreBuyerContent();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  // Logo/Icon
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFC436),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
+      body: Consumer<ExploreBuyerController>(
+        builder: (context, controller, child) {
+          if (controller.isLoading && controller.categories.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFFC436)),
+              ),
+            );
+          }
 
-                  // Title
-                  const Text(
-                    'Explorar',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+          if (controller.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Colors.red[300],
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    controller.error!,
+                    style: const TextStyle(
+                      fontSize: 16,
                       fontFamily: 'Poppins',
                     ),
+                    textAlign: TextAlign.center,
                   ),
-
-                  const Spacer(),
-
-                  // Icons
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite_border,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.local_shipping,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                      ),
-                    ],
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => controller.refresh(),
+                    child: const Text('Reintentar'),
                   ),
                 ],
               ),
-            ),
+            );
+          }
 
-            // Search Bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                height: 48,
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Buscar en UniMarket',
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: 14,
-                      fontFamily: 'Poppins',
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Colors.grey,
-                      size: 20,
-                    ),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
+          return _buildContent(context, controller);
+        },
+      ),
+      bottomNavigationBar: _buildBottomNavigationBar(context),
+    );
+  }
+
+  Widget _buildContent(BuildContext context, ExploreBuyerController controller) {
+    return SafeArea(
+      child: Column(
+        children: [
+          // Header
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                // Logo/Icon
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFC436),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                    size: 20,
                   ),
                 ),
-              ),
-            ),
+                const SizedBox(width: 8),
+                
+                // Title
+                const Text(
+                  'Explorar',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
 
-            const SizedBox(height: 16),
+                const Spacer(),
 
-            // Categories (Horizontal Scroll)
-            SizedBox(
-              height: 40,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  final category = categories[index];
-                  final isSelected = category['name'] == selectedCategory;
-
-                  return Padding(
-                    padding: const EdgeInsets.only(right: 12.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedCategory = category['name'] as String;
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? const Color(0xFFFFC436)
-                              : Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: isSelected
-                                ? const Color(0xFFFFC436)
-                                : Colors.grey[300]!,
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              category['icon'] as IconData,
-                              size: 16,
-                              color: isSelected
-                                  ? Colors.white
-                                  : Colors.grey[600],
-                            ),
-                            const SizedBox(width: 6),
-                            Text(
-                              category['name'] as String,
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: isSelected ? Colors.black : Colors.black,
-                                fontFamily: 'Poppins',
-                              ),
-                            ),
-                          ],
-                        ),
+                // Icons
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.favorite_border,
+                        color: Colors.black,
+                        size: 24,
                       ),
                     ),
-                  );
-                },
-              ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.local_shipping,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-
-            const SizedBox(height: 16),
-
-            // Products Grid (Vertical Scroll)
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 0.85,
+          ),
+          
+          // Search Bar
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Container(
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(24),
+              ),
+              child: TextField(
+                onChanged: (value) => controller.updateSearchQuery(value),
+                decoration: InputDecoration(
+                  hintText: 'Buscar en UniMarket',
+                  hintStyle: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 14,
+                    fontFamily: 'Poppins',
                   ),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: product['backgroundColor'] as Color,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Column(
-                        children: [
-                          // Image placeholder
-                          Expanded(
-                            flex: 3,
-                            child: Container(
-                              width: double.infinity,
-                              margin: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.3),
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Image.asset(
-                                'assets/images/explore-buyer-image.png',
-
-                                width: 40,
-                                height: 40,
-                              ),
-                            ),
+                  prefixIcon: const Icon(
+                    Icons.search,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+                  suffixIcon: controller.searchQuery.isNotEmpty
+                      ? IconButton(
+                          onPressed: () => controller.clearSearch(),
+                          icon: const Icon(
+                            Icons.clear,
+                            color: Colors.grey,
+                            size: 20,
                           ),
-
-                          // Title
-                          Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0,
-                                vertical: 8.0,
-                              ),
-                              child: Text(
-                                product['title'] as String,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                ),
-                                textAlign: TextAlign.center,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                        )
+                      : null,
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
             ),
-          ],
+          ),
+          
+          const SizedBox(height: 16),
+          
+          // Categories (Horizontal Scroll)
+          _buildCategoriesFilter(controller),
+          
+          const SizedBox(height: 16),
+          
+          // Products Grid (Vertical Scroll)
+          _buildProductsGrid(controller),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNavigationBar(BuildContext context) {
+    return Container(
+      height: 60,
+      decoration: const BoxDecoration(
+        color: Color(0xFFFFC436),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          // Home
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const MapBackgroundPage()),
+              );
+            },
+            icon: const Icon(Icons.home, color: Colors.white, size: 24),
+          ),
 
-      // Bottom Navigation Bar
-      bottomNavigationBar: Container(
-        height: 60,
-        decoration: const BoxDecoration(
-          color: Color(0xFFFFC436),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+          // Search (Selected)
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.search, color: Colors.white, size: 24),
+          ),
+
+          // Cart
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.shopping_bag,
+              color: Colors.white,
+              size: 24,
+            ),
+          ),
+
+          // Profile
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.person, color: Colors.white, size: 24),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoriesFilter(ExploreBuyerController controller) {
+    return SizedBox(
+      height: 40,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        itemCount: controller.categoryTypes.length,
+        itemBuilder: (context, index) {
+          final categoryType = controller.categoryTypes[index];
+          final isSelected = categoryType == controller.selectedCategoryType;
+          
+          return Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: GestureDetector(
+              onTap: () => controller.filterByType(categoryType),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: isSelected ? const Color(0xFFFFC436) : Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: isSelected ? const Color(0xFFFFC436) : Colors.grey[300]!,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      _getIconForType(categoryType),
+                      size: 16,
+                      color: isSelected ? Colors.white : Colors.grey[600],
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      categoryType,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: isSelected ? Colors.white : Colors.black,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProductsGrid(ExploreBuyerController controller) {
+    if (controller.filteredCategories.isEmpty) {
+      String message = controller.searchQuery.isNotEmpty
+          ? 'No se encontraron resultados para "${controller.searchQuery}"'
+          : 'No hay categorías disponibles';
+      
+      return Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                controller.searchQuery.isNotEmpty ? Icons.search_off : Icons.category_outlined,
+                size: 64,
+                color: Colors.grey[400],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                message,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontFamily: 'Poppins',
+                  color: Colors.grey[600],
+                ),
+                textAlign: TextAlign.center,
+              ),
+              if (controller.searchQuery.isNotEmpty) ...[
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () => controller.clearSearch(),
+                  child: const Text(
+                    'Limpiar búsqueda',
+                    style: TextStyle(
+                      color: Color(0xFFFFC436),
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      );
+    }
+
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.75, // Reducido para dar más espacio vertical
+          ),
+          itemCount: controller.filteredCategories.length,
+          itemBuilder: (context, index) {
+            final category = controller.filteredCategories[index];
+            return _buildCategoryCard(category, controller);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryCard(Category category, ExploreBuyerController controller) {
+    return GestureDetector(
+      onTap: () => controller.updateSelectionCount(category.id),
+      child: Container(
+        decoration: BoxDecoration(
+          color: _getBackgroundColorForType(category.type),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
           children: [
-            // Home
-            IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const MapBackgroundPage()),
-                );
-              },
-              icon: const Icon(Icons.home, color: Colors.white, size: 24),
-            ),
-
-            // Search (Selected)
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(12),
+            // Image placeholder
+            Expanded(
+              flex: 3,
+              child: Container(
+                width: double.infinity,
+                margin: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    category.image,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        _getIconForType(category.type),
+                        size: 40,
+                        color: Colors.grey[600],
+                      );
+                    },
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFFC436)),
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
-              child: const Icon(Icons.search, color: Colors.white, size: 24),
             ),
-
-            // Cart
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.shopping_bag,
-                color: Colors.white,
-                size: 24,
+            
+            // Title and selection count
+            Expanded(
+              flex: 2,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      _truncateText(category.name, 20),
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                        fontFamily: 'Poppins',
+                      ),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${category.selectionCount} selecciones',
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.grey[700],
+                        fontFamily: 'Poppins',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
               ),
-            ),
-
-            // Profile
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.person, color: Colors.white, size: 24),
             ),
           ],
         ),
       ),
     );
+  }
+
+  IconData _getIconForType(String type) {
+    switch (type.toLowerCase()) {
+      case 'Tutoria':
+        return Icons.school;
+      case 'Papeleria':
+        return Icons.content_cut;
+      case 'Comida':
+        return Icons.restaurant;
+      case 'Emprendimiento':
+        return Icons.store;
+      case 'Todos':
+        return Icons.shopping_bag;
+      default:
+        return Icons.shopping_bag;
+    }
+  }
+
+  Color _getBackgroundColorForType(String type) {
+    switch (type.toLowerCase()) {
+      case 'Tutoria':
+        return const Color(0xFFFFF9C4); // Light yellow
+      case 'Papeleria':
+        return const Color(0xFFE8F5E8); // Light green
+      case 'Comida':
+        return const Color(0xFFFFE4E1); // Light pink
+      case 'Emprendimiento':
+        return const Color(0xFFF3E5F5); // Light purple
+      default:
+        return const Color(0xFFE3F2FD); // Light blue
+    }
+  }
+
+  String _truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return '${text.substring(0, maxLength)}...';
   }
 }
