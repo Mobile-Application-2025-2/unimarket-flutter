@@ -1,8 +1,135 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'create_account.dart';
+import 'explore_buyer.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  bool _isPasswordVisible = false;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _signInWithEmail() async {
+    // CHANGED: Enhanced validation with email format check
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showErrorSnackBar('Please fill in all fields');
+      return;
+    }
+
+    // CHANGED: Email format validation
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text.trim())) {
+      _showErrorSnackBar('Please enter a valid email');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      // CHANGED: Email normalization - trim and lowercase before signIn
+      final response = await Supabase.instance.client.auth.signInWithPassword(
+        email: _emailController.text.trim().toLowerCase(),
+        password: _passwordController.text,
+      );
+
+      if (response.user != null) {
+        _showSuccessSnackBar('Welcome back!');
+        
+        // Navigate to home screen on successful login
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const ExploreBuyerScreen(),
+            ),
+          );
+        }
+      } else {
+        // CHANGED: Handle case where user is null
+        _showErrorSnackBar('Invalid login credentials');
+      }
+    } on AuthException catch (error) {
+      // CHANGED: Enhanced error handling with statusCode
+      String errorMessage = error.message;
+      if (error.statusCode != null) {
+        errorMessage = '${error.statusCode} $errorMessage';
+      }
+      _showErrorSnackBar(errorMessage);
+    } catch (error) {
+      _showErrorSnackBar('An unexpected error occurred');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _resetPassword() async {
+    if (_emailController.text.isEmpty) {
+      _showErrorSnackBar('Please enter your email address');
+      return;
+    }
+
+    // CHANGED: Email format validation for password reset
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text.trim())) {
+      _showErrorSnackBar('Please enter a valid email');
+      return;
+    }
+
+    try {
+      // CHANGED: Email normalization for password reset
+      await Supabase.instance.client.auth.resetPasswordForEmail(
+        _emailController.text.trim().toLowerCase(),
+      );
+      _showSuccessSnackBar('Password reset email sent! Check your inbox.');
+    } on AuthException catch (error) {
+      // CHANGED: Enhanced error handling for password reset
+      String errorMessage = error.message;
+      if (error.statusCode != null) {
+        errorMessage = '${error.statusCode} $errorMessage';
+      }
+      _showErrorSnackBar(errorMessage);
+    } catch (error) {
+      _showErrorSnackBar('An unexpected error occurred');
+    }
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -220,6 +347,8 @@ class LoginScreen extends StatelessWidget {
                       border: Border.all(color: Colors.grey.shade300),
                     ),
                     child: TextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
                         hintText: 'Email address',
                         hintStyle: TextStyle(
@@ -248,17 +377,29 @@ class LoginScreen extends StatelessWidget {
                       border: Border.all(color: Colors.grey.shade300),
                     ),
                     child: TextField(
-                      obscureText: true,
-                      decoration: const InputDecoration(
+                      controller: _passwordController,
+                      obscureText: !_isPasswordVisible,
+                      decoration: InputDecoration(
                         hintText: 'Password',
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           color: Colors.grey,
                           fontFamily: 'Poppins',
                         ),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 16,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
                         ),
                       ),
                       style: const TextStyle(
@@ -277,9 +418,7 @@ class LoginScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Handle sign in
-                  },
+                  onPressed: _isLoading ? null : _signInWithEmail,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFC436),
                     foregroundColor: Colors.white,
@@ -288,14 +427,23 @@ class LoginScreen extends StatelessWidget {
                     ),
                     elevation: 2,
                   ),
-                  child: const Text(
-                    'SIGN IN',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text(
+                          'SIGN IN',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
                 ),
               ),
               
@@ -303,9 +451,7 @@ class LoginScreen extends StatelessWidget {
               
               // Forgot password link
               TextButton(
-                onPressed: () {
-                  // Handle forgot password
-                },
+                onPressed: _resetPassword,
                 child: const Text(
                   'Forgot Password?',
                   style: TextStyle(
