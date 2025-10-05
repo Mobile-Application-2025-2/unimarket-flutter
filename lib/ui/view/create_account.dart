@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../core/widgets/back_button.dart';
-import '../../core/widgets/title_section.dart';
-import '../../core/widgets/social_button.dart';
-import '../../core/widgets/custom_textfield.dart';
-import '../../core/widgets/primary_button.dart';
-import '../../core/widgets/divider_text.dart';
+import '../widgets/back_button.dart';
+import '../widgets/title_section.dart';
+import '../widgets/social_button.dart';
+import '../widgets/custom_textfield.dart';
+import '../widgets/primary_button.dart';
+import '../widgets/divider_text.dart';
 import 'student_code.dart';
 
 class CreateAccountScreen extends StatefulWidget {

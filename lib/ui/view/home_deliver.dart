@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:unimarket/ui/catalog/view/explore_buyer.dart';
+import 'package:unimarket/ui/view/explore_buyer.dart';
 
 class MapBackgroundPage extends StatefulWidget {
   const MapBackgroundPage({super.key});

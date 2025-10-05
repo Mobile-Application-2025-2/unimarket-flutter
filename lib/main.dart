@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'ui/catalog/view/sign_up.dart';
+import 'ui/view/sign_up.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'config/supabase_config.dart';
+import 'app/supabase_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

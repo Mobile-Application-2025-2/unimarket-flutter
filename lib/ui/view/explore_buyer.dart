@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket/ui/catalog/view/home_deliver.dart';
+import 'package:unimarket/ui/view/home_deliver.dart';
 
 class ExploreBuyerScreen extends StatefulWidget {
   const ExploreBuyerScreen({super.key});
