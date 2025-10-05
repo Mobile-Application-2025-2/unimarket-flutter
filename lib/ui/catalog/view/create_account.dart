@@ -6,7 +6,7 @@ import '../../core/widgets/social_button.dart';
 import '../../core/widgets/custom_textfield.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/divider_text.dart';
-import '../../../core/user_session.dart';
+import '../../../controllers/session_controller.dart';
 import 'student_code.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -50,54 +50,31 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return;
     }
 
-    if (_passwordController.text.length < 6) {
-      _showErrorSnackBar('Password must be at least 6 characters');
-      return;
-    }
-
-    // Email format validation
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text.trim())) {
-      _showErrorSnackBar('Please enter a valid email address');
-      return;
-    }
-
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // CHANGED: Updated signUp with proper metadata including account type
-      final response = await Supabase.instance.client.auth.signUp(
-        email: _emailController.text.trim(),
+      // CHANGED: Use SessionController for signup logic
+      await SessionController.instance.signup(
+        name: _nameController.text,
+        email: _emailController.text,
         password: _passwordController.text,
-        data: {
-          'name': _nameController.text.trim(),
-          'type': _accountType, // buyer | deliver | business
-        },
+        type: _accountType!,
       );
-
-      if (response.user != null) {
-        // CHANGED: Save user data to Singleton after successful account creation
-        UserSession.instance.setUser({
-          'id': response.user!.id,
-          'email': response.user!.email,
-          'name': response.user!.userMetadata?['name'],
-          'type': response.user!.userMetadata?['type'],
-        });
-        
-        _showSuccessSnackBar('Account created! Please check your email to verify your account.');
-        
-        // Navigate to student code screen after successful account creation
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => StudentCodeScreen(
-                userName: _nameController.text.trim(),
-              ),
+      
+      _showSuccessSnackBar('Account created! Please check your email to verify your account.');
+      
+      // Navigate to student code screen after successful account creation
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StudentCodeScreen(
+              userName: _nameController.text.trim(),
             ),
-          );
-        }
+          ),
+        );
       }
     } on AuthException catch (error) {
       // CHANGED: Enhanced error handling with statusCode
@@ -181,7 +158,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       size: 16,
                     ),
                     onPressed: () {
-                      // TODO: Handle Outlook login
+                      // Handle Outlook login
                     },
                   ),
                   const SizedBox(height: 16),
@@ -202,7 +179,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       textAlign: TextAlign.center,
                     ),
                     onPressed: () {
-                      // TODO: Handle Google login
+                      // Handle Google login
                     },
                   ),
                 ],
