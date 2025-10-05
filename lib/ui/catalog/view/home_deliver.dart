@@ -352,39 +352,3 @@ class _FooterBar extends StatelessWidget {
   }
 }
 
-class _FloatingLeftButton extends StatelessWidget {
-  const _FloatingLeftButton({required this.brandYellow});
-  final Color brandYellow;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: brandYellow,
-      elevation: 8,
-      borderRadius: BorderRadius.circular(18),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(18),
-        onTap: () {}, // no-op
-        child: Container(
-          height: 56,
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          alignment: Alignment.center,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              Icon(Icons.map_rounded, color: Colors.white, size: 22),
-              SizedBox(width: 8),
-              Text(
-                'Map',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
