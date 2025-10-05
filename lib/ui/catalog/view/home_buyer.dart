@@ -126,7 +126,7 @@ class _SearchBar extends StatelessWidget {
         hintText: 'Buscar en UniMarket',
         prefixIcon: const Icon(Icons.search),
         filled: true,
-        fillColor: scheme.surfaceVariant.withOpacity(.5),
+        fillColor: scheme.surfaceContainerHighest.withOpacity(.5),
         contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(22),
