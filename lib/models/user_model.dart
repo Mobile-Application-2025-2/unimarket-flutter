@@ -13,7 +13,6 @@ class UserModel {
     this.type,
   });
 
-  /// Factory constructor to create UserModel from Supabase User
   factory UserModel.fromAuth(User user) {
     return UserModel(
       id: user.id,
@@ -23,7 +22,6 @@ class UserModel {
     );
   }
 
-  /// Convert UserModel to JSON Map
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -33,7 +31,6 @@ class UserModel {
     };
   }
 
-  /// Convert UserModel to UserSession format
   Map<String, dynamic> toUserSession() {
     return {
       'id': id,

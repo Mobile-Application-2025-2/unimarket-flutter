@@ -13,20 +13,16 @@ class SessionController {
 
   static SessionController get instance => _instance;
 
-  /// Login with email and password
   Future<UserModel> login({
     required String email,
     required String password,
   }) async {
-    // Normalize email
     final normalizedEmail = email.trim().toLowerCase();
     
-    // Validate email format
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(normalizedEmail)) {
       throw AuthException('Please enter a valid email');
     }
 
-    // Validate password
     if (password.length < 6) {
       throw AuthException('Password must be at least 6 characters');
     }
@@ -43,12 +39,11 @@ class SessionController {
 
       final userModel = UserModel.fromAuth(response.user!);
       
-      // Cache user data in UserSession
       UserSession.instance.setUser(userModel.toUserSession());
       
       return userModel;
     } on AuthException {
-      rethrow; // Re-throw AuthException to preserve original error details
+      rethrow; 
     } catch (e) {
       throw AuthException('An unexpected error occurred');
     }
@@ -61,10 +56,8 @@ class SessionController {
     required String password,
     required String type,
   }) async {
-    // Normalize email
     final normalizedEmail = email.trim().toLowerCase();
     
-    // Validate inputs
     if (name.trim().isEmpty) {
       throw AuthException('Please enter your name');
     }
@@ -97,23 +90,19 @@ class SessionController {
 
       final userModel = UserModel.fromAuth(response.user!);
       
-      // Cache user data in UserSession
       UserSession.instance.setUser(userModel.toUserSession());
       
       return userModel;
     } on AuthException {
-      rethrow; // Re-throw AuthException to preserve original error details
+      rethrow;
     } catch (e) {
       throw AuthException('An unexpected error occurred');
     }
   }
 
-  /// Reset password for email
   Future<void> resetPassword(String email) async {
-    // Normalize email
     final normalizedEmail = email.trim().toLowerCase();
     
-    // Validate email format
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(normalizedEmail)) {
       throw AuthException('Please enter a valid email');
     }
@@ -121,24 +110,21 @@ class SessionController {
     try {
       await Supabase.instance.client.auth.resetPasswordForEmail(normalizedEmail);
     } on AuthException {
-      rethrow; // Re-throw AuthException to preserve original error details
+      rethrow;
     } catch (e) {
       throw AuthException('An unexpected error occurred');
     }
   }
 
-  /// Sign out current user
   Future<void> signOut() async {
     try {
       await Supabase.instance.client.auth.signOut();
-      // Clear cached user data
       UserSession.instance.clear();
     } catch (e) {
       throw AuthException('Failed to sign out');
     }
   }
 
-  /// Get current authenticated user
   UserModel? currentUser() {
     try {
       final user = Supabase.instance.client.auth.currentUser;
@@ -150,7 +136,6 @@ class SessionController {
     }
   }
 
-  /// Check if user is currently logged in
   bool get isLoggedIn {
     return Supabase.instance.client.auth.currentUser != null;
   }
