@@ -25,7 +25,6 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _signInWithEmail() async {
-    // CHANGED: Use SessionController for login logic
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       _showErrorSnackBar('Please fill in all fields');
       return;
@@ -40,15 +39,13 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      
+
       _showSuccessSnackBar('Welcome back!');
-      
+
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-            builder: (context) => const ExploreBuyerScreen(),
-          ),
+          MaterialPageRoute(builder: (context) => const ExploreBuyerScreen()),
         );
       }
     } on AuthException catch (error) {
@@ -75,11 +72,9 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     try {
-      // CHANGED: Use SessionController for password reset
       await SessionController.instance.resetPassword(_emailController.text);
       _showSuccessSnackBar('Password reset email sent! Check your inbox.');
     } on AuthException catch (error) {
-      // CHANGED: Enhanced error handling for password reset
       String errorMessage = error.message;
       if (error.statusCode != null) {
         errorMessage = '${error.statusCode} $errorMessage';
@@ -119,7 +114,6 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             children: [
-              // Top section with back button and welcome text
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 40.0),
                 child: Column(
@@ -154,7 +148,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 30),
                     Stack(
                       children: [
-                        // Decorative background shapes
                         Positioned(
                           top: -20,
                           left: -20,
@@ -179,7 +172,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        // Welcome text
                         const Center(
                           child: Text(
                             'Welcome Back!',
@@ -196,15 +188,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              
+
               Column(
                 children: [
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF0078D4),
                         foregroundColor: Colors.white,
@@ -243,13 +234,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.black,
@@ -294,9 +284,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               const Text(
                 'OR LOG IN WITH EMAIL',
                 style: TextStyle(
@@ -305,9 +295,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontFamily: 'Poppins',
                 ),
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               Column(
                 children: [
                   Container(
@@ -338,7 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
+
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
@@ -361,7 +351,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         suffixIcon: IconButton(
                           icon: Icon(
-                            _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                            _isPasswordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                             color: Colors.grey,
                           ),
                           onPressed: () {
@@ -379,9 +371,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 32),
-              
+
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -414,9 +406,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                 ),
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Forgot password link
               TextButton(
                 onPressed: _resetPassword,
@@ -429,10 +421,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 40),
-              
-              // Footer sign up link
+
               Padding(
                 padding: const EdgeInsets.only(bottom: 32.0),
                 child: GestureDetector(

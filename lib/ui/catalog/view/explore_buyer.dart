@@ -38,18 +38,11 @@ class _ExploreBuyerContent extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red[300],
-                  ),
+                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                   const SizedBox(height: 16),
                   Text(
                     controller.error!,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Poppins',
-                    ),
+                    style: const TextStyle(fontSize: 16, fontFamily: 'Poppins'),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -69,7 +62,10 @@ class _ExploreBuyerContent extends StatelessWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, ExploreBuyerController controller) {
+  Widget _buildContent(
+    BuildContext context,
+    ExploreBuyerController controller,
+  ) {
     return SafeArea(
       child: Column(
         children: [
@@ -93,7 +89,7 @@ class _ExploreBuyerContent extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                
+
                 // Title
                 const Text(
                   'Explorar',
@@ -131,7 +127,7 @@ class _ExploreBuyerContent extends StatelessWidget {
               ],
             ),
           ),
-          
+
           // Search Bar
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -166,20 +162,21 @@ class _ExploreBuyerContent extends StatelessWidget {
                         )
                       : null,
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
               ),
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
-          // Categories (Horizontal Scroll)
+
           _buildCategoriesFilter(controller),
-          
+
           const SizedBox(height: 16),
-          
-          // Products Grid (Vertical Scroll)
+
           _buildProductsGrid(controller),
         ],
       ),
@@ -222,11 +219,7 @@ class _ExploreBuyerContent extends StatelessWidget {
           // Cart
           IconButton(
             onPressed: () {},
-            icon: const Icon(
-              Icons.shopping_bag,
-              color: Colors.white,
-              size: 24,
-            ),
+            icon: const Icon(Icons.shopping_bag, color: Colors.white, size: 24),
           ),
 
           // Profile
@@ -249,18 +242,23 @@ class _ExploreBuyerContent extends StatelessWidget {
         itemBuilder: (context, index) {
           final categoryType = controller.categoryTypes[index];
           final isSelected = categoryType == controller.selectedCategoryType;
-          
+
           return Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: GestureDetector(
               onTap: () => controller.filterByType(categoryType),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: isSelected ? const Color(0xFFFFC436) : Colors.white,
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: isSelected ? const Color(0xFFFFC436) : Colors.grey[300]!,
+                    color: isSelected
+                        ? const Color(0xFFFFC436)
+                        : Colors.grey[300]!,
                   ),
                 ),
                 child: Row(
@@ -296,14 +294,16 @@ class _ExploreBuyerContent extends StatelessWidget {
       String message = controller.searchQuery.isNotEmpty
           ? 'No se encontraron resultados para "${controller.searchQuery}"'
           : 'No hay categorías disponibles';
-      
+
       return Expanded(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                controller.searchQuery.isNotEmpty ? Icons.search_off : Icons.category_outlined,
+                controller.searchQuery.isNotEmpty
+                    ? Icons.search_off
+                    : Icons.category_outlined,
                 size: 64,
                 color: Colors.grey[400],
               ),
@@ -357,7 +357,10 @@ class _ExploreBuyerContent extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoryCard(Category category, ExploreBuyerController controller) {
+  Widget _buildCategoryCard(
+    Category category,
+    ExploreBuyerController controller,
+  ) {
     return GestureDetector(
       onTap: () => controller.updateSelectionCount(category.id),
       child: Container(
@@ -393,9 +396,12 @@ class _ExploreBuyerContent extends StatelessWidget {
                       if (loadingProgress == null) return child;
                       return Center(
                         child: CircularProgressIndicator(
-                          valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFFFFC436)),
+                          valueColor: const AlwaysStoppedAnimation<Color>(
+                            Color(0xFFFFC436),
+                          ),
                           value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
                               : null,
                         ),
                       );
@@ -404,12 +410,15 @@ class _ExploreBuyerContent extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             // Title and selection count
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 4.0,
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
