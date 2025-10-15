@@ -20,11 +20,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
+
   bool _isPasswordVisible = false;
   bool _isPrivacyPolicyAccepted = false;
   bool _isLoading = false;
-  String? _accountType; // CHANGED: Added account type state
+  String? _accountType;
 
   @override
   void initState() {
@@ -32,9 +32,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }
 
   Future<void> _createAccount() async {
-    // CHANGED: Enhanced validation with account type and email format
-    if (_nameController.text.isEmpty || 
-        _emailController.text.isEmpty || 
+    if (_nameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
         _passwordController.text.isEmpty) {
       _showErrorSnackBar('Please fill in all fields');
       return;
@@ -55,29 +54,27 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
     });
 
     try {
-      // CHANGED: Use SessionController for signup logic
       await SessionController.instance.signup(
         name: _nameController.text,
         email: _emailController.text,
         password: _passwordController.text,
         type: _accountType!,
       );
-      
-      _showSuccessSnackBar('Account created! Please check your email to verify your account.');
-      
-      // Navigate to student code screen after successful account creation
+
+      _showSuccessSnackBar(
+        'Account created! Please check your email to verify your account.',
+      );
+
       if (mounted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => StudentCodeScreen(
-              userName: _nameController.text.trim(),
-            ),
+            builder: (context) =>
+                StudentCodeScreen(userName: _nameController.text.trim()),
           ),
         );
       }
     } on AuthException catch (error) {
-      // CHANGED: Enhanced error handling with statusCode
       String errorMessage = error.message;
       if (error.statusCode != null) {
         errorMessage = '${error.statusCode} $errorMessage';
@@ -124,18 +121,15 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             children: [
-              // Top section with back button and title
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 40.0),
                 child: Column(
                   children: [
-                    // Back button
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: CustomBackButton(),
                     ),
                     const SizedBox(height: 30),
-                    // Title with decorative background
                     const TitleSection(
                       title: 'Create your account',
                       titleColor: Color(0xFFFFC436),
@@ -143,11 +137,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   ],
                 ),
               ),
-              
-              // Social login buttons
+
               Column(
                 children: [
-                  // Outlook button
                   SocialButton(
                     text: 'CONTINUE WITH OUTLOOK',
                     backgroundColor: const Color(0xFF0078D4),
@@ -157,13 +149,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       color: Color(0xFF0078D4),
                       size: 16,
                     ),
-                    onPressed: () {
-                      // Handle Outlook login
-                    },
+                    onPressed: () {},
                   ),
                   const SizedBox(height: 16),
-                  
-                  // Google button
+
                   SocialButton(
                     text: 'CONTINUE WITH GOOGLE',
                     backgroundColor: Colors.white,
@@ -178,21 +167,17 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    onPressed: () {
-                      // Handle Google login
-                    },
+                    onPressed: () {},
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 32),
-              
-              // Divider text
+
               const DividerText(text: 'OR CREATE ACCOUNT WITH EMAIL'),
-              
+
               const SizedBox(height: 32),
-              
-              // Input fields
+
               Column(
                 children: [
                   // Name field with checkmark
@@ -206,8 +191,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
-                  // Email field with checkmark
+
                   CustomTextField(
                     hintText: 'Email',
                     controller: _emailController,
@@ -219,15 +203,16 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
-                  // Password field with eye icon
+
                   CustomTextField(
                     hintText: 'Password',
                     controller: _passwordController,
                     obscureText: !_isPasswordVisible,
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
+                        _isPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: const Color(0xFFFFC436),
                         size: 20,
                       ),
@@ -239,8 +224,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  
-                  // CHANGED: Added Account Type dropdown
+
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[100],
@@ -272,10 +256,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         color: Colors.black,
                       ),
                       items: const [
-                        DropdownMenuItem(
-                          value: 'buyer',
-                          child: Text('Buyer'),
-                        ),
+                        DropdownMenuItem(value: 'buyer', child: Text('Buyer')),
                         DropdownMenuItem(
                           value: 'deliver',
                           child: Text('Deliver'),
@@ -294,10 +275,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 24),
-              
-              // Privacy Policy checkbox
+
               Row(
                 children: [
                   Checkbox(
@@ -335,16 +315,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 40),
-              
+
               // Create Account button
               Padding(
                 padding: const EdgeInsets.only(bottom: 32.0),
                 child: PrimaryButton(
                   text: 'CREATE ACCOUNT',
                   onPressed: _isLoading ? null : _createAccount,
-                  backgroundColor: _isLoading ? Colors.grey : const Color(0xFFFFC436),
+                  backgroundColor: _isLoading
+                      ? Colors.grey
+                      : const Color(0xFFFFC436),
                 ),
               ),
             ],

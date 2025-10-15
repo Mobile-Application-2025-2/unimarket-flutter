@@ -13,38 +13,32 @@ class SignUpScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             children: [
-              // Top section with MAIN text
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 60.0),
-                child: Align(
-                  alignment: Alignment.centerLeft,                  
-                ),
+                child: Align(alignment: Alignment.centerLeft),
               ),
-              
-              // Logo section with image and text
+
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Logo image
                     Image.asset(
-                      'images/sign.png',
+                      'assets/images/sign.png',
                       width: 120,
                       height: 120,
                       fit: BoxFit.contain,
                     ),
-                    
+
                     const SizedBox(width: 20),
-                    
-                    // UniMarket text
+
                     const Text(
                       'UNIMARKET',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFFFFC436), // Orange-yellow color
+                        color: Color(0xFFFFC436),
                         fontFamily: 'Poppins',
                         letterSpacing: 2,
                       ),
@@ -52,9 +46,9 @@ class SignUpScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 80),
-              
+
               // Sign Up button
               PrimaryButton(
                 text: 'SIGN UP',
@@ -67,9 +61,9 @@ class SignUpScreen extends StatelessWidget {
                   );
                 },
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Login link
               GestureDetector(
                 onTap: () {
@@ -82,16 +76,11 @@ class SignUpScreen extends StatelessWidget {
                 },
                 child: RichText(
                   text: const TextSpan(
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: 'Poppins',
-                    ),
+                    style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
                     children: [
                       TextSpan(
                         text: 'ALREADY HAVE AN ACCOUNT? ',
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(color: Colors.grey),
                       ),
                       TextSpan(
                         text: 'LOG IN',
@@ -104,7 +93,7 @@ class SignUpScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 40),
             ],
           ),
@@ -114,7 +103,6 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-// Import the PrimaryButton component
 class PrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -122,7 +110,7 @@ class PrimaryButton extends StatelessWidget {
   final Color textColor;
   final double? width;
   final double height;
-  
+
   const PrimaryButton({
     super.key,
     required this.text,

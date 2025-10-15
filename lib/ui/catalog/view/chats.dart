@@ -14,51 +14,31 @@ class _ChatsScreenState extends State<ChatsScreen> {
 
   // Array de mensajes para evitar código repetido
   List<Map<String, dynamic>> messages = [
-    {
-      'text': 'Hello! John',
-      'isFromUser': true,
-      'timestamp': '09:25 AM',
-    },
+    {'text': 'Hello! John', 'isFromUser': true, 'timestamp': '09:25 AM'},
     {
       'text': 'Hello! Carlos hry?',
       'isFromUser': false,
       'timestamp': '09:25 AM',
     },
-    {
-      'text': 'Hello! John',
-      'isFromUser': true,
-      'timestamp': '09:25 AM',
-    },
+    {'text': 'Hello! John', 'isFromUser': true, 'timestamp': '09:25 AM'},
     {
       'text': 'Hello! Carlos hry?',
       'isFromUser': false,
       'timestamp': '09:25 AM',
     },
-    {
-      'text': 'Hello! John',
-      'isFromUser': true,
-      'timestamp': '09:25 AM',
-    },
+    {'text': 'Hello! John', 'isFromUser': true, 'timestamp': '09:25 AM'},
     {
       'text': 'Hello! Carlos hry?',
       'isFromUser': false,
       'timestamp': '09:25 AM',
     },
-    {
-      'text': 'Hello! John',
-      'isFromUser': true,
-      'timestamp': '09:25 AM',
-    },
+    {'text': 'Hello! John', 'isFromUser': true, 'timestamp': '09:25 AM'},
     {
       'text': 'Hello! Carlos hry?',
       'isFromUser': false,
       'timestamp': '09:25 AM',
     },
-    {
-      'text': 'Hello! John',
-      'isFromUser': true,
-      'timestamp': '09:25 AM',
-    },
+    {'text': 'Hello! John', 'isFromUser': true, 'timestamp': '09:25 AM'},
     {
       'text': 'Hello! Carlos hry?',
       'isFromUser': false,
@@ -113,13 +93,15 @@ class _ChatsScreenState extends State<ChatsScreen> {
       resizeToAvoidBottomInset: true,
       body: Column(
         children: [
-          // Header with yellow background
           Container(
             height: 100,
             color: const Color(0xFFFFC436),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 8.0,
+                ),
                 child: Row(
                   children: [
                     // Back button
@@ -131,15 +113,16 @@ class _ChatsScreenState extends State<ChatsScreen> {
                         size: 24,
                       ),
                     ),
-                    
+
                     const SizedBox(width: 12),
-                    
-                    // Profile picture with status indicator
+
                     Stack(
                       children: [
                         CircleAvatar(
                           radius: 25,
-                          backgroundImage: AssetImage('assets/images/chats-cesar-picture.png'),
+                          backgroundImage: AssetImage(
+                            'assets/images/chats-cesar-picture.png',
+                          ),
                         ),
                         Positioned(
                           bottom: 0,
@@ -156,9 +139,9 @@ class _ChatsScreenState extends State<ChatsScreen> {
                         ),
                       ],
                     ),
-                    
+
                     const SizedBox(width: 12),
-                    
+
                     // Contact info
                     Expanded(
                       child: Column(
@@ -185,8 +168,7 @@ class _ChatsScreenState extends State<ChatsScreen> {
                         ],
                       ),
                     ),
-                    
-                    // Phone icon
+
                     IconButton(
                       onPressed: () {
                         // Handle phone call
@@ -202,8 +184,8 @@ class _ChatsScreenState extends State<ChatsScreen> {
               ),
             ),
           ),
-          
-          // Chat messages area
+
+          // Chat messages
           Expanded(
             child: Container(
               color: Colors.white,
@@ -213,7 +195,10 @@ class _ChatsScreenState extends State<ChatsScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16.0),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
                         borderRadius: BorderRadius.circular(12),
@@ -228,154 +213,164 @@ class _ChatsScreenState extends State<ChatsScreen> {
                       ),
                     ),
                   ),
-                  
-                   // Messages
-                   Expanded(
-                     child: ListView.builder(
-                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                       itemCount: messages.length,
-                       itemBuilder: (context, index) {
-                         final message = messages[index];
-                         final isFromUser = message['isFromUser'] as bool;
-                         
-                         return Padding(
-                           padding: const EdgeInsets.only(bottom: 8.0),
-                           child: Row(
-                             mainAxisAlignment: isFromUser 
-                                 ? MainAxisAlignment.end 
-                                 : MainAxisAlignment.start,
-                             crossAxisAlignment: CrossAxisAlignment.end,
-                             children: [
-                               if (!isFromUser) ...[
-                                 // Profile picture for left messages
-                                 CircleAvatar(
-                                   radius: 12,
-                                   backgroundImage: AssetImage('assets/images/chats-cesar-picture.png'),
-                                 ),
-                                 const SizedBox(width: 8),
-                               ],
-                               
-                               // Message bubble
-                               Container(
-                                 constraints: BoxConstraints(
-                                   maxWidth: MediaQuery.of(context).size.width * 0.7,
-                                 ),
-                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                 decoration: BoxDecoration(
-                                   color: isFromUser 
-                                       ? const Color(0xFFFFC436) 
-                                       : Colors.grey[300],
-                                   borderRadius: BorderRadius.circular(16),
-                                 ),
-                                 child: Column(
-                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                   children: [
-                                     Text(
-                                       message['text'] as String,
-                                       style: TextStyle(
-                                         fontSize: 14,
-                                         color: isFromUser ? Colors.white : Colors.black,
-                                         fontFamily: 'Poppins',
-                                       ),
-                                     ),
-                                     const SizedBox(height: 4),
-                                     Text(
-                                       message['timestamp'] as String,
-                                       style: TextStyle(
-                                         fontSize: 10,
-                                         color: isFromUser ? Colors.white70 : Colors.grey[600],
-                                         fontFamily: 'Poppins',
-                                       ),
-                                     ),
-                                   ],
-                                 ),
-                               ),
-                             ],
-                           ),
-                         );
-                       },
-                     ),
-                   ),
+
+                  // Messages
+                  Expanded(
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      itemCount: messages.length,
+                      itemBuilder: (context, index) {
+                        final message = messages[index];
+                        final isFromUser = message['isFromUser'] as bool;
+
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: Row(
+                            mainAxisAlignment: isFromUser
+                                ? MainAxisAlignment.end
+                                : MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              if (!isFromUser) ...[
+                                // Profile picture for left messages
+                                CircleAvatar(
+                                  radius: 12,
+                                  backgroundImage: AssetImage(
+                                    'assets/images/chats-cesar-picture.png',
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                              ],
+
+                              // Message bubble
+                              Container(
+                                constraints: BoxConstraints(
+                                  maxWidth:
+                                      MediaQuery.of(context).size.width * 0.7,
+                                ),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 8,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isFromUser
+                                      ? const Color(0xFFFFC436)
+                                      : Colors.grey[300],
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      message['text'] as String,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: isFromUser
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      message['timestamp'] as String,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: isFromUser
+                                            ? Colors.white70
+                                            : Colors.grey[600],
+                                        fontFamily: 'Poppins',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
-          
-          // Message input bar
+
           Container(
             padding: const EdgeInsets.all(16.0),
             color: Colors.grey[100],
             child: Row(
               children: [
-                // Attachment icon
                 IconButton(
-                  onPressed: () {
-                    // Handle attachment
-                  },
+                  onPressed: () {},
                   icon: Icon(
                     Icons.attach_file,
                     color: Colors.grey[600],
                     size: 24,
                   ),
                 ),
-                
-                 // Message input field
-                 Expanded(
-                   child: GestureDetector(
-                     onTap: () {
-                       _messageFocusNode.requestFocus();
-                     },
-                     child: Container(
-                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                       decoration: BoxDecoration(
-                         color: Colors.white,
-                         borderRadius: BorderRadius.circular(24),
-                         border: Border.all(color: Colors.grey[300]!),
-                       ),
-                       child: TextField(
-                       controller: _messageController,
-                       focusNode: _messageFocusNode,
-                       decoration: const InputDecoration(
-                         hintText: 'Write your message',
-                         hintStyle: TextStyle(
-                           color: Colors.grey,
-                           fontSize: 14,
-                           fontFamily: 'Poppins',
-                         ),
-                         border: InputBorder.none,
-                         contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 1),
-                         isDense: true,
-                       ),
-                       style: const TextStyle(
-                         fontSize: 14,
-                         fontFamily: 'Poppins',
-                         color: Colors.black,
-                       ),
-                       maxLines: null,
-                       minLines: 1,
-                       textCapitalization: TextCapitalization.sentences,
-                       textInputAction: TextInputAction.send,
-                       onSubmitted: (_) => _sendMessage(),
-                       enabled: true,
-                       readOnly: false,
-                     ),
-                     ),
-                   ),
-                 ),
-                
+
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      _messageFocusNode.requestFocus();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: Colors.grey[300]!),
+                      ),
+                      child: TextField(
+                        controller: _messageController,
+                        focusNode: _messageFocusNode,
+                        decoration: const InputDecoration(
+                          hintText: 'Write your message',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                            fontFamily: 'Poppins',
+                          ),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 0,
+                            vertical: 1,
+                          ),
+                          isDense: true,
+                        ),
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                          color: Colors.black,
+                        ),
+                        maxLines: null,
+                        minLines: 1,
+                        textCapitalization: TextCapitalization.sentences,
+                        textInputAction: TextInputAction.send,
+                        onSubmitted: (_) => _sendMessage(),
+                        enabled: true,
+                        readOnly: false,
+                      ),
+                    ),
+                  ),
+                ),
+
                 const SizedBox(width: 8),
-                
-                 // Send/media icon
-                 IconButton(
-                   onPressed: _sendMessage,
-                   icon: Icon(
-                     Icons.send,
-                     color: _hasText 
-                         ? const Color(0xFFFFC436) 
-                         : Colors.grey[600],
-                     size: 24,
-                   ),
-                 ),
+
+                IconButton(
+                  onPressed: _sendMessage,
+                  icon: Icon(
+                    Icons.send,
+                    color: _hasText
+                        ? const Color(0xFFFFC436)
+                        : Colors.grey[600],
+                    size: 24,
+                  ),
+                ),
               ],
             ),
           ),
