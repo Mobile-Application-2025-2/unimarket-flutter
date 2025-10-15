@@ -1,6 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../../data/models/category.dart';
 import '../../../services/supabase_service.dart';
+import '../../../services/popularity_service.dart'; // NEW
+import '../../../models/category_popularity.dart';  // NEW
+import 'package:supabase_flutter/supabase_flutter.dart'; // NEW
 
 class ExploreBuyerController extends ChangeNotifier {
   List<Category> _categories = [];
@@ -10,6 +15,12 @@ class ExploreBuyerController extends ChangeNotifier {
   bool _isLoading = false;
   String? _error;
 
+  // NEW: sugerencias
+  final PopularityService _popService;                // NEW
+  List<CategoryTypePopularity> _suggestions = [];     // NEW
+  bool _loadingSuggestions = false;                   // NEW
+  String? _errorSuggestions;                          // NEW
+
   // Getters
   List<Category> get categories => _categories;
   List<Category> get filteredCategories => _filteredCategories;
@@ -18,6 +29,11 @@ class ExploreBuyerController extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
+  // NEW: getters de sugerencias
+  List<CategoryTypePopularity> get suggestions => _suggestions;       // NEW
+  bool get loadingSuggestions => _loadingSuggestions;                 // NEW
+  String? get errorSuggestions => _errorSuggestions;                  // NEW
+
   // Tipos únicos de categorías para el filtro
   List<String> get categoryTypes {
     final types = _categories.map((cat) => cat.type).toSet().toList();
@@ -25,7 +41,10 @@ class ExploreBuyerController extends ChangeNotifier {
     return types;
   }
 
-  ExploreBuyerController() {
+  // Constructor
+  ExploreBuyerController({PopularityService? popularityService})
+      : _popService =
+            popularityService ?? PopularityService(Supabase.instance.client) {
     loadCategories();
   }
 
@@ -34,17 +53,36 @@ class ExploreBuyerController extends ChangeNotifier {
     try {
       _setLoading(true);
       _clearError();
-      
+
       final response = await SupabaseService.getCategories();
       _categories = response.map((json) => Category.fromJson(json)).toList();
-      
-      // Aplicar filtro actual
+
       _applyFilter();
-      
+
+      // NEW: carga sugerencias en paralelo (top 4)
+      unawaited(loadSuggestions(limit: 4)); // ignore: unawaited_futures
     } catch (e) {
       _setError('Error al cargar categorías: ${e.toString()}');
     } finally {
       _setLoading(false);
+    }
+  }
+
+  // NEW: cargar sugerencias (Top-N por selection_count)
+  Future<void> loadSuggestions({int limit = 4}) async {
+    _loadingSuggestions = true;
+    _errorSuggestions = null;
+    notifyListeners();
+    try {
+      final rows = await _popService.topTypes(limit: limit);
+      _suggestions = rows
+          .map((m) => CategoryTypePopularity.fromMap(m))
+          .toList(growable: false);
+    } catch (e) {
+      _errorSuggestions = 'Error loading suggestions: $e';
+    } finally {
+      _loadingSuggestions = false;
+      notifyListeners();
     }
   }
 
@@ -75,14 +113,15 @@ class ExploreBuyerController extends ChangeNotifier {
 
     // Filtrar por tipo de categoría
     if (_selectedCategoryType != 'Todos') {
-      filtered = filtered.where((cat) => cat.type == _selectedCategoryType).toList();
+      filtered =
+          filtered.where((cat) => cat.type == _selectedCategoryType).toList();
     }
 
     // Filtrar por búsqueda (solo si hay consulta de búsqueda)
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((cat) => 
-        cat.name.toLowerCase().contains(_searchQuery)
-      ).toList();
+      filtered = filtered
+          .where((cat) => cat.name.toLowerCase().contains(_searchQuery))
+          .toList();
     }
 
     _filteredCategories = filtered;
@@ -96,9 +135,9 @@ class ExploreBuyerController extends ChangeNotifier {
         'selection_count': category.selectionCount + 1,
         'updated_at': DateTime.now().toIso8601String(),
       };
-      
+
       await SupabaseService.updateData('categories', updatedData, categoryId);
-      
+
       // Actualizar localmente
       final updatedCategory = Category(
         id: category.id,
@@ -109,11 +148,13 @@ class ExploreBuyerController extends ChangeNotifier {
         updatedAt: DateTime.now(),
         selectionCount: category.selectionCount + 1,
       );
-      
+
       final index = _categories.indexWhere((cat) => cat.id == categoryId);
       if (index != -1) {
         _categories[index] = updatedCategory;
         _applyFilter();
+        // NEW: refrescar sugerencias (opcional)
+        unawaited(loadSuggestions(limit: 4)); // ignore: unawaited_futures
         notifyListeners();
       }
     } catch (e) {
