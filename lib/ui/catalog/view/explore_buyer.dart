@@ -171,6 +171,11 @@ class _ExploreBuyerContent extends StatelessWidget {
             ),
           ),
 
+          const SizedBox(height: 12),
+
+          // Suggested for you (NUEVO)
+          _buildSuggestions(context),
+
           const SizedBox(height: 16),
 
           _buildCategoriesFilter(controller),
@@ -180,6 +185,116 @@ class _ExploreBuyerContent extends StatelessWidget {
           _buildProductsGrid(controller),
         ],
       ),
+    );
+  }
+
+  /// NUEVO: barra de sugerencias basada en v_category_selection_by_type
+  Widget _buildSuggestions(BuildContext context) {
+    final brandYellow = const Color(0xFFFFC436);
+
+    return Consumer<ExploreBuyerController>(
+      builder: (_, c, __) {
+        if (c.loadingSuggestions) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Material(
+              elevation: 2,
+              borderRadius: BorderRadius.circular(14),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                        height: 18,
+                        width: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2)),
+                    SizedBox(width: 8),
+                    Text('Cargando sugerencias...'),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
+        if (c.errorSuggestions != null) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              c.errorSuggestions!,
+              style: const TextStyle(color: Colors.red),
+            ),
+          );
+        }
+
+        if (c.suggestions.isEmpty) return const SizedBox.shrink();
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Material(
+            elevation: 3,
+            borderRadius: BorderRadius.circular(14),
+            child: Container(
+              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: brandYellow.withOpacity(0.35)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Suggested for you',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  SizedBox(
+                    height: 40,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: c.suggestions.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 8),
+                      itemBuilder: (_, i) {
+                        final s = c.suggestions[i];
+                        return InkWell(
+                          onTap: () => c.filterByType(s.type),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: brandYellow.withOpacity(0.12),
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(color: brandYellow, width: 1),
+                            ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.local_offer_rounded,
+                                    size: 16, color: brandYellow),
+                                const SizedBox(width: 6),
+                                Text(
+                                  '${s.type} • ${s.totalSelections}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -345,7 +460,7 @@ class _ExploreBuyerContent extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
-            childAspectRatio: 0.75, // Reducido para dar más espacio vertical
+            childAspectRatio: 0.75,
           ),
           itemCount: controller.filteredCategories.length,
           itemBuilder: (context, index) {
@@ -370,7 +485,7 @@ class _ExploreBuyerContent extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // Image placeholder
+            // Image
             Expanded(
               flex: 3,
               child: Container(
@@ -401,7 +516,7 @@ class _ExploreBuyerContent extends StatelessWidget {
                           ),
                           value: loadingProgress.expectedTotalBytes != null
                               ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
+                                  loadingProgress.expectedTotalBytes!
                               : null,
                         ),
                       );
@@ -456,15 +571,15 @@ class _ExploreBuyerContent extends StatelessWidget {
 
   IconData _getIconForType(String type) {
     switch (type.toLowerCase()) {
-      case 'Tutoria':
+      case 'tutoria':
         return Icons.school;
-      case 'Papeleria':
+      case 'papeleria':
         return Icons.content_cut;
-      case 'Comida':
+      case 'comida':
         return Icons.restaurant;
-      case 'Emprendimiento':
+      case 'emprendimiento':
         return Icons.store;
-      case 'Todos':
+      case 'todos':
         return Icons.shopping_bag;
       default:
         return Icons.shopping_bag;
@@ -473,13 +588,13 @@ class _ExploreBuyerContent extends StatelessWidget {
 
   Color _getBackgroundColorForType(String type) {
     switch (type.toLowerCase()) {
-      case 'Tutoria':
+      case 'tutoria':
         return const Color(0xFFFFF9C4); // Light yellow
-      case 'Papeleria':
+      case 'papeleria':
         return const Color(0xFFE8F5E8); // Light green
-      case 'Comida':
+      case 'comida':
         return const Color(0xFFFFE4E1); // Light pink
-      case 'Emprendimiento':
+      case 'emprendimiento':
         return const Color(0xFFF3E5F5); // Light purple
       default:
         return const Color(0xFFE3F2FD); // Light blue
