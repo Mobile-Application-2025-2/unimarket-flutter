@@ -15,28 +15,22 @@ class StudentCodeScreen extends StatelessWidget {
     final greetingText = userName.isNotEmpty ? 'Hi $userName!' : 'Hi there!';
     
     return Scaffold(
-      resizeToAvoidBottomInset: false, // Prevent keyboard overflow
+      resizeToAvoidBottomInset: false, 
       body: Column(
         children: [
-          // Top section with background image and wavy line
           Expanded(
             flex: 3,
             child: Stack(
               children: [
-                // Background image with wavy cut
                 Positioned.fill(
                   child: Image.asset(
                     'assets/images/student-code-bg.png',
                     fit: BoxFit
-                        .cover, // Cambiado de fitWidth a cover para llenar todo el espacio
+                        .cover, 
                     alignment: Alignment.topCenter,
                   ),
                 ),
 
-                // Wavy line positioned at the bottom of the background
-                // OPCIÓN 1: Usar un offset negativo para superponer la línea
-
-                // Content over the background
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -44,11 +38,9 @@ class StudentCodeScreen extends StatelessWidget {
                       children: [
                         const SizedBox(height: 40),
 
-                        // Logo with star
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Star icon
                             Image.asset(
                               'assets/images/student-code-star.png',
                               width: 30,
@@ -56,7 +48,6 @@ class StudentCodeScreen extends StatelessWidget {
                             ),
                             const SizedBox(width: 2),
 
-                            // UNIMARKET logo
                             const Text(
                               'UNIMARKET',
                               style: TextStyle(
@@ -84,7 +75,6 @@ class StudentCodeScreen extends StatelessWidget {
 
                         const SizedBox(height: 20),
 
-                        // Instructional text
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 20.0),
                           child: Text(
@@ -101,7 +91,6 @@ class StudentCodeScreen extends StatelessWidget {
 
                         const SizedBox(height: 20),
 
-                        // ID input field
                         Container(
                           width: double.infinity,
                           height: 60,
@@ -117,27 +106,54 @@ class StudentCodeScreen extends StatelessWidget {
                               ),
                             ],
                           ),
-                          child: const TextField(
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
-                              fontFamily: 'Poppins',
-                            ),
-                            decoration: InputDecoration(
-                              hintText: 'ID',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 18,
-                                fontFamily: 'Poppins',
+                          child: Row(
+                            children: [
+                              const Expanded(
+                                child: TextField(
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                    fontFamily: 'Poppins',
+                                  ),
+                                  decoration: InputDecoration(
+                                    hintText: 'ID',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 18,
+                                      fontFamily: 'Poppins',
+                                    ),
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                      vertical: 20,
+                                    ),
+                                  ),
+                                ),
                               ),
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 20,
+                              Container(
+                                height: 60,
+                                width: 50,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFFFC436),
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
+                                  ),
+                                ),
+                                child: IconButton(
+                                  icon: const Icon(
+                                    Icons.camera_alt_outlined,
+                                    color: Colors.white,
+                                    size: 24,
+                                  ),
+                                  onPressed: () {
+                                    // Camera functionality would be implemented here
+                                  },
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
                       ],
