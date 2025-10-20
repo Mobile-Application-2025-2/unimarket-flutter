@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:unimarket/ui/catalog/view/explore_buyer.dart';
+import 'package:unimarket/services/places_service.dart';
 
 class MapBackgroundPage extends StatefulWidget {
   const MapBackgroundPage({super.key});
@@ -18,6 +20,10 @@ class _MapBackgroundPageState extends State<MapBackgroundPage> {
   );
   bool _loading = true;
   String? _error;
+  final Set<Marker> _markers = {};
+  final Map<String, PlaceLite> _placesById = {};
+  static const String _placesApiKey = String.fromEnvironment('PLACES_API_KEY');
+  late final PlacesService _placesService = PlacesService(apiKey: _placesApiKey);
 
   final _brandYellow = const Color(0xFFF5A623);
 
@@ -60,8 +66,150 @@ class _MapBackgroundPageState extends State<MapBackgroundPage> {
       });
 
       _controller?.animateCamera(CameraUpdate.newCameraPosition(newCamera));
+
+      // Load nearby restaurants after we have the user's location
+      await _loadNearbyRestaurants(pos.latitude, pos.longitude, radiusMeters: 1200);
     } catch (e) {
       setState(() => _error = 'Error obteniendo ubicación: $e');
+    }
+  }
+
+  Future<void> _loadNearbyRestaurants(double lat, double lng, {int radiusMeters = 1200, String rankPreference = 'DISTANCE'}) async {
+    if (_placesApiKey.isEmpty) {
+      setState(() {
+        _error = 'Falta configurar PLACES_API_KEY. Usa --dart-define=PLACES_API_KEY=...';
+      });
+      return;
+    }
+    try {
+      setState(() {
+        _error = null;
+      });
+      final results = await _placesService.searchNearby(
+        latitude: lat,
+        longitude: lng,
+        radiusMeters: radiusMeters,
+        rankPreference: rankPreference,
+      );
+      if (results.isEmpty) {
+        setState(() {
+          _markers.clear();
+          _placesById.clear();
+          _error = 'No se encontraron restaurantes cercanos.';
+        });
+        return;
+      }
+
+      final Set<Marker> markers = {};
+      final Map<String, PlaceLite> byId = {};
+      for (final place in results) {
+        byId[place.id] = place;
+        markers.add(
+          Marker(
+            markerId: MarkerId(place.id),
+            position: LatLng(place.latitude, place.longitude),
+            infoWindow: InfoWindow(title: place.name),
+            onTap: () => _openPlace(place),
+          ),
+        );
+      }
+
+      setState(() {
+        _placesById
+          ..clear()
+          ..addAll(byId);
+        _markers
+          ..clear()
+          ..addAll(markers);
+      });
+    } catch (e) {
+      setState(() {
+        _error = 'Error consultando restaurantes: $e';
+      });
+    }
+  }
+
+  void _openPlace(PlaceLite place) {
+    final photoUrl = _placesService.buildPhotoUrl(place.firstPhotoName);
+    final priceText = _formatPriceLevel(place.priceLevel);
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (photoUrl != null)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      photoUrl,
+                      width: double.infinity,
+                      height: 160,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                const SizedBox(height: 12),
+                Text(
+                  place.name,
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    if (place.rating != null) ...[
+                      const Icon(Icons.star, size: 16, color: Colors.amber),
+                      const SizedBox(width: 4),
+                      Text('${place.rating!.toStringAsFixed(1)}'),
+                      const SizedBox(width: 12),
+                    ],
+                    if (priceText != null) Text(priceText, style: const TextStyle(color: Colors.black54)),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  height: 44,
+                  child: ElevatedButton.icon(
+                    onPressed: () => _launchDirections(place.latitude, place.longitude, place.name),
+                    icon: const Icon(Icons.directions),
+                    label: const Text('Cómo llegar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFF5A623),
+                      foregroundColor: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String? _formatPriceLevel(String? level) {
+    if (level == null) return null;
+    // API returns enums like PRICE_LEVEL_INEXPENSIVE, PRICE_LEVEL_MODERATE, etc.
+    if (level.contains('INEXPENSIVE')) return ''; // cheap
+    if (level.contains('MODERATE')) return '';
+    if (level.contains('EXPENSIVE')) return '';
+    if (level.contains('VERY_EXPENSIVE')) return '';
+    return null;
+  }
+
+  Future<void> _launchDirections(double lat, double lng, String name) async {
+    final encodedName = Uri.encodeComponent(name);
+    final uri = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$lat,$lng&destination_place_id=$encodedName');
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
   }
 
@@ -79,6 +227,7 @@ class _MapBackgroundPageState extends State<MapBackgroundPage> {
             zoomControlsEnabled: false,
             compassEnabled: false,
             mapToolbarEnabled: false,
+            markers: _markers,
           ),
 
           // Estado (opcional)
