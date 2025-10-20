@@ -22,7 +22,7 @@ class _MapBackgroundPageState extends State<MapBackgroundPage> {
   String? _error;
   final Set<Marker> _markers = {};
   final Map<String, PlaceLite> _placesById = {};
-  static const String _placesApiKey = String.fromEnvironment('PLACES_API_KEY');
+  static const String _placesApiKey = 'AIzaSyDmWwy5o6U0ELq2oDwYBkjmFQgdOabADxE';
   late final PlacesService _placesService = PlacesService(apiKey: _placesApiKey);
 
   final _brandYellow = const Color(0xFFF5A623);
@@ -75,12 +75,6 @@ class _MapBackgroundPageState extends State<MapBackgroundPage> {
   }
 
   Future<void> _loadNearbyRestaurants(double lat, double lng, {int radiusMeters = 1200, String rankPreference = 'DISTANCE'}) async {
-    if (_placesApiKey.isEmpty) {
-      setState(() {
-        _error = 'Falta configurar PLACES_API_KEY. Usa --dart-define=PLACES_API_KEY=...';
-      });
-      return;
-    }
     try {
       setState(() {
         _error = null;

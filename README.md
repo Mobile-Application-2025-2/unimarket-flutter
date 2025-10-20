@@ -22,25 +22,18 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Nearby Restaurants (Google Places v1)
 
-Setup API key:
+The app now includes nearby restaurants functionality using Google Places API v1:
 
-- Create a restricted API key for Google Places API (Places API (New), Places API, Maps SDKs as needed). Restrict to your app package/bundle and specific APIs.
-- Do not hardcode the key. Pass it via dart-define:
+- Automatically loads nearby restaurants when the map centers on user location
+- Shows markers for restaurants with tap interactions
+- Bottom sheet displays restaurant details (photo, name, rating, price level)
+- "Cómo llegar" button opens Google Maps for directions
 
-```bash
-flutter run --dart-define=PLACES_API_KEY=YOUR_KEY
-```
-
-Android/iOS:
-
-- Android: You may also provide the key via `local.properties`/build config if desired, but Flutter code reads it from `--dart-define`.
-- iOS: Keep restrictions in the Cloud Console and Info.plist as needed; Flutter code reads from `--dart-define`.
+Features:
+- Radius: 1200m (configurable)
+- Rank preference: DISTANCE (configurable)
+- Photo support via Places Photos API
+- Error handling for API failures
 
 Permissions:
-
-- Location permission is required. Make sure your AndroidManifest and iOS Info.plist contain location usage descriptions (already configured in project).
-
-Testing params:
-
-- Radius: 600 / 1200 / 2000 (configured in call site).
-- Rank preference: DISTANCE or POPULARITY.
+- Location permission is required (already configured in project)
