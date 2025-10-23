@@ -1,109 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'create_account.dart';
-import 'explore_buyer.dart';
-import '../../../controllers/session_controller.dart';
+import 'package:provider/provider.dart';
+import '../../viewmodel/catalog/login_viewmodel.dart';
+import '../../../view/catalog/create_account_view.dart';
+import '../../../ui/catalog/view/explore_buyer.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  bool _isLoading = false;
-  bool _isPasswordVisible = false;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _signInWithEmail() async {
-    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
-      _showErrorSnackBar('Please fill in all fields');
-      return;
-    }
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      await SessionController.instance.login(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-
-      _showSuccessSnackBar('Welcome back!');
-
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const ExploreBuyerScreen()),
-        );
-      }
-    } on AuthException catch (error) {
-      String errorMessage = error.message;
-      if (error.statusCode != null) {
-        errorMessage = '${error.statusCode} $errorMessage';
-      }
-      _showErrorSnackBar(errorMessage);
-    } catch (error) {
-      _showErrorSnackBar('An unexpected error occurred');
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _resetPassword() async {
-    if (_emailController.text.isEmpty) {
-      _showErrorSnackBar('Please enter your email address');
-      return;
-    }
-
-    try {
-      await SessionController.instance.resetPassword(_emailController.text);
-      _showSuccessSnackBar('Password reset email sent! Check your inbox.');
-    } on AuthException catch (error) {
-      String errorMessage = error.message;
-      if (error.statusCode != null) {
-        errorMessage = '${error.statusCode} $errorMessage';
-      }
-      _showErrorSnackBar(errorMessage);
-    } catch (error) {
-      _showErrorSnackBar('An unexpected error occurred');
-    }
-  }
-
-  void _showErrorSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
-  void _showSuccessSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
+class LoginView extends StatelessWidget {
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -298,128 +200,178 @@ class _LoginScreenState extends State<LoginScreen> {
 
               const SizedBox(height: 32),
 
-              Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade300),
-                    ),
-                    child: TextField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: const InputDecoration(
-                        hintText: 'Email address',
-                        hintStyle: TextStyle(
-                          color: Colors.grey,
-                          fontFamily: 'Poppins',
+              Consumer<LoginViewModel>(
+                builder: (context, viewModel, child) {
+                  return Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade300),
                         ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                      ),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[100],
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade300),
-                    ),
-                    child: TextField(
-                      controller: _passwordController,
-                      obscureText: !_isPasswordVisible,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: const TextStyle(
-                          color: Colors.grey,
-                          fontFamily: 'Poppins',
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            color: Colors.grey,
+                        child: TextField(
+                          onChanged: viewModel.setEmail,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: const InputDecoration(
+                            hintText: 'Email address',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                              fontFamily: 'Poppins',
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                          ),
                         ),
                       ),
-                      style: const TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
+                      const SizedBox(height: 16),
+
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[100],
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: TextField(
+                          onChanged: viewModel.setPassword,
+                          obscureText: !viewModel.isPasswordVisible,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            hintStyle: const TextStyle(
+                              color: Colors.grey,
+                              fontFamily: 'Poppins',
+                            ),
+                            border: InputBorder.none,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                viewModel.isPasswordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                color: Colors.grey,
+                              ),
+                              onPressed: viewModel.togglePasswordVisibility,
+                            ),
+                          ),
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
+                    ],
+                  );
+                },
               ),
 
               const SizedBox(height: 32),
 
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _signInWithEmail,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFC436),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 2,
-                  ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Text(
-                          'SIGN IN',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Poppins',
-                          ),
+              Consumer<LoginViewModel>(
+                builder: (context, viewModel, child) {
+                  return SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      onPressed: viewModel.isLoading || !viewModel.isValid 
+                          ? null 
+                          : () async {
+                              await viewModel.signIn();
+                              if (viewModel.errorMessage == null && context.mounted) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ExploreBuyerScreen(),
+                                  ),
+                                );
+                              }
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFFFFC436),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                ),
+                        elevation: 2,
+                      ),
+                      child: viewModel.isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              'SIGN IN',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Poppins',
+                              ),
+                            ),
+                    ),
+                  );
+                },
               ),
 
               const SizedBox(height: 16),
 
+              // Error message display
+              Consumer<LoginViewModel>(
+                builder: (context, viewModel, child) {
+                  if (viewModel.errorMessage != null) {
+                    return Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.red.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.red.shade200),
+                      ),
+                      child: Text(
+                        viewModel.errorMessage!,
+                        style: TextStyle(
+                          color: Colors.red.shade700,
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
+              ),
+
               // Forgot password link
-              TextButton(
-                onPressed: _resetPassword,
-                child: const Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
+              Consumer<LoginViewModel>(
+                builder: (context, viewModel, child) {
+                  return TextButton(
+                    onPressed: viewModel.isLoading ? null : () async {
+                      await viewModel.resetPassword();
+                    },
+                    child: const Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                  );
+                },
               ),
 
               const SizedBox(height: 40),
@@ -431,7 +383,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CreateAccountScreen(),
+                                    builder: (context) => const CreateAccountView(),
                       ),
                     );
                   },

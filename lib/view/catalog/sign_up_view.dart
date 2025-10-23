@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'package:provider/provider.dart';
+import '../../viewmodel/catalog/sign_up_viewmodel.dart';
+import '../../../view/catalog/create_account_view.dart';
+import 'login_view.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({super.key});
+class SignUpView extends StatelessWidget {
+  const SignUpView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +53,19 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(height: 80),
 
               // Sign Up button
-              PrimaryButton(
-                text: 'SIGN UP',
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
-                    ),
+              Consumer<SignUpViewModel>(
+                builder: (context, viewModel, child) {
+                  return PrimaryButton(
+                    text: 'SIGN UP',
+                    onPressed: viewModel.isLoading ? null : () {
+                      viewModel.navigateToCreateAccount();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CreateAccountView(),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
@@ -65,33 +73,38 @@ class SignUpScreen extends StatelessWidget {
               const SizedBox(height: 24),
 
               // Login link
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+              Consumer<SignUpViewModel>(
+                builder: (context, viewModel, child) {
+                  return GestureDetector(
+                    onTap: viewModel.isLoading ? null : () {
+                      viewModel.navigateToLogin();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginView(),
+                        ),
+                      );
+                    },
+                    child: RichText(
+                      text: const TextSpan(
+                        style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
+                        children: [
+                          TextSpan(
+                            text: 'ALREADY HAVE AN ACCOUNT? ',
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                          TextSpan(
+                            text: 'LOG IN',
+                            style: TextStyle(
+                              color: Color(0xFFFFC436),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
-                child: RichText(
-                  text: const TextSpan(
-                    style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
-                    children: [
-                      TextSpan(
-                        text: 'ALREADY HAVE AN ACCOUNT? ',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                      TextSpan(
-                        text: 'LOG IN',
-                        style: TextStyle(
-                          color: Color(0xFFFFC436),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               ),
 
               const SizedBox(height: 40),
