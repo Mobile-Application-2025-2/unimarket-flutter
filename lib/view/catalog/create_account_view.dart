@@ -61,32 +61,98 @@ class CreateAccountView extends StatelessWidget {
                 builder: (context, vm, _) {
                   return Column(
                     children: [
-                      CustomTextField(
-                        hintText: 'Name',
-                        onChanged: vm.setName,
-                        suffixIcon: const Icon(Icons.check_circle, color: Color(0xFFFFC436), size: 20),
+                      // Name field
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextField(
+                            hintText: 'Name',
+                            onChanged: vm.setName,
+                            suffixIcon: vm.name.isNotEmpty && vm.nameError == null
+                                ? const Icon(Icons.check_circle, color: Color(0xFFFFC436), size: 20)
+                                : null,
+                          ),
+                          if (vm.nameError != null)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12, top: 6),
+                              child: Text(
+                                vm.nameError!,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                       const SizedBox(height: 16),
-                      CustomTextField(
-                        hintText: 'Email',
-                        keyboardType: TextInputType.emailAddress,
-                        onChanged: vm.setEmail,
-                        suffixIcon: const Icon(Icons.check_circle, color: Color(0xFFFFC436), size: 20),
+                      
+                      // Email field
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextField(
+                            hintText: 'Email',
+                            keyboardType: TextInputType.emailAddress,
+                            onChanged: vm.setEmail,
+                            suffixIcon: vm.email.isNotEmpty && vm.emailError == null
+                                ? const Icon(Icons.check_circle, color: Color(0xFFFFC436), size: 20)
+                                : null,
+                          ),
+                          if (vm.emailError != null)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12, top: 6),
+                              child: Text(
+                                vm.emailError!,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                       const SizedBox(height: 16),
+                      
+                      // Password field
                       CustomTextField(
                         hintText: 'Password',
                         obscureText: true,
                         onChanged: vm.setPassword,
-                        // visibility handled in original, keep minimal for now
                       ),
                       const SizedBox(height: 16),
-                      CustomTextField(
-                        hintText: 'Confirm Password',
-                        obscureText: true,
-                        onChanged: vm.setConfirmPassword,
+                      
+                      // Confirm Password field
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextField(
+                            hintText: 'Confirm Password',
+                            obscureText: true,
+                            onChanged: vm.setConfirmPassword,
+                            suffixIcon: vm.confirmPassword.isNotEmpty && vm.passwordError == null && vm.password.isNotEmpty
+                                ? const Icon(Icons.check_circle, color: Color(0xFFFFC436), size: 20)
+                                : null,
+                          ),
+                          if (vm.passwordError != null)
+                            Padding(
+                              padding: const EdgeInsets.only(left: 12, top: 6),
+                              child: Text(
+                                vm.passwordError!,
+                                style: const TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                  fontFamily: 'Poppins',
+                                ),
+                              ),
+                            ),
+                        ],
                       ),
                       const SizedBox(height: 16),
+                      
+                      // Account Type dropdown
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.grey[100],
