@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../data/models/category.dart' as data;
-import '../../models/category_popularity.dart';
+import '../../model/catalog/entities/category_popularity.dart';
 import '../../model/shared/services/popularity_service.dart';
 
 class ExploreBuyerViewModel extends ChangeNotifier {
@@ -23,7 +23,7 @@ class ExploreBuyerViewModel extends ChangeNotifier {
   String? _error;
 
   // Suggestions
-  List<CategoryTypePopularity> _suggestions = [];
+  List<CategoryPopularity> _suggestions = [];
   bool _loadingSuggestions = false;
   String? _errorSuggestions;
 
@@ -36,7 +36,7 @@ class ExploreBuyerViewModel extends ChangeNotifier {
   String? get error => _error;
 
   // Suggestions getters
-  List<CategoryTypePopularity> get suggestions => _suggestions;
+  List<CategoryPopularity> get suggestions => _suggestions;
   bool get loadingSuggestions => _loadingSuggestions;
   String? get errorSuggestions => _errorSuggestions;
 

@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../controllers/session_controller.dart';
+import '../../viewmodel/app/session_viewmodel.dart';
 
 class LoginViewModel extends ChangeNotifier {
-  final SessionController _sessionController;
+  final SessionViewModel _sessionViewModel;
   
-  LoginViewModel(this._sessionController);
+  LoginViewModel(this._sessionViewModel);
 
   // State
   bool _isLoading = false;
@@ -66,7 +66,7 @@ class LoginViewModel extends ChangeNotifier {
     _setLoading(true);
 
     try {
-      await _sessionController.login(
+      await _sessionViewModel.signIn(
         email: _email.trim(),
         password: _password,
       );
@@ -100,7 +100,7 @@ class LoginViewModel extends ChangeNotifier {
     }
 
     try {
-      await _sessionController.resetPassword(_email.trim());
+      await _sessionViewModel.resetPassword(email: _email.trim());
       _clearError();
     } on AuthException catch (error) {
       String errorMessage = error.message;

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../model/shared/services/popularity_service.dart';
-import '../../models/category_popularity.dart';
+import '../../model/catalog/entities/category_popularity.dart';
 
 class HomeBuyerViewModel extends ChangeNotifier {
   final PopularityService _popularityService;
@@ -13,7 +13,7 @@ class HomeBuyerViewModel extends ChangeNotifier {
   // State
   bool _isLoading = false;
   String? _errorMessage;
-  List<CategoryTypePopularity> _categories = [];
+  List<CategoryPopularity> _categories = [];
   String _searchQuery = '';
   String _selectedCategory = 'Todos';
   List<VentureCard> _ventureCards = [];
@@ -21,7 +21,7 @@ class HomeBuyerViewModel extends ChangeNotifier {
   // Getters
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-  List<CategoryTypePopularity> get categories => _categories;
+  List<CategoryPopularity> get categories => _categories;
   String get searchQuery => _searchQuery;
   String get selectedCategory => _selectedCategory;
   List<VentureCard> get ventureCards => _ventureCards;

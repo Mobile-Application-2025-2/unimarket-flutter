@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../controllers/session_controller.dart';
+import '../../viewmodel/app/session_viewmodel.dart';
 
 class CreateAccountViewModel extends ChangeNotifier {
-  final SessionController _sessionController;
+  final SessionViewModel _sessionViewModel;
 
-  CreateAccountViewModel(this._sessionController);
+  CreateAccountViewModel(this._sessionViewModel);
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -57,14 +57,14 @@ class CreateAccountViewModel extends ChangeNotifier {
 
     _setLoading(true);
     try {
-      final user = await _sessionController.signup(
+      await _sessionViewModel.signUp(
         name: _name.trim(),
         email: _email.trim(),
         password: _password,
         type: _accountType!,
       );
       _clearError();
-      return user.name; // for next screen greeting
+      return _name.trim(); // for next screen greeting
     } on AuthException catch (e) {
       String msg = e.message;
       if (e.statusCode != null) {

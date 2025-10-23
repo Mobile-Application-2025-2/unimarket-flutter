@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unimarket/view/catalog/sign_up_view.dart';
 import 'package:unimarket/viewmodel/catalog/login_viewmodel.dart';
@@ -12,15 +11,16 @@ import 'package:unimarket/viewmodel/catalog/home_buyer_viewmodel.dart';
 import 'package:unimarket/model/shared/services/camera_service.dart';
 import 'package:unimarket/model/shared/services/popularity_service.dart';
 import 'package:unimarket/model/shared/services/places_service.dart';
-import 'package:unimarket/controllers/session_controller.dart';
-import 'config/supabase_config.dart';
+import 'package:unimarket/model/shared/services/supabase_service.dart';
+import 'package:unimarket/model/shared/services/auth_service.dart';
+import 'package:unimarket/viewmodel/app/session_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  await Supabase.initialize(
-    url: SupabaseConfig.url,
-    anonKey: SupabaseConfig.anonKey,
+  await SupabaseService.initialize(
+    url: 'https://fiieipssuysdlntvfhkg.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpaWVpcHNzdXlzZGxudHZmaGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk1OTU1NDEsImV4cCI6MjA3NTE3MTU0MX0.eIZvRlF4tUCMa76KlWkZdBAOGx6L4wPO8xjtCD-6U4A',
   );
   
   runApp(const MyApp());
@@ -33,18 +33,28 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (_) => SessionController.instance),
+        // Services
+        Provider(create: (_) => SupabaseService(
+          url: 'https://fiieipssuysdlntvfhkg.supabase.co',
+          anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpaWVpcHNzdXlzZGxudHZmaGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk1OTU1NDEsImV4cCI6MjA3NTE3MTU0MX0.eIZvRlF4tUCMa76KlWkZdBAOGx6L4wPO8xjtCD-6U4A',
+        )),
+        Provider(create: (ctx) => AuthService(ctx.read<SupabaseService>())),
         Provider(create: (_) => CameraService()),
-        Provider(create: (_) => PopularityService(Supabase.instance.client)),
+        Provider(create: (ctx) => PopularityService(ctx.read<SupabaseService>().client)),
         Provider(create: (_) => PlacesService(apiKey: 'AIzaSyDmWwy5o6U0ELq2oDwYBkjmFQgdOabADxE')),
+        
+        // ViewModels
         ChangeNotifierProvider(
-          create: (ctx) => LoginViewModel(ctx.read<SessionController>()),
+          create: (ctx) => SessionViewModel(ctx.read<AuthService>()),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => LoginViewModel(ctx.read<SessionViewModel>()),
         ),
         ChangeNotifierProvider(
           create: (_) => SignUpViewModel(),
         ),
         ChangeNotifierProvider(
-          create: (ctx) => CreateAccountViewModel(ctx.read<SessionController>()),
+          create: (ctx) => CreateAccountViewModel(ctx.read<SessionViewModel>()),
         ),
         ChangeNotifierProvider(
           create: (ctx) => StudentCodeViewModel(ctx.read<CameraService>()),
