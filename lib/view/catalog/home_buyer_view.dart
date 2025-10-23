@@ -1,17 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-/// Home de UniMarket (maqueta estática).
-/// - Sin backend, sin estados dinámicos, sin navegación.
-/// - Colores y formas aproximadas al mock.
-class HomePageView extends StatelessWidget {
-  const HomePageView({super.key});
+import '../../viewmodel/catalog/home_buyer_viewmodel.dart';
 
-  static const _brandYellow = Color(0xFFFFC107); // ajusta si tienes HEX exacto
+class HomeBuyerView extends StatelessWidget {
+  const HomeBuyerView({super.key});
+
+  static const _brandYellow = Color(0xFFFFC107);
   static const _chipRadius = 22.0;
   static const _cardRadius = 16.0;
 
   @override
   Widget build(BuildContext context) {
+    return Consumer<HomeBuyerViewModel>(
+      builder: (context, viewModel, child) {
+        if (viewModel.isLoading) {
+          return const Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+
+        if (viewModel.errorMessage != null) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
+                  const SizedBox(height: 16),
+                  Text(
+                    viewModel.errorMessage!,
+                    style: const TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () => viewModel.refreshData(),
+                    child: const Text('Reintentar'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return _buildContent(context, viewModel);
+      },
+    );
+  }
+
+  Widget _buildContent(BuildContext context, HomeBuyerViewModel viewModel) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
 
@@ -38,36 +78,39 @@ class HomePageView extends StatelessWidget {
           SizedBox(width: 6),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-        children: const [
-          _SearchBar(),
-          SizedBox(height: 12),
-          _CategoryChipsRow(),
-          SizedBox(height: 12),
-          _SubfiltersRow(),
-          SizedBox(height: 12),
-          _VentureCard(
-            imageUrl: 'https://picsum.photos/seed/uniwok/900/600',
-            title: 'HJA WOK Parrilla Asiática',
-            subtitle: 'Carne · Bowl · PAD THAI · Hamburguesa',
-            rating: 4.0,
-            comments: 124,
-            isFavorite: false,
-          ),
-          SizedBox(height: 12),
-          _VentureCard(
-            imageUrl: 'https://picsum.photos/seed/magenta/900/600',
-            title: 'Magenta',
-            subtitle: 'Tacos · Burritos · Nachos · Quesadillas',
-            rating: 4.0,
-            comments: 124,
-            isFavorite: true,
-          ),
-          SizedBox(height: 100),
-        ],
+      body: RefreshIndicator(
+        onRefresh: () => viewModel.refreshData(),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          children: [
+            _SearchBar(
+              onChanged: (value) => viewModel.setSearchQuery(value),
+              initialValue: viewModel.searchQuery,
+            ),
+            const SizedBox(height: 12),
+            _CategoryChipsRow(
+              categories: viewModel.categoryTypes,
+              selectedCategory: viewModel.selectedCategory,
+              onCategorySelected: (category) => viewModel.selectCategory(category),
+            ),
+            const SizedBox(height: 12),
+            const _SubfiltersRow(),
+            const SizedBox(height: 12),
+            ...viewModel.ventureCards.map((card) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _VentureCard(
+                imageUrl: card.imageUrl,
+                title: card.title,
+                subtitle: card.subtitle,
+                rating: card.rating,
+                comments: card.comments,
+                isFavorite: card.isFavorite,
+              ),
+            )),
+            const SizedBox(height: 100),
+          ],
+        ),
       ),
-      // Bottom nav amarillo redondeado (decorativo)
       bottomNavigationBar: SafeArea(
         top: false,
         child: Container(
@@ -116,17 +159,25 @@ class _AppBarIcon extends StatelessWidget {
 
 /// ======= Search =======
 class _SearchBar extends StatelessWidget {
-  const _SearchBar();
+  const _SearchBar({
+    required this.onChanged,
+    required this.initialValue,
+  });
+  
+  final ValueChanged<String> onChanged;
+  final String initialValue;
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return TextField(
-      readOnly: true,
+      onChanged: onChanged,
+      controller: TextEditingController(text: initialValue),
       decoration: InputDecoration(
         hintText: 'Buscar en UniMarket',
         prefixIcon: const Icon(Icons.search),
         filled: true,
-        fillColor: scheme.surfaceContainerHighest.withOpacity(.5),
+        fillColor: scheme.surfaceContainerHighest.withValues(alpha: 0.5),
         contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(22),
@@ -139,10 +190,17 @@ class _SearchBar extends StatelessWidget {
 
 /// ======= Filtros principales (fila de chips) =======
 class _CategoryChipsRow extends StatelessWidget {
-  const _CategoryChipsRow();
+  const _CategoryChipsRow({
+    required this.categories,
+    required this.selectedCategory,
+    required this.onCategorySelected,
+  });
 
-  static const _brandYellow = HomePageView._brandYellow;
-  static const items = ['Todos', 'Comida', 'Papelería', 'Tutorías', 'Servicios'];
+  final List<String> categories;
+  final String selectedCategory;
+  final ValueChanged<String> onCategorySelected;
+
+  static const _brandYellow = HomeBuyerView._brandYellow;
 
   @override
   Widget build(BuildContext context) {
@@ -152,25 +210,28 @@ class _CategoryChipsRow extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          for (final label in items)
+          for (final label in categories)
             Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: label == 'Todos' ? _brandYellow : Colors.transparent,
-                  borderRadius: BorderRadius.circular(HomePageView._chipRadius),
-                  border: Border.all(
-                    color: label == 'Todos' ? _brandYellow : const Color(0xFFE0E0E0),
-                    width: 1.2,
+              child: GestureDetector(
+                onTap: () => onCategorySelected(label),
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: label == selectedCategory ? _brandYellow : Colors.transparent,
+                    borderRadius: BorderRadius.circular(HomeBuyerView._chipRadius),
+                    border: Border.all(
+                      color: label == selectedCategory ? _brandYellow : const Color(0xFFE0E0E0),
+                      width: 1.2,
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: Text(
-                    label,
-                    style: text.labelLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: label == 'Todos' ? Colors.black : const Color(0xFF555555),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    child: Text(
+                      label,
+                      style: text.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: label == selectedCategory ? Colors.black : const Color(0xFF555555),
+                      ),
                     ),
                   ),
                 ),
@@ -257,7 +318,7 @@ class _VentureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final radius = BorderRadius.circular(HomePageView._cardRadius);
+    final radius = BorderRadius.circular(HomeBuyerView._cardRadius);
 
     return Material(
       color: Colors.transparent,

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodel/catalog/login_viewmodel.dart';
 import '../../../view/catalog/create_account_view.dart';
-import '../../../ui/catalog/view/explore_buyer.dart';
+import '../../../view/catalog/explore_buyer_view.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -290,7 +290,7 @@ class LoginView extends StatelessWidget {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const ExploreBuyerScreen(),
+                                    builder: (context) => const ExploreBuyerView(),
                                   ),
                                 );
                               }

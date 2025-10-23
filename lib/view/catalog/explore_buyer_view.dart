@@ -1,31 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../controller/explore_buyer_controller.dart';
-import '../../../data/models/category.dart';
-import 'home_deliver.dart';
+import '../../viewmodel/catalog/explore_buyer_viewmodel.dart';
+import '../../../data/models/category.dart' as data;
+import '../../../view/catalog/home_deliver_view.dart';
 
-class ExploreBuyerScreen extends StatelessWidget {
-  const ExploreBuyerScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ExploreBuyerController(),
-      child: const _ExploreBuyerContent(),
-    );
-  }
-}
-
-class _ExploreBuyerContent extends StatelessWidget {
-  const _ExploreBuyerContent();
+class ExploreBuyerView extends StatelessWidget {
+  const ExploreBuyerView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Consumer<ExploreBuyerController>(
-        builder: (context, controller, child) {
-          if (controller.isLoading && controller.categories.isEmpty) {
+      body: Consumer<ExploreBuyerViewModel>(
+        builder: (context, viewModel, child) {
+          if (viewModel.isLoading && viewModel.categories.isEmpty) {
             return const Center(
               child: CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color(0xFFFFC436)),
@@ -33,7 +21,7 @@ class _ExploreBuyerContent extends StatelessWidget {
             );
           }
 
-          if (controller.error != null) {
+          if (viewModel.error != null) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -41,13 +29,13 @@ class _ExploreBuyerContent extends StatelessWidget {
                   Icon(Icons.error_outline, size: 64, color: Colors.red[300]),
                   const SizedBox(height: 16),
                   Text(
-                    controller.error!,
+                    viewModel.error!,
                     style: const TextStyle(fontSize: 16, fontFamily: 'Poppins'),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => controller.refresh(),
+                    onPressed: () => viewModel.refresh(),
                     child: const Text('Reintentar'),
                   ),
                 ],
@@ -55,7 +43,7 @@ class _ExploreBuyerContent extends StatelessWidget {
             );
           }
 
-          return _buildContent(context, controller);
+          return _buildContent(context, viewModel);
         },
       ),
       bottomNavigationBar: _buildBottomNavigationBar(context),
@@ -64,7 +52,7 @@ class _ExploreBuyerContent extends StatelessWidget {
 
   Widget _buildContent(
     BuildContext context,
-    ExploreBuyerController controller,
+    ExploreBuyerViewModel viewModel,
   ) {
     return SafeArea(
       child: Column(
@@ -138,7 +126,7 @@ class _ExploreBuyerContent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(24),
               ),
               child: TextField(
-                onChanged: (value) => controller.updateSearchQuery(value),
+                onChanged: (value) => viewModel.setSearchQuery(value),
                 decoration: InputDecoration(
                   hintText: 'Buscar en UniMarket',
                   hintStyle: const TextStyle(
@@ -151,9 +139,9 @@ class _ExploreBuyerContent extends StatelessWidget {
                     color: Colors.grey,
                     size: 20,
                   ),
-                  suffixIcon: controller.searchQuery.isNotEmpty
+                  suffixIcon: viewModel.searchQuery.isNotEmpty
                       ? IconButton(
-                          onPressed: () => controller.clearSearch(),
+                          onPressed: () => viewModel.setSearchQuery(''),
                           icon: const Icon(
                             Icons.clear,
                             color: Colors.grey,
@@ -173,128 +161,123 @@ class _ExploreBuyerContent extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Suggested for you (NUEVO)
-          _buildSuggestions(context),
+          // Suggested for you
+          _buildSuggestions(context, viewModel),
 
           const SizedBox(height: 16),
 
-          _buildCategoriesFilter(controller),
+          _buildCategoriesFilter(viewModel),
 
           const SizedBox(height: 16),
 
-          _buildProductsGrid(controller),
+          _buildProductsGrid(viewModel),
         ],
       ),
     );
   }
 
-  /// NUEVO: barra de sugerencias basada en v_category_selection_by_type
-  Widget _buildSuggestions(BuildContext context) {
+  Widget _buildSuggestions(BuildContext context, ExploreBuyerViewModel viewModel) {
     final brandYellow = const Color(0xFFFFC436);
 
-    return Consumer<ExploreBuyerController>(
-      builder: (_, c, __) {
-        if (c.loadingSuggestions) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Material(
-              elevation: 2,
-              borderRadius: BorderRadius.circular(14),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                        height: 18,
-                        width: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2)),
-                    SizedBox(width: 8),
-                    Text('Cargando sugerencias...'),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
-
-        if (c.errorSuggestions != null) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              c.errorSuggestions!,
-              style: const TextStyle(color: Colors.red),
-            ),
-          );
-        }
-
-        if (c.suggestions.isEmpty) return const SizedBox.shrink();
-
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Material(
-            elevation: 3,
-            borderRadius: BorderRadius.circular(14),
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: brandYellow.withOpacity(0.35)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Suggested for you',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 40,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: c.suggestions.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 8),
-                      itemBuilder: (_, i) {
-                        final s = c.suggestions[i];
-                        return InkWell(
-                          onTap: () => c.filterByType(s.type),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: brandYellow.withOpacity(0.12),
-                              borderRadius: BorderRadius.circular(24),
-                              border: Border.all(color: brandYellow, width: 1),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.local_offer_rounded,
-                                    size: 16, color: brandYellow),
-                                const SizedBox(width: 6),
-                                Text(
-                                  '${s.type} • ${s.totalSelections}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
+    if (viewModel.loadingSuggestions) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Material(
+          elevation: 2,
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                    height: 18,
+                    width: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2)),
+                SizedBox(width: 8),
+                Text('Cargando sugerencias...'),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      );
+    }
+
+    if (viewModel.errorSuggestions != null) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Text(
+          viewModel.errorSuggestions!,
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
+    }
+
+    if (viewModel.suggestions.isEmpty) return const SizedBox.shrink();
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Material(
+        elevation: 3,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: brandYellow.withOpacity(0.35)),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Suggested for you',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 40,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: viewModel.suggestions.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 8),
+                  itemBuilder: (_, i) {
+                    final s = viewModel.suggestions[i];
+                    return InkWell(
+                      onTap: () => viewModel.selectCategoryType(s.type),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: brandYellow.withOpacity(0.12),
+                          borderRadius: BorderRadius.circular(24),
+                          border: Border.all(color: brandYellow, width: 1),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(Icons.local_offer_rounded,
+                                size: 16, color: brandYellow),
+                            const SizedBox(width: 6),
+                            Text(
+                              '${s.type} • ${s.totalSelections}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -315,7 +298,7 @@ class _ExploreBuyerContent extends StatelessWidget {
           IconButton(
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const MapBackgroundPage()),
+                MaterialPageRoute(builder: (_) => const HomeDeliverView()),
               );
             },
             icon: const Icon(Icons.home, color: Colors.white, size: 24),
@@ -347,21 +330,21 @@ class _ExploreBuyerContent extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoriesFilter(ExploreBuyerController controller) {
+  Widget _buildCategoriesFilter(ExploreBuyerViewModel viewModel) {
     return SizedBox(
       height: 40,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        itemCount: controller.categoryTypes.length,
+        itemCount: viewModel.categoryTypes.length,
         itemBuilder: (context, index) {
-          final categoryType = controller.categoryTypes[index];
-          final isSelected = categoryType == controller.selectedCategoryType;
+          final categoryType = viewModel.categoryTypes[index];
+          final isSelected = categoryType == viewModel.selectedCategoryType;
 
           return Padding(
             padding: const EdgeInsets.only(right: 12.0),
             child: GestureDetector(
-              onTap: () => controller.filterByType(categoryType),
+              onTap: () => viewModel.selectCategoryType(categoryType),
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
@@ -404,10 +387,10 @@ class _ExploreBuyerContent extends StatelessWidget {
     );
   }
 
-  Widget _buildProductsGrid(ExploreBuyerController controller) {
-    if (controller.filteredCategories.isEmpty) {
-      String message = controller.searchQuery.isNotEmpty
-          ? 'No se encontraron resultados para "${controller.searchQuery}"'
+  Widget _buildProductsGrid(ExploreBuyerViewModel viewModel) {
+    if (viewModel.filteredCategories.isEmpty) {
+      String message = viewModel.searchQuery.isNotEmpty
+          ? 'No se encontraron resultados para "${viewModel.searchQuery}"'
           : 'No hay categorías disponibles';
 
       return Expanded(
@@ -416,7 +399,7 @@ class _ExploreBuyerContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
-                controller.searchQuery.isNotEmpty
+                viewModel.searchQuery.isNotEmpty
                     ? Icons.search_off
                     : Icons.category_outlined,
                 size: 64,
@@ -432,10 +415,10 @@ class _ExploreBuyerContent extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              if (controller.searchQuery.isNotEmpty) ...[
+              if (viewModel.searchQuery.isNotEmpty) ...[
                 const SizedBox(height: 16),
                 TextButton(
-                  onPressed: () => controller.clearSearch(),
+                  onPressed: () => viewModel.setSearchQuery(''),
                   child: const Text(
                     'Limpiar búsqueda',
                     style: TextStyle(
@@ -462,10 +445,10 @@ class _ExploreBuyerContent extends StatelessWidget {
             mainAxisSpacing: 12,
             childAspectRatio: 0.75,
           ),
-          itemCount: controller.filteredCategories.length,
+          itemCount: viewModel.filteredCategories.length,
           itemBuilder: (context, index) {
-            final category = controller.filteredCategories[index];
-            return _buildCategoryCard(category, controller);
+            final category = viewModel.filteredCategories[index];
+            return _buildCategoryCard(category, viewModel);
           },
         ),
       ),
@@ -473,11 +456,13 @@ class _ExploreBuyerContent extends StatelessWidget {
   }
 
   Widget _buildCategoryCard(
-    Category category,
-    ExploreBuyerController controller,
+    data.Category category,
+    ExploreBuyerViewModel viewModel,
   ) {
     return GestureDetector(
-      onTap: () => controller.updateSelectionCount(category.id),
+      onTap: () {
+        // TODO: Implement category selection logic if needed
+      },
       child: Container(
         decoration: BoxDecoration(
           color: _getBackgroundColorForType(category.type),

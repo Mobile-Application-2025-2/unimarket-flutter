@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../viewmodel/catalog/student_code_viewmodel.dart';
-import '../../../ui/catalog/view/explore_buyer.dart';
+import '../../../view/catalog/explore_buyer_view.dart';
 
 class StudentCodeView extends StatelessWidget {
   const StudentCodeView({super.key, required this.userName});
@@ -250,7 +250,7 @@ class StudentCodeView extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => const ExploreBuyerScreen(),
+                                          builder: (context) => const ExploreBuyerView(),
                                         ),
                                       );
                                     }

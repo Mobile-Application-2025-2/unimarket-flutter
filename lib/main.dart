@@ -6,7 +6,12 @@ import 'package:unimarket/viewmodel/catalog/login_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/sign_up_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/create_account_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/student_code_viewmodel.dart';
+import 'package:unimarket/viewmodel/catalog/explore_buyer_viewmodel.dart';
+import 'package:unimarket/viewmodel/catalog/home_deliver_viewmodel.dart';
+import 'package:unimarket/viewmodel/catalog/home_buyer_viewmodel.dart';
 import 'package:unimarket/model/shared/services/camera_service.dart';
+import 'package:unimarket/model/shared/services/popularity_service.dart';
+import 'package:unimarket/model/shared/services/places_service.dart';
 import 'package:unimarket/controllers/session_controller.dart';
 import 'config/supabase_config.dart';
 
@@ -30,6 +35,8 @@ class MyApp extends StatelessWidget {
       providers: [
         Provider(create: (_) => SessionController.instance),
         Provider(create: (_) => CameraService()),
+        Provider(create: (_) => PopularityService(Supabase.instance.client)),
+        Provider(create: (_) => PlacesService(apiKey: 'AIzaSyDmWwy5o6U0ELq2oDwYBkjmFQgdOabADxE')),
         ChangeNotifierProvider(
           create: (ctx) => LoginViewModel(ctx.read<SessionController>()),
         ),
@@ -41,6 +48,15 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (ctx) => StudentCodeViewModel(ctx.read<CameraService>()),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => ExploreBuyerViewModel(ctx.read<PopularityService>()),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => HomeDeliverViewModel(ctx.read<PlacesService>()),
+        ),
+        ChangeNotifierProvider(
+          create: (ctx) => HomeBuyerViewModel(ctx.read<PopularityService>()),
         ),
       ],
       child: MaterialApp(
