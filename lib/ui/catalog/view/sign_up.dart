@@ -17,6 +17,10 @@ class SignUpScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 20.0, bottom: 60.0),
                 child: Align(alignment: Alignment.centerLeft),
               ),
+              TextButton(
+                onPressed: () => throw Exception(),
+                child: const Text("Throw Test Exception"),
+              ),
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 40.0),
