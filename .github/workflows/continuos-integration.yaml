@@ -44,7 +44,7 @@ jobs:
           restore-keys: gradle-${{ runner.os }}
 
       - name: Build release APK
-        run: flutter build apk --release
+        run: flutter build apk --profile
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
