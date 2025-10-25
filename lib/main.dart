@@ -15,19 +15,12 @@ import 'package:unimarket/model/shared/services/supabase_service.dart';
 import 'package:unimarket/model/shared/services/auth_service.dart';
 import 'package:unimarket/viewmodel/app/session_viewmodel.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:unimarket/ui/catalog/view/sign_up.dart';
-import 'config/supabase_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  await SupabaseService.initialize(
-    url: 'https://fiieipssuysdlntvfhkg.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpaWVpcHNzdXlzZGxudHZmaGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk1OTU1NDEsImV4cCI6MjA3NTE3MTU0MX0.eIZvRlF4tUCMa76KlWkZdBAOGx6L4wPO8xjtCD-6U4A',
-  );
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -122,3 +115,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
