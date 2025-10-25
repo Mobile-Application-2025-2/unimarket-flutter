@@ -46,6 +46,9 @@ jobs:
       - name: Generate Android folder
         run: flutter create --platforms android .
 
+      - name: Generate firebase_options.dart file
+        run: echo "{{ secrets.FIREBASE_OPTIONS }}" > lib/firebase_options.dart
+
       - name: Build release APK
         run: flutter build apk --profile
 
