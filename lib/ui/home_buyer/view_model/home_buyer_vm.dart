@@ -1,12 +1,19 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:unimarket/domain/models/categories/category.dart';
+import 'package:unimarket/utils/command.dart';
+import 'package:unimarket/utils/result.dart';
 
 class HomeBuyerViewModel extends ChangeNotifier {
-  HomeBuyerViewModel();
+  HomeBuyerViewModel() {
+    load = Command0(_load)..execute();
+  }
+
+  late Command0 load;
 
   List<Category> _categories = [
     new Category(
@@ -49,6 +56,7 @@ class HomeBuyerViewModel extends ChangeNotifier {
 
   UnmodifiableListView<Category> get categories => UnmodifiableListView(_categories);
 
+  // for the horizontal scroll view
   UnmodifiableListView<String> get uniqueCategories {
     List<String> categoryTypes = [
       "Todos",
@@ -60,10 +68,11 @@ class HomeBuyerViewModel extends ChangeNotifier {
     return UnmodifiableListView(categoryTypes);
   }
 
+  // for the vertical scroll view
   UnmodifiableListView<Category> get filteredCategories {
     if (_searchQuery.isEmpty && _selectedCategory == 'Todos') return UnmodifiableListView(_categories);
 
-    final filteredCategories = _categories
+    final categoriesFilteredByName = _categories
         .where((category) {
             String copy = category.name.toLowerCase();
             String name = copy;
@@ -82,24 +91,30 @@ class HomeBuyerViewModel extends ChangeNotifier {
             return name.contains(_searchQuery.toLowerCase()) || copy.contains(_searchQuery.toLowerCase());
         }).toSet();
 
-    final filteredByCategoryType = _selectedCategory.isEmpty
-        ? filteredCategories
-        : filteredCategories.where((category) => category.type == _selectedCategory).toSet();
+    final categoriesFilteredByCategoryType = _selectedCategory.isEmpty
+        ? categoriesFilteredByName
+        : categoriesFilteredByName.where((category) => category.type == _selectedCategory).toSet();
 
-    if (_searchQuery.isEmpty && _selectedCategory.isNotEmpty) {
-      return UnmodifiableListView(filteredByCategoryType);
+    if(_selectedCategory == "Todos") {
+      if (_searchQuery.isNotEmpty) {
+        return UnmodifiableListView(_categories.toSet().intersection(categoriesFilteredByName));
+      } else {
+        return UnmodifiableListView(_categories);
+      }
+    } else {
+      if (_searchQuery.isNotEmpty) {
+        return UnmodifiableListView(categoriesFilteredByName.intersection(
+            categoriesFilteredByCategoryType));
+      } else {
+        return UnmodifiableListView(categoriesFilteredByCategoryType);
+      }
     }
-
-    if (_searchQuery.isNotEmpty && _selectedCategory.isEmpty) {
-      return UnmodifiableListView(filteredCategories);
-    }
-
-    return UnmodifiableListView(filteredCategories.intersection(filteredByCategoryType));
   }
 
-  Future<void> _load() async {
+  Future<Result> _load() async {
     try {
-      _categories = _categories;
+      sleep(Duration(seconds: 1));
+      return Result.ok(_categories);
     }
     finally {
       notifyListeners();

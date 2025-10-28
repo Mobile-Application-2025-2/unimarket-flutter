@@ -20,8 +20,12 @@ class GenericSearchBar extends StatelessWidget {
         ),
         child: TextField(
           onChanged: onChanged,
+          maxLength: 25,
           decoration: InputDecoration(
             hintText: 'Buscar en UniMarket',
+            counterText: '',
+            // suffixText: '25',
+            // suffixStyle: const TextStyle(color: Colors.grey, fontSize: 14),
             hintStyle: const TextStyle(
               color: Colors.grey,
               fontSize: 14,
