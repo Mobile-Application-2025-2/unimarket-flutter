@@ -44,21 +44,24 @@ class HomeBuyerViewModel extends ChangeNotifier {
   String _searchQuery = "";
   String get searchQuery => _searchQuery;
 
-  String _selectedCategory = "";
+  String _selectedCategory = "Todos";
   String get selectedCategory => _selectedCategory;
 
   UnmodifiableListView<Category> get categories => UnmodifiableListView(_categories);
 
   UnmodifiableListView<String> get uniqueCategories {
-    List<String> categoryTypes = categories.map((category) => category.type)
+    List<String> categoryTypes = [
+      "Todos",
+      ...categories.map((category) => category.type)
         .toList()
-        .toSet().toList(); // obtain unique categories
+        .toSet()
+    ];
 
     return UnmodifiableListView(categoryTypes);
   }
 
   UnmodifiableListView<Category> get filteredCategories {
-    if (_searchQuery.isEmpty && _selectedCategory.isEmpty) return UnmodifiableListView(_categories);
+    if (_searchQuery.isEmpty && _selectedCategory == 'Todos') return UnmodifiableListView(_categories);
 
     final filteredCategories = _categories
         .where((category) {
@@ -109,8 +112,8 @@ class HomeBuyerViewModel extends ChangeNotifier {
   }
 
   void setSelectedCategory(String value) {
-    if (value == _selectedCategory) {
-      _selectedCategory = "";
+    if (value == _selectedCategory && value != 'Todos') {
+      _selectedCategory = "Todos";
       notifyListeners();
       return;
     }

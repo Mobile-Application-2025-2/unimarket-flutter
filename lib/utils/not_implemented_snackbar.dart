@@ -11,8 +11,9 @@ void notImplementedFunctionalitySnackbar(BuildContext context) {
       style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
       textAlign: TextAlign.center,
     ),
-    backgroundColor: Colors.blue,
-    duration: Duration(milliseconds: 700),
+    backgroundColor: Colors.blueAccent,
+    margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    duration: Duration(seconds: 1),
     behavior: SnackBarBehavior.floating,
   );
 

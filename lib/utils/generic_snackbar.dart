@@ -12,7 +12,7 @@ void genericSnackbar(BuildContext context, String message, Color bgColor, Color 
       textAlign: TextAlign.center,
     ),
     backgroundColor: bgColor,
-    duration: Duration(milliseconds: 700),
+    duration: Duration(seconds: 1),
     behavior: SnackBarBehavior.floating,
   );
 
