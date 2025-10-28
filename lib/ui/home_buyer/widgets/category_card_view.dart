@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:unimarket/domain/models/categories/category.dart';
+import 'package:unimarket/utils/generic_snackbar.dart';
 
 class CategoryCardView extends StatelessWidget {
   const CategoryCardView({super.key, required this.category});
@@ -9,7 +10,7 @@ class CategoryCardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => genericSnackbar(context, 'El detalle de la categoria no se encuentra disponible.', Colors.yellow, Colors.black),
       child: Container(
         decoration: BoxDecoration(
           color: Color(0xFFFFFF72),
@@ -32,7 +33,6 @@ class CategoryCardView extends StatelessWidget {
                     category.image,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
-                      print(error);
                       return Icon(
                         Icons.add_call,
                         size: 40,

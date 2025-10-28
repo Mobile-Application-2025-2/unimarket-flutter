@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-void showInfoSnackbar(BuildContext context) {
+void genericSnackbar(BuildContext context, String message, Color bgColor, Color textColor) {
   final scaffoldMessenger = ScaffoldMessenger.of(context);
 
   scaffoldMessenger.hideCurrentSnackBar();
 
   final snackBar = SnackBar(
     content: Text(
-      "¡Esta funcionalidad aún no está disponible!",
-      style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
+      message,
+      style: TextStyle(color: textColor, fontSize: 15, fontWeight: FontWeight.w500),
       textAlign: TextAlign.center,
     ),
-    backgroundColor: Colors.blue,
+    backgroundColor: bgColor,
     duration: Duration(milliseconds: 700),
     behavior: SnackBarBehavior.floating,
   );

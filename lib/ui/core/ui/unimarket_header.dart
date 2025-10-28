@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket/utils/snackbar.dart';
+import 'package:unimarket/utils/not_implemented_snackbar.dart';
 
 class UnimarketHeader extends StatelessWidget {
   const UnimarketHeader({super.key});
@@ -30,7 +30,7 @@ class UnimarketHeader extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                onPressed: () => showInfoSnackbar(context),
+                onPressed: () => notImplementedFunctionalitySnackbar(context),
                 icon: const Icon(
                   Icons.favorite_border,
                   color: Colors.black,
@@ -38,7 +38,7 @@ class UnimarketHeader extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () => showInfoSnackbar(context),
+                onPressed: () => notImplementedFunctionalitySnackbar(context),
                 icon: const Icon(
                   Icons.local_shipping,
                   color: Colors.black,

@@ -5,13 +5,14 @@ import 'package:unimarket/ui/home_buyer/widgets/category_card_view.dart';
 class SubcategoriesVerticalScrollView extends StatelessWidget {
   final HomeBuyerViewModel viewModel;
 
-  const SubcategoriesVerticalScrollView({
-    super.key,
-    required this.viewModel,
-  });
+  const SubcategoriesVerticalScrollView({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
+    if (viewModel.filteredCategories.isEmpty) {
+      return const Expanded(child: Center(child: Text("No hay subcategorias para mostrar.", style: TextStyle(fontSize: 16),)));
+    }
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
