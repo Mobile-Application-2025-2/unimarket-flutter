@@ -42,6 +42,12 @@ jobs:
             build
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: gradle-${{ runner.os }}
+      
+      - name: Generate Android folder
+        run: flutter create --platforms android .
+
+      - name: Generate firebase_options.dart file
+        run: echo "${{ secrets.FIREBASE_OPTIONS }}" | base64 --decode > lib/firebase_options.dart
 
       - name: Build release APK
         run: flutter build apk --profile
