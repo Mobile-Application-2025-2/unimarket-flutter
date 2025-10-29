@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unimarket/ui/home_buyer/widgets/home_buyer_screen.dart';
-import 'package:unimarket/view/catalog/sign_up_view.dart';
+import 'package:unimarket/ui/sign_up/view/sign_up_view.dart';
 import 'package:unimarket/viewmodel/catalog/login_viewmodel.dart';
-import 'package:unimarket/viewmodel/catalog/sign_up_viewmodel.dart';
+import 'package:unimarket/ui/sign_up/view_model/sign_up_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/create_account_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/student_code_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/explore_buyer_viewmodel.dart';
@@ -19,7 +19,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'firebase_options.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,7 +127,7 @@ class MyApp extends StatelessWidget {
             foregroundColor: Colors.white,
           )
         ),
-        home: HomeBuyerScreen(),
+        home: SignUpView(),
         debugShowCheckedModeBanner: false,
       ),
     );
