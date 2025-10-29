@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../view_model/sign_up_viewmodel.dart';
 import '../widgets/primary_button.dart';
 import '../../login/view/login_view.dart';
-import '../../../../view/catalog/create_account_view.dart';
+import '../../create_account/view/create_account_view.dart';
 
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});

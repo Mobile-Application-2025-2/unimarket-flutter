@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../../viewmodel/app/session_viewmodel.dart';
+import '../../create_account/widgets/session_viewmodel.dart';
 
 class LoginUiState {
   final bool loading;

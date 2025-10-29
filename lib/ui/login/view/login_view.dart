@@ -5,7 +5,7 @@ import '../widgets/email_field.dart';
 import '../widgets/password_field.dart';
 import '../widgets/login_button.dart';
 import '../widgets/error_banner.dart';
-import '../../../../view/catalog/create_account_view.dart';
+import '../../../../ui/create_account/view/create_account_view.dart';
 import '../../../../view/catalog/explore_buyer_view.dart';
 
 class LoginView extends StatelessWidget {
