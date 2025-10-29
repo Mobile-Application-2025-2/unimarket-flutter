@@ -17,6 +17,9 @@ import 'package:unimarket/model/shared/services/auth_service.dart';
 import 'package:unimarket/viewmodel/app/session_viewmodel.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +27,22 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // handle the errors of Flutter framework
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+
+  // handle errors outside of Flutter framework
+  // PlatformDispatcher.instance.onError = (error, stack) {
+  //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+  //   return true;
+  // };
+
   runApp(const MyApp());
 }
 
@@ -44,7 +62,7 @@ class MyApp extends StatelessWidget {
         Provider(create: (_) => CameraService()),
         Provider(create: (ctx) => PopularityService(ctx.read<SupabaseService>().client)),
         Provider(create: (_) => PlacesService(apiKey: 'AIzaSyDmWwy5o6U0ELq2oDwYBkjmFQgdOabADxE')),
-        
+
         // ViewModels
         ChangeNotifierProvider(
           create: (ctx) => SessionViewModel(ctx.read<AuthService>()),
