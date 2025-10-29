@@ -239,12 +239,24 @@ class LoginView extends StatelessWidget {
                 enabled: state.canSubmit,
                 loading: state.loading,
                 onPressed: () async {
-                  await vm.signIn();
-                  if (state.error == null && context.mounted) {
+                  final success = await vm.signIn();
+                  if (!context.mounted) return;
+
+                  if (success) {
+                    // ✅ Only navigate on real success
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const ExploreBuyerView(),
+                      ),
+                    );
+                  } else if (vm.state.error != null) {
+                    // Show error in SnackBar
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(vm.state.error!),
+                        backgroundColor: Colors.red,
+                        behavior: SnackBarBehavior.floating,
                       ),
                     );
                   }

@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../create_account/widgets/session_viewmodel.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../../model/shared/services/firebase_auth_service.dart';
 
 class LoginUiState {
   final bool loading;
@@ -34,16 +34,18 @@ class LoginUiState {
   }
 
   bool get isEmailValid {
-    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email.trim());
+    return RegExp(r'^\S+@\S+\.\S+$').hasMatch(email.trim());
   }
 
-  bool get canSubmit => !loading && isEmailValid && password.isNotEmpty;
+  bool get isPasswordValid => password.isNotEmpty;
+
+  bool get canSubmit => !loading && isEmailValid && isPasswordValid;
 }
 
 class LoginViewModel extends ChangeNotifier {
-  final SessionViewModel _sessionViewModel;
+  final FirebaseAuthService _auth;
 
-  LoginViewModel(this._sessionViewModel);
+  LoginViewModel(this._auth);
 
   LoginUiState _state = const LoginUiState();
 
@@ -70,30 +72,50 @@ class LoginViewModel extends ChangeNotifier {
     _set(_state.copyWith(error: () => null));
   }
 
-  Future<void> signIn() async {
+  /// Sign in with email and password
+  /// Returns true if login was successful, false otherwise
+  Future<bool> signIn() async {
+    // Guard: check if inputs are valid
     if (!_state.canSubmit) {
       _set(_state.copyWith(error: () => 'Please fill in all fields correctly'));
-      return;
+      return false;
     }
 
     _set(_state.copyWith(loading: true, error: () => null));
 
     try {
-      await _sessionViewModel.signIn(
+      final user = await _auth.signInWithEmailPassword(
         email: _state.email.trim(),
         password: _state.password,
       );
 
-      // Success - navigation will be handled by the view
-      _set(_state.copyWith(loading: false));
-    } on AuthException catch (error) {
-      String errorMessage = error.message;
-      if (error.statusCode != null) {
-        errorMessage = '${error.statusCode} $errorMessage';
+      // Check if user exists
+      if (user == null) {
+        _set(_state.copyWith(loading: false, error: () => 'Login failed'));
+        return false;
       }
+
+      // Check if email is verified
+      if (!user.emailVerified) {
+        _set(_state.copyWith(
+          loading: false,
+          error: () => 'Please verify your email before logging in. Check your inbox.',
+        ));
+        // Sign out the user since email is not verified
+        await _auth.signOut();
+        return false;
+      }
+
+      // Success
+      _set(_state.copyWith(loading: false));
+      return true;
+    } on FirebaseAuthException catch (e) {
+      final errorMessage = _mapFirebaseAuthError(e);
       _set(_state.copyWith(loading: false, error: () => errorMessage));
+      return false;
     } catch (error) {
       _set(_state.copyWith(loading: false, error: () => 'An unexpected error occurred'));
+      return false;
     }
   }
 
@@ -109,17 +131,33 @@ class LoginViewModel extends ChangeNotifier {
     }
 
     try {
-      await _sessionViewModel.resetPassword(email: _state.email.trim());
+      await _auth.sendPasswordResetEmail(email: _state.email.trim());
       _set(_state.copyWith(error: () => null));
-    } on AuthException catch (error) {
-      String errorMessage = error.message;
-      if (error.statusCode != null) {
-        errorMessage = '${error.statusCode} $errorMessage';
-      }
+    } on FirebaseAuthException catch (e) {
+      final errorMessage = _mapFirebaseAuthError(e);
       _set(_state.copyWith(error: () => errorMessage));
     } catch (error) {
       _set(_state.copyWith(error: () => 'An unexpected error occurred'));
     }
   }
-}
 
+  String _mapFirebaseAuthError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'user-not-found':
+        return 'No account found for this email';
+      case 'wrong-password':
+      case 'invalid-credential':
+        return 'Invalid email or password';
+      case 'invalid-email':
+        return 'Invalid email format';
+      case 'user-disabled':
+        return 'This account has been disabled';
+      case 'too-many-requests':
+        return 'Too many attempts. Try again later';
+      case 'network-request-failed':
+        return 'Network error. Check your connection';
+      default:
+        return 'Login failed. Please try again';
+    }
+  }
+}
