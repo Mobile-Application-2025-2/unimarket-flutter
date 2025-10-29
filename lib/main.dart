@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unimarket/ui/home_buyer/widgets/home_buyer_screen.dart';
 import 'package:unimarket/ui/sign_up/view/sign_up_view.dart';
-import 'package:unimarket/viewmodel/catalog/login_viewmodel.dart';
+import 'package:unimarket/ui/login/view_model/login_viewmodel.dart';
 import 'package:unimarket/ui/sign_up/view_model/sign_up_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/create_account_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/student_code_viewmodel.dart';
@@ -16,9 +16,8 @@ import 'package:unimarket/model/shared/services/supabase_service.dart';
 import 'package:unimarket/model/shared/services/auth_service.dart';
 import 'package:unimarket/viewmodel/app/session_viewmodel.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'firebase_options.dart';
 
 
 void main() async {
