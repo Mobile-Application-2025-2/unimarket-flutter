@@ -13,19 +13,11 @@ project_type: app
 migration:
   platforms:
     - platform: root
-<<<<<<< HEAD
       create_revision: a402d9a4376add5bc2d6b1e33e53edaae58c07f8
       base_revision: a402d9a4376add5bc2d6b1e33e53edaae58c07f8
     - platform: android
       create_revision: a402d9a4376add5bc2d6b1e33e53edaae58c07f8
       base_revision: a402d9a4376add5bc2d6b1e33e53edaae58c07f8
-=======
-      create_revision: ac4e799d237041cf905519190471f657b657155a
-      base_revision: ac4e799d237041cf905519190471f657b657155a
-    - platform: android
-      create_revision: ac4e799d237041cf905519190471f657b657155a
-      base_revision: ac4e799d237041cf905519190471f657b657155a
->>>>>>> 39eeaa126900a04cc1bee70c2beedea30a9d5d72
 
   # User provided section
 
