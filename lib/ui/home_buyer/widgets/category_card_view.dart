@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:unimarket/domain/models/categories/category.dart';
+import 'package:unimarket/domain/models/products/product.dart';
 import 'package:unimarket/utils/generic_snackbar.dart';
 
-class CategoryCardView extends StatelessWidget {
-  const CategoryCardView({super.key, required this.category});
+class ProductCardView extends StatelessWidget {
+  const ProductCardView({super.key, required this.product});
 
-  final Category category;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class CategoryCardView extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
-                    category.image,
+                    product.image,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) {
                       return Icon(
@@ -63,7 +64,7 @@ class CategoryCardView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      _truncateText(category.name, 20),
+                      _truncateText(product.name, 20),
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -76,7 +77,7 @@ class CategoryCardView extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${category.selectionCount} selecciones',
+                      '${product.price} selecciones',
                       style: TextStyle(
                         fontSize: 9,
                         color: Colors.grey[700],

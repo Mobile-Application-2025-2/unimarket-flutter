@@ -8,9 +8,9 @@ import 'package:unimarket/ui/home_buyer/widgets/subcategories_vertical_scroll_vi
 import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
 
 class HomeBuyerScreen extends StatelessWidget {
-  HomeBuyerScreen({super.key});
+  const HomeBuyerScreen({super.key, required this.viewModel});
 
-  final HomeBuyerViewModel viewModel = HomeBuyerViewModel();
+  final HomeBuyerViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class HomeBuyerScreen extends StatelessWidget {
                 GenericSearchBar(onChanged: viewModel.setSearchQuery),
                 const SizedBox(height: 16),
 
-                CategoriesHorizontalScrollView(viewModel: viewModel),
-                const SizedBox(height: 16),
+                // CategoriesHorizontalScrollView(viewModel: viewModel),
+                // const SizedBox(height: 16),
 
                 SubcategoriesVerticalScrollView(viewModel: viewModel),
               ],
