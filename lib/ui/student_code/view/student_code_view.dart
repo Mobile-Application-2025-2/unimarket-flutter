@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import '../view_model/student_code_viewmodel.dart';
  
 import 'package:unimarket/utils/not_implemented_snackbar.dart';
-import '../../home_buyer/widgets/home_buyer_screen.dart';
-import '../../home_buyer/view_model/home_buyer_vm.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 class StudentCodeView extends StatelessWidget {
   const StudentCodeView({super.key, required this.userName});
@@ -250,12 +250,7 @@ class StudentCodeView extends StatelessWidget {
                                 : () async {
                                     await viewModel.submitVerification();
                                     if (viewModel.state.isVerified && context.mounted) {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>  HomeBuyerScreen(viewModel: context.read<HomeBuyerViewModel>()),
-                                        ),
-                                      );
+                                      context.go(Routes.homeBuyer);
                                     }
                                   },
                             style: ElevatedButton.styleFrom(

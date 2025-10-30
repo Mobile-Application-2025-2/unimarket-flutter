@@ -6,8 +6,8 @@ import 'package:unimarket/ui/core/ui/password_field.dart';
 import '../widgets/login_button.dart';
 import '../widgets/error_banner.dart';
 import '../../../../ui/create_account/view/create_account_view.dart';
-import '../../../../ui/home_buyer/widgets/home_buyer_screen.dart';
-import '../../../../ui/home_buyer/view_model/home_buyer_vm.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 // notImplementedFunctionalitySnackbar used inside SocialMediaButtonGroup, no direct usage here
 import '../widgets/social_media_button.dart';
@@ -157,12 +157,8 @@ class LoginView extends StatelessWidget {
                       if (!context.mounted) return;
 
                       if (success) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeBuyerScreen(viewModel: context.read<HomeBuyerViewModel>()),
-                          ),
-                        );
+                        if (!context.mounted) return;
+                        context.go(Routes.homeBuyer);
                       } else if (viewModel.state.error != null) {
                         // Show error in SnackBar
                         ScaffoldMessenger.of(context).showSnackBar(

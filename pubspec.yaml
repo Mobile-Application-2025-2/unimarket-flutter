@@ -49,7 +49,6 @@ dependencies:
   cloud_firestore: ^6.0.3
   freezed_annotation: ^2.4.1
   json_annotation: ^4.9.0
-  cloud_firestore: ^6.0.3
 
 dev_dependencies:
   flutter_test:
