@@ -243,7 +243,6 @@ class LoginView extends StatelessWidget {
                   if (!context.mounted) return;
 
                   if (success) {
-                    // ✅ Only navigate on real success
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(

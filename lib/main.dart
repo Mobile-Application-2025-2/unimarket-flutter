@@ -15,16 +15,15 @@ import 'package:unimarket/ui/sign_up/view_model/sign_up_viewmodel.dart';
 import 'package:unimarket/ui/create_account/view_model/create_account_viewmodel.dart';
 import 'package:unimarket/ui/create_account/view_model/session_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/student_code_viewmodel.dart';
-import 'package:unimarket/viewmodel/catalog/explore_buyer_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/home_deliver_viewmodel.dart';
-import 'package:unimarket/viewmodel/catalog/home_buyer_viewmodel.dart';
+// TODO: Reconnect ExploreBuyerViewModel and HomeBuyerViewModel with Firebase later
+// import 'package:unimarket/viewmodel/catalog/explore_buyer_viewmodel.dart';
+// import 'package:unimarket/viewmodel/catalog/home_buyer_viewmodel.dart';
 
 // Services
-import 'package:unimarket/model/shared/services/firebase_auth_service.dart';
-import 'package:unimarket/model/shared/services/camera_service.dart';
-import 'package:unimarket/model/shared/services/places_service.dart';
-import 'package:unimarket/model/shared/services/supabase_service.dart';
-import 'package:unimarket/model/shared/services/popularity_service.dart';
+import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
+import 'package:unimarket/data/models/services/camera_service.dart';
+import 'package:unimarket/data/models/services/places_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -63,19 +62,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        // Supabase Service (kept for other features that may still use it)
-        Provider(
-          create: (_) => SupabaseService(
-            url: 'https://fiieipssuysdlntvfhkg.supabase.co',
-            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZpaWVpcHNzdXlzZGxudHZmaGtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk1OTU1NDEsImV4cCI6MjA3NTE3MTU0MX0.eIZvRlF4tUCMa76KlWkZdBAOGx6L4wPO8xjtCD-6U4A',
-          ),
-        ),
-
         // Other Services
         Provider(create: (_) => CameraService()),
-        Provider(
-          create: (ctx) => PopularityService(ctx.read<SupabaseService>().client),
-        ),
+
         Provider(
           create: (_) => PlacesService(
             apiKey: 'AIzaSyDmWwy5o6U0ELq2oDwYBkjmFQgdOabADxE',
@@ -102,15 +91,18 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => StudentCodeViewModel(ctx.read<CameraService>()),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => ExploreBuyerViewModel(ctx.read<PopularityService>()),
-        ),
+
         ChangeNotifierProvider(
           create: (ctx) => HomeDeliverViewModel(ctx.read<PlacesService>()),
         ),
-        ChangeNotifierProvider(
-          create: (ctx) => HomeBuyerViewModel(ctx.read<PopularityService>()),
-        ),
+
+        // TODO: Reconnect these ViewModels with Firebase later
+        // ChangeNotifierProvider(
+        //   create: (ctx) => ExploreBuyerViewModel(),
+        // ),
+        // ChangeNotifierProvider(
+        //   create: (ctx) => HomeBuyerViewModel(),
+        // ),
       ],
       child: MaterialApp(
         title: 'UniMarket',

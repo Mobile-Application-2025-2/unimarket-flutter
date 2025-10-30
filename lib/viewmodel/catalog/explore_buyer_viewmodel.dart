@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../data/models/category.dart' as data;
 import '../../model/catalog/entities/category_popularity.dart';
-import '../../model/shared/services/popularity_service.dart';
+// TODO: Remove PopularityService dependency (Supabase-related)
+// import '../../model/shared/services/popularity_service.dart';
 
 class ExploreBuyerViewModel extends ChangeNotifier {
-  final PopularityService _popularityService;
+  // TODO: Reconnect this ViewModel with Firebase later
+  // final PopularityService _popularityService;
 
-  ExploreBuyerViewModel(this._popularityService) {
+  ExploreBuyerViewModel(/* this._popularityService */) {
     loadCategories();
   }
 
@@ -53,15 +54,9 @@ class ExploreBuyerViewModel extends ChangeNotifier {
     _clearError();
 
     try {
-      final response = await Supabase.instance.client
-          .from('categories')
-          .select()
-          .order('name');
-
-      _categories = (response as List)
-          .map((json) => data.Category.fromJson(json))
-          .toList();
-
+      // TODO: Reconnect to Firebase/Firestore for loading categories
+      // For now, using empty list
+      _categories = [];
       _applyFilters();
     } catch (e) {
       _error = 'Error loading categories: $e';
@@ -75,7 +70,8 @@ class ExploreBuyerViewModel extends ChangeNotifier {
     _clearErrorSuggestions();
 
     try {
-      _suggestions = await _popularityService.getPopularCategories();
+      // TODO: Reconnect to Firebase/Firestore for loading suggestions
+      _suggestions = [];
     } catch (e) {
       _errorSuggestions = 'Error loading suggestions: $e';
     } finally {

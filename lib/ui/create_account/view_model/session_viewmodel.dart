@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../../model/shared/services/firebase_auth_service.dart';
+import '../../../data/models/services/firebase_auth_service_adapter.dart';
 
 class SessionViewModel extends ChangeNotifier {
   final FirebaseAuthService _auth;

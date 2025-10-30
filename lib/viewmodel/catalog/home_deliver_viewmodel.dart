@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../model/shared/services/places_service.dart';
+import '../../data/models/services/places_service.dart';
 
 class HomeDeliverViewModel extends ChangeNotifier {
   final PlacesService _placesService;

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-import '../../model/shared/services/camera_service.dart';
+import '../../data/models/services/camera_service.dart';
 
 class StudentCodeViewModel extends ChangeNotifier {
   final CameraService _cameraService;
