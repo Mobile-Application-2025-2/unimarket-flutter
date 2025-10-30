@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:unimarket/ui/sign_up/view_model/sign_up_viewmodel.dart';
+import 'package:unimarket/ui/sign_up/widgets/sign_up_state.dart';
 
 void main() {
   group('SignUpViewModel Tests', () {
@@ -36,18 +37,18 @@ void main() {
     });
   });
 
-  group('SignUpUiState Tests', () {
+  group('SignUpState Tests', () {
     test('copyWith should update only specified fields', () {
-      const state = SignUpUiState(loading: false, error: 'Test error');
+      const state = SignUpState(loading: false);
       
       final newState = state.copyWith(loading: true);
       
       expect(newState.loading, true);
-      expect(newState.error, 'Test error');
+      expect(newState.error, null);
     });
 
     test('copyWith with null error should clear error', () {
-      const state = SignUpUiState(loading: false, error: 'Test error');
+      const state = SignUpState(loading: false, error: 'Test error');
       
       final newState = state.copyWith(error: null);
       

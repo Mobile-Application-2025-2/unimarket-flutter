@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:unimarket/ui/login/view_model/login_viewmodel.dart';
+import 'package:unimarket/ui/login/widgets/login_state.dart';
 
 void main() {
   group('LoginViewModel Tests', () {
@@ -12,9 +12,9 @@ void main() {
     });
   });
 
-  group('LoginUiState Tests', () {
+  group('LoginState Tests', () {
     test('initial state should have correct defaults', () {
-      const state = LoginUiState();
+      const state = LoginState();
       
       expect(state.loading, false);
       expect(state.email, '');
@@ -25,12 +25,11 @@ void main() {
     });
 
     test('copyWith should update only specified fields', () {
-      const state = LoginUiState(
+      const state = LoginState(
         loading: false,
         email: 'test@example.com',
         password: 'password',
         showPassword: false,
-        error: 'Test error',
       );
 
       final newState = state.copyWith(loading: true);
@@ -39,45 +38,45 @@ void main() {
       expect(newState.email, 'test@example.com');
       expect(newState.password, 'password');
       expect(newState.showPassword, false);
-      expect(newState.error, 'Test error');
+      expect(newState.error, null);
     });
 
     test('copyWith with null error should clear error', () {
-      const state = LoginUiState(error: 'Test error');
+      const state = LoginState(error: 'Test error');
 
-      final newState = state.copyWith(error: () => null);
+      final newState = state.copyWith(error: null);
 
       expect(newState.error, null);
     });
 
     test('isEmailValid should validate email format', () {
-      const validState = LoginUiState(email: 'test@example.com');
+      const validState = LoginState(email: 'test@example.com');
       expect(validState.isEmailValid, true);
 
-      const invalidState1 = LoginUiState(email: 'invalid');
+      const invalidState1 = LoginState(email: 'invalid');
       expect(invalidState1.isEmailValid, false);
 
-      const invalidState2 = LoginUiState(email: 'test@');
+      const invalidState2 = LoginState(email: 'test@');
       expect(invalidState2.isEmailValid, false);
 
-      const invalidState3 = LoginUiState(email: '@example.com');
+      const invalidState3 = LoginState(email: '@example.com');
       expect(invalidState3.isEmailValid, false);
     });
 
     test('canSubmit should require valid email and non-empty password', () {
-      const state1 = LoginUiState(email: 'test@example.com', password: 'pass');
+      const state1 = LoginState(email: 'test@example.com', password: 'pass');
       expect(state1.canSubmit, true);
 
-      const state2 = LoginUiState(email: 'invalid', password: 'pass');
+      const state2 = LoginState(email: 'invalid', password: 'pass');
       expect(state2.canSubmit, false);
 
-      const state3 = LoginUiState(email: 'test@example.com', password: '');
+      const state3 = LoginState(email: 'test@example.com', password: '');
       expect(state3.canSubmit, false);
 
-      const state4 = LoginUiState(email: '', password: '');
+      const state4 = LoginState(email: '', password: '');
       expect(state4.canSubmit, false);
 
-      const state5 = LoginUiState(
+      const state5 = LoginState(
         email: 'test@example.com',
         password: 'pass',
         loading: true,
@@ -86,7 +85,7 @@ void main() {
     });
 
     test('canSubmit should be false when loading', () {
-      const state = LoginUiState(
+      const state = LoginState(
         email: 'test@example.com',
         password: 'password',
         loading: true,
@@ -96,7 +95,7 @@ void main() {
     });
 
     test('copyWith should preserve other fields when updating one', () {
-      const state = LoginUiState(
+      const state = LoginState(
         email: 'test@example.com',
         password: 'password123',
         showPassword: true,

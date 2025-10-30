@@ -1,31 +1,12 @@
 import 'package:flutter/foundation.dart';
-
-class SignUpUiState {
-  final bool loading;
-  final String? error;
-
-  const SignUpUiState({
-    this.loading = false,
-    this.error,
-  });
-
-  SignUpUiState copyWith({
-    bool? loading,
-    String? error,
-  }) {
-    return SignUpUiState(
-      loading: loading ?? this.loading,
-      error: error,
-    );
-  }
-}
+import '../widgets/sign_up_state.dart';
 
 class SignUpViewModel extends ChangeNotifier {
-  SignUpUiState _state = const SignUpUiState();
+  SignUpState _state = const SignUpState();
 
-  SignUpUiState get state => _state;
+  SignUpState get state => _state;
 
-  void _set(SignUpUiState newState) {
+  void _set(SignUpState newState) {
     _state = newState;
     notifyListeners();
   }

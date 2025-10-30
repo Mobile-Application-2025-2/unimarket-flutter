@@ -164,7 +164,7 @@ class HomeDeliverViewModel extends ChangeNotifier {
                     if (place.rating != null) ...[
                       const Icon(Icons.star, size: 16, color: Colors.amber),
                       const SizedBox(width: 4),
-                      Text('${place.rating!.toStringAsFixed(1)}'),
+                      Text(place.rating!.toStringAsFixed(1)),
                       const SizedBox(width: 12),
                     ],
                     if (priceText != null) Text(priceText, style: const TextStyle(color: Colors.black54)),

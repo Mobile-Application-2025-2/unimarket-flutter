@@ -1,67 +1,28 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../../data/models/services/firebase_auth_service_adapter.dart';
-
-class LoginUiState {
-  final bool loading;
-  final String email;
-  final String password;
-  final bool showPassword;
-  final String? error;
-
-  const LoginUiState({
-    this.loading = false,
-    this.email = '',
-    this.password = '',
-    this.showPassword = false,
-    this.error,
-  });
-
-  LoginUiState copyWith({
-    bool? loading,
-    String? email,
-    String? password,
-    bool? showPassword,
-    String? Function()? error,
-  }) {
-    return LoginUiState(
-      loading: loading ?? this.loading,
-      email: email ?? this.email,
-      password: password ?? this.password,
-      showPassword: showPassword ?? this.showPassword,
-      error: error != null ? error() : this.error,
-    );
-  }
-
-  bool get isEmailValid {
-    return RegExp(r'^\S+@\S+\.\S+$').hasMatch(email.trim());
-  }
-
-  bool get isPasswordValid => password.isNotEmpty;
-
-  bool get canSubmit => !loading && isEmailValid && isPasswordValid;
-}
+import '../widgets/login_state.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final FirebaseAuthService _auth;
 
   LoginViewModel(this._auth);
 
-  LoginUiState _state = const LoginUiState();
+  LoginState _state = const LoginState();
 
-  LoginUiState get state => _state;
+  LoginState get state => _state;
 
-  void _set(LoginUiState newState) {
+  void _set(LoginState newState) {
     _state = newState;
     notifyListeners();
   }
 
   void setEmail(String value) {
-    _set(_state.copyWith(email: value, error: () => null));
+    _set(_state.copyWith(email: value, error: null));
   }
 
   void setPassword(String value) {
-    _set(_state.copyWith(password: value, error: () => null));
+    _set(_state.copyWith(password: value, error: null));
   }
 
   void togglePasswordVisibility() {
@@ -69,7 +30,7 @@ class LoginViewModel extends ChangeNotifier {
   }
 
   void clearError() {
-    _set(_state.copyWith(error: () => null));
+    _set(_state.copyWith(error: null));
   }
 
   /// Sign in with email and password
@@ -77,11 +38,11 @@ class LoginViewModel extends ChangeNotifier {
   Future<bool> signIn() async {
     // Guard: check if inputs are valid
     if (!_state.canSubmit) {
-      _set(_state.copyWith(error: () => 'Please fill in all fields correctly'));
+      _set(_state.copyWith(error: 'Please fill in all fields correctly'));
       return false;
     }
 
-    _set(_state.copyWith(loading: true, error: () => null));
+    _set(_state.copyWith(loading: true, error: null));
 
     try {
       final user = await _auth.signInWithEmailPassword(
@@ -91,7 +52,7 @@ class LoginViewModel extends ChangeNotifier {
 
       // Check if user exists
       if (user == null) {
-        _set(_state.copyWith(loading: false, error: () => 'Login failed'));
+        _set(_state.copyWith(loading: false, error: 'Login failed'));
         return false;
       }
 
@@ -99,7 +60,7 @@ class LoginViewModel extends ChangeNotifier {
       if (!user.emailVerified) {
         _set(_state.copyWith(
           loading: false,
-          error: () => 'Please verify your email before logging in. Check your inbox.',
+          error: 'Please verify your email before logging in. Check your inbox.',
         ));
         // Sign out the user since email is not verified
         await _auth.signOut();
@@ -111,33 +72,33 @@ class LoginViewModel extends ChangeNotifier {
       return true;
     } on FirebaseAuthException catch (e) {
       final errorMessage = _mapFirebaseAuthError(e);
-      _set(_state.copyWith(loading: false, error: () => errorMessage));
+      _set(_state.copyWith(loading: false, error: errorMessage));
       return false;
     } catch (error) {
-      _set(_state.copyWith(loading: false, error: () => 'An unexpected error occurred'));
+      _set(_state.copyWith(loading: false, error: 'An unexpected error occurred'));
       return false;
     }
   }
 
   Future<void> resetPassword() async {
     if (_state.email.trim().isEmpty) {
-      _set(_state.copyWith(error: () => 'Please enter your email address'));
+      _set(_state.copyWith(error: 'Please enter your email address'));
       return;
     }
 
     if (!_state.isEmailValid) {
-      _set(_state.copyWith(error: () => 'Please enter a valid email address'));
+      _set(_state.copyWith(error: 'Please enter a valid email address'));
       return;
     }
 
     try {
       await _auth.sendPasswordResetEmail(email: _state.email.trim());
-      _set(_state.copyWith(error: () => null));
+      _set(_state.copyWith(error: null));
     } on FirebaseAuthException catch (e) {
       final errorMessage = _mapFirebaseAuthError(e);
-      _set(_state.copyWith(error: () => errorMessage));
+      _set(_state.copyWith(error: errorMessage));
     } catch (error) {
-      _set(_state.copyWith(error: () => 'An unexpected error occurred'));
+      _set(_state.copyWith(error: 'An unexpected error occurred'));
     }
   }
 

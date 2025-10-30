@@ -15,32 +15,32 @@ class HomeBuyerViewModel extends ChangeNotifier {
 
   late Command0 load;
 
-  List<Category> _categories = [
-    new Category(
+  final List<Category> _categories = [
+    Category(
       id: 'cat1',
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
       name: 'Matemáticas Avanzadas',
       type: 'Tutoria',
     ),
-    new Category(
+    Category(
       id: 'cat2',
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
       name: 'Cuadernos y Libretas',
       type: 'Funkos',
     ),
-    new Category(
+    Category(
       id: 'cat3',
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
       name: 'Café Orgánico Especial',
       type: 'Comida',
     ),
-    new Category(
+    Category(
       id: 'cat4',
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
       name: 'Servicios de Impresión',
       type: 'Emprendimiento',
     ),
-    new Category(
+    Category(
       id: 'cat5',
       image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
       name: 'Matematicas Avanzadas',

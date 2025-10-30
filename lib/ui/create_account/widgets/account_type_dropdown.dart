@@ -21,7 +21,7 @@ class AccountTypeDropdown extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade300),
       ),
       child: DropdownButtonFormField<String>(
-        value: value,
+        initialValue: value,
         decoration: const InputDecoration(
           hintText: 'Select Account Type',
           hintStyle: TextStyle(color: Colors.grey, fontFamily: 'Poppins'),
