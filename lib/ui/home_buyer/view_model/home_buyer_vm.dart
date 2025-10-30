@@ -25,26 +25,10 @@ class HomeBuyerViewModel extends ChangeNotifier {
   String _searchQuery = "";
   String get searchQuery => _searchQuery;
 
-  String _selectedCategory = "Todos";
-  String get selectedCategory => _selectedCategory;
-
   UnmodifiableListView<Product> get categories => UnmodifiableListView(_products);
 
-  // for the horizontal scroll view
-  UnmodifiableListView<String> get uniqueCategories {
-    List<String> categoryTypes = [
-      "Todos",
-      ...categories.map((category) => category.category)
-        .toList()
-        .toSet()
-    ];
-
-    return UnmodifiableListView(categoryTypes);
-  }
-
-  // for the vertical scroll view
   UnmodifiableListView<Product> get filteredCategories {
-    if (_searchQuery.isEmpty && _selectedCategory == 'Todos') return UnmodifiableListView(_products);
+    if (_searchQuery.isEmpty) return UnmodifiableListView(_products);
 
     final categoriesFilteredByName = _products
         .where((category) {
@@ -65,24 +49,7 @@ class HomeBuyerViewModel extends ChangeNotifier {
             return name.contains(_searchQuery.toLowerCase()) || copy.contains(_searchQuery.toLowerCase());
         }).toSet();
 
-    final categoriesFilteredByCategoryType = _selectedCategory.isEmpty
-        ? categoriesFilteredByName
-        : categoriesFilteredByName.where((category) => category.category == _selectedCategory).toSet();
-
-    if(_selectedCategory == "Todos") {
-      if (_searchQuery.isNotEmpty) {
-        return UnmodifiableListView(_products.toSet().intersection(categoriesFilteredByName));
-      } else {
-        return UnmodifiableListView(_products);
-      }
-    } else {
-      if (_searchQuery.isNotEmpty) {
-        return UnmodifiableListView(categoriesFilteredByName.intersection(
-            categoriesFilteredByCategoryType));
-      } else {
-        return UnmodifiableListView(categoriesFilteredByCategoryType);
-      }
-    }
+    return UnmodifiableListView(categoriesFilteredByName.toList());
   }
 
   Future<Result> _load() async {
@@ -106,17 +73,6 @@ class HomeBuyerViewModel extends ChangeNotifier {
 
   void setSearchQuery(String value) {
     _searchQuery = value;
-    notifyListeners();
-  }
-
-  void setSelectedCategory(String value) {
-    if (value == _selectedCategory && value != 'Todos') {
-      _selectedCategory = "Todos";
-      notifyListeners();
-      return;
-    }
-
-    _selectedCategory = value;
     notifyListeners();
   }
 }

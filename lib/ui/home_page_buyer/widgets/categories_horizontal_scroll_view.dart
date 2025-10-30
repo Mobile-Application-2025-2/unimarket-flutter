@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
+import 'package:unimarket/ui/home_page_buyer/view_model/home_page_buyer_vm.dart';
 
 class CategoriesHorizontalScrollView extends StatelessWidget {
-  final HomeBuyerViewModel viewModel;
+  final HomePageBuyerViewModel viewModel;
 
   const CategoriesHorizontalScrollView({
     super.key,
