@@ -137,10 +137,10 @@ class CreateAccountView extends StatelessWidget {
                       onPressed: state.loading || !state.isValid
                           ? null
                           : () async {
-                              final name = await viewModel.createAccount();
+                              await viewModel.createAccount();
                               if (!context.mounted) return;
 
-                              if (name != null) {
+                              if (viewModel.state.errorMessage == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Account created! Please check your email to verify your account.'),
@@ -151,9 +151,11 @@ class CreateAccountView extends StatelessWidget {
                                 );
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (_) => StudentCodeView(userName: name.trim())),
+                                  MaterialPageRoute(
+                                    builder: (_) => StudentCodeView(userName: viewModel.state.name.trim()),
+                                  ),
                                 );
-                              } else if (viewModel.state.errorMessage != null) {
+                              } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(viewModel.state.errorMessage!),

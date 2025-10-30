@@ -1,12 +1,12 @@
 import 'package:flutter/foundation.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import '../../../data/models/services/firebase_auth_service_adapter.dart';
+import 'package:unimarket/data/daos/create_account_dao.dart';
 import '../widgets/create_account_state.dart';
+import 'package:unimarket/utils/result.dart';
 
 class CreateAccountViewModel extends ChangeNotifier {
-  final FirebaseAuthService _auth;
+  final CreateAccountDao _dao;
 
-  CreateAccountViewModel(this._auth);
+  CreateAccountViewModel({required CreateAccountDao dao}) : _dao = dao;
 
   CreateAccountState _state = const CreateAccountState();
 
@@ -104,48 +104,43 @@ class CreateAccountViewModel extends ChangeNotifier {
     return null;
   }
 
-  /// Returns the display name on success, null on failure
-  Future<String?> createAccount() async {
-    if (!_state.isValid) {
-      _set(_state.copyWith(errorMessage: 'Please complete all fields correctly'));
-      return null;
-    }
+  Future<void> createAccount() async {
+    if (!state.isValid || state.loading) return;
 
     _set(_state.copyWith(loading: true, errorMessage: null));
 
-    try {
-      final user = await _auth.signUpWithEmailPassword(
-        name: _state.name.trim(),
-        email: _state.email.trim(),
-        password: _state.password,
-        accountType: _state.accountType,
-      );
-      _set(_state.copyWith(loading: false));
-      return user?.displayName ?? _state.name.trim();
-    } on FirebaseAuthException catch (e) {
-      final errorMessage = _mapFirebaseAuthError(e);
-      _set(_state.copyWith(loading: false, errorMessage: errorMessage));
-      return null;
-    } catch (e) {
-      _set(_state.copyWith(loading: false, errorMessage: 'An unexpected error occurred'));
-      return null;
+    final r = await _dao.createAccount(
+      name: state.name,
+      email: state.email,
+      password: state.password,
+      accountType: state.accountType,
+    );
+
+    switch (r) {
+      case Ok():
+        _set(_state.copyWith(loading: false));
+        // Navigation is handled by the View
+
+      case Error():
+        final msg = _mapError(r.error);
+        _set(_state.copyWith(loading: false, errorMessage: msg));
     }
   }
 
-  String _mapFirebaseAuthError(FirebaseAuthException e) {
-    switch (e.code) {
-      case 'email-already-in-use':
-        return 'Email already in use';
-      case 'invalid-email':
-        return 'Invalid email address';
-      case 'weak-password':
-        return 'Password is too weak';
-      case 'operation-not-allowed':
-        return 'Email/password accounts are not enabled';
-      case 'network-request-failed':
-        return 'Network error. Check your connection';
-      default:
-        return 'Could not create the account. Try again';
+  String _mapError(Object e) {
+    final errorStr = e.toString();
+    if (errorStr.contains('email-already-in-use')) {
+      return 'Email already in use.';
     }
+    if (errorStr.contains('invalid-email')) {
+      return 'Invalid email.';
+    }
+    if (errorStr.contains('weak-password')) {
+      return 'Weak password.';
+    }
+    if (errorStr.contains('network-request-failed')) {
+      return 'Network error. Check your connection.';
+    }
+    return 'Could not create account. Try again.';
   }
 }
