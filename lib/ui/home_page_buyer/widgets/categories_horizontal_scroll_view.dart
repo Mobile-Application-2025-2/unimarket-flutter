@@ -16,9 +16,9 @@ class CategoriesHorizontalScrollView extends StatelessWidget {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          itemCount: viewModel.uniqueCategories.length,
+          itemCount: viewModel.uniqueBusinessCategories.length,
           itemBuilder: (context, index) {
-            final categoryType = viewModel.uniqueCategories[index];
+            final categoryType = viewModel.uniqueBusinessCategories[index];
             final isSelected = categoryType == viewModel.selectedCategory;
 
             return Padding(
