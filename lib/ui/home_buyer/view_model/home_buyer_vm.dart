@@ -1,52 +1,26 @@
 import 'dart:collection';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:unimarket/data/repositories/products/product_repository.dart';
 import 'dart:async';
+import 'package:logging/logging.dart';
 
-import 'package:unimarket/domain/models/categories/category.dart';
+import 'package:unimarket/domain/models/products/product.dart';
 import 'package:unimarket/utils/command.dart';
 import 'package:unimarket/utils/result.dart';
 
 class HomeBuyerViewModel extends ChangeNotifier {
-  HomeBuyerViewModel() {
+  HomeBuyerViewModel({
+    required ProductRepository productRepository,
+  }):  _productRepository = productRepository {
     load = Command0(_load)..execute();
   }
 
   late Command0 load;
+  final ProductRepository _productRepository;
+  final _log = Logger('HomeBuyerViewModel');
 
-  List<Category> _categories = [
-    new Category(
-      id: 'cat1',
-      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
-      name: 'Matemáticas Avanzadas',
-      type: 'Tutoria',
-    ),
-    new Category(
-      id: 'cat2',
-      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
-      name: 'Cuadernos y Libretas',
-      type: 'Funkos',
-    ),
-    new Category(
-      id: 'cat3',
-      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
-      name: 'Café Orgánico Especial',
-      type: 'Comida',
-    ),
-    new Category(
-      id: 'cat4',
-      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
-      name: 'Servicios de Impresión',
-      type: 'Emprendimiento',
-    ),
-    new Category(
-      id: 'cat5',
-      image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmsIy7X7phPyQGZO9Hvi-V_vM52GlDjDu2uQ&s',
-      name: 'Matematicas Avanzadas',
-      type: 'Emprendimiento',
-    ),
-  ];
+  List<Product> _products = [];
 
   String _searchQuery = "";
   String get searchQuery => _searchQuery;
@@ -54,13 +28,13 @@ class HomeBuyerViewModel extends ChangeNotifier {
   String _selectedCategory = "Todos";
   String get selectedCategory => _selectedCategory;
 
-  UnmodifiableListView<Category> get categories => UnmodifiableListView(_categories);
+  UnmodifiableListView<Product> get categories => UnmodifiableListView(_products);
 
   // for the horizontal scroll view
   UnmodifiableListView<String> get uniqueCategories {
     List<String> categoryTypes = [
       "Todos",
-      ...categories.map((category) => category.type)
+      ...categories.map((category) => category.category)
         .toList()
         .toSet()
     ];
@@ -69,10 +43,10 @@ class HomeBuyerViewModel extends ChangeNotifier {
   }
 
   // for the vertical scroll view
-  UnmodifiableListView<Category> get filteredCategories {
-    if (_searchQuery.isEmpty && _selectedCategory == 'Todos') return UnmodifiableListView(_categories);
+  UnmodifiableListView<Product> get filteredCategories {
+    if (_searchQuery.isEmpty && _selectedCategory == 'Todos') return UnmodifiableListView(_products);
 
-    final categoriesFilteredByName = _categories
+    final categoriesFilteredByName = _products
         .where((category) {
             String copy = category.name.toLowerCase();
             String name = copy;
@@ -93,13 +67,13 @@ class HomeBuyerViewModel extends ChangeNotifier {
 
     final categoriesFilteredByCategoryType = _selectedCategory.isEmpty
         ? categoriesFilteredByName
-        : categoriesFilteredByName.where((category) => category.type == _selectedCategory).toSet();
+        : categoriesFilteredByName.where((category) => category.category == _selectedCategory).toSet();
 
     if(_selectedCategory == "Todos") {
       if (_searchQuery.isNotEmpty) {
-        return UnmodifiableListView(_categories.toSet().intersection(categoriesFilteredByName));
+        return UnmodifiableListView(_products.toSet().intersection(categoriesFilteredByName));
       } else {
-        return UnmodifiableListView(_categories);
+        return UnmodifiableListView(_products);
       }
     } else {
       if (_searchQuery.isNotEmpty) {
@@ -113,8 +87,17 @@ class HomeBuyerViewModel extends ChangeNotifier {
 
   Future<Result> _load() async {
     try {
-      sleep(Duration(seconds: 1));
-      return Result.ok(_categories);
+      final result = await _productRepository.getProductsList();
+
+      switch (result) {
+        case Ok<List<Product>>():
+          _products = result.value;
+          notifyListeners();
+        case Error<List<Product>>():
+          _log.warning("Failed to load products", result.error);
+      }
+
+      return result;
     }
     finally {
       notifyListeners();

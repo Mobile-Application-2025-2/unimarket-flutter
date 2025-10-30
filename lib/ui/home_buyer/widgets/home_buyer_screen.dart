@@ -9,9 +9,9 @@ import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
 import 'package:unimarket/ui/core/ui/error_indicator.dart';
 
 class HomeBuyerScreen extends StatelessWidget {
-  HomeBuyerScreen({super.key});
+  const HomeBuyerScreen({super.key, required this.viewModel});
 
-  final HomeBuyerViewModel viewModel = HomeBuyerViewModel();
+  final HomeBuyerViewModel viewModel;
 
   @override
   Widget build(BuildContext context) {

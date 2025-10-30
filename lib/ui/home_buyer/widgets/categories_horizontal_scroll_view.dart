@@ -39,7 +39,7 @@ class CategoriesHorizontalScrollView extends StatelessWidget {
                     children: [
                       const SizedBox(width: 6),
                       Text(
-                        categoryType,
+                        "${categoryType[0].toUpperCase()}${categoryType.substring(1).toLowerCase()}",
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
