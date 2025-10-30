@@ -20,4 +20,3 @@ class SignUpState {
   bool get canTapSignUp => !loading;
   bool get canTapLogin  => !loading;
 }
-

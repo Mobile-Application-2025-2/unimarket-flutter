@@ -33,4 +33,3 @@ class LoginState {
   bool get isPasswordValid => password.isNotEmpty;
   bool get canSubmit => !loading && isEmailValid && isPasswordValid;
 }
-
