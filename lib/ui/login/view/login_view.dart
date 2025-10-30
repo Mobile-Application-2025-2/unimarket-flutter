@@ -7,6 +7,8 @@ import '../widgets/login_button.dart';
 import '../widgets/error_banner.dart';
 import '../../../../ui/create_account/view/create_account_view.dart';
 import '../../../../ui/home_buyer/widgets/home_buyer_screen.dart';
+import '../../../../ui/home_buyer/view_model/home_buyer_vm.dart';
+
 // notImplementedFunctionalitySnackbar used inside SocialMediaButtonGroup, no direct usage here
 import '../widgets/social_media_button.dart';
 
@@ -158,7 +160,7 @@ class LoginView extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => HomeBuyerScreen(),
+                            builder: (context) => HomeBuyerScreen(viewModel: context.read<HomeBuyerViewModel>()),
                           ),
                         );
                       } else if (viewModel.state.error != null) {

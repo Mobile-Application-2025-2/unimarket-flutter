@@ -4,6 +4,7 @@ import '../view_model/student_code_viewmodel.dart';
  
 import 'package:unimarket/utils/not_implemented_snackbar.dart';
 import '../../home_buyer/widgets/home_buyer_screen.dart';
+import '../../home_buyer/view_model/home_buyer_vm.dart';
 
 class StudentCodeView extends StatelessWidget {
   const StudentCodeView({super.key, required this.userName});
@@ -252,7 +253,7 @@ class StudentCodeView extends StatelessWidget {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>  HomeBuyerScreen(),
+                                          builder: (context) =>  HomeBuyerScreen(viewModel: context.read<HomeBuyerViewModel>()),
                                         ),
                                       );
                                     }
