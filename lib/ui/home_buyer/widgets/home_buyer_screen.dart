@@ -33,8 +33,8 @@ class HomeBuyerScreen extends StatelessWidget {
                 GenericSearchBar(onChanged: viewModel.setSearchQuery),
                 const SizedBox(height: 16),
 
-                CategoriesHorizontalScrollView(viewModel: viewModel),
-                const SizedBox(height: 16),
+                // CategoriesHorizontalScrollView(viewModel: viewModel),
+                // const SizedBox(height: 16),
 
                 SubcategoriesVerticalScrollView(viewModel: viewModel),
               ],
