@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:unimarket/utils/not_implemented_snackbar.dart';
 
 class UnimarketHeader extends StatelessWidget {
-  const UnimarketHeader({super.key});
+  const UnimarketHeader({super.key, required this.title});
+
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +16,8 @@ class UnimarketHeader extends StatelessWidget {
           const SizedBox(width: 8),
 
           // Title
-          const Text(
-            'Explorar',
+          Text(
+            title,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w900,
