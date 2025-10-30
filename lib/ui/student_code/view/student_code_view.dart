@@ -1,10 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../viewmodel/catalog/student_code_viewmodel.dart';
-import '../../../view/catalog/explore_buyer_view.dart';
+import '../view_model/student_code_viewmodel.dart';
+ 
+import 'package:unimarket/utils/not_implemented_snackbar.dart';
+import '../../home_buyer/widgets/home_buyer_screen.dart';
 
 class StudentCodeView extends StatelessWidget {
   const StudentCodeView({super.key, required this.userName});
@@ -15,9 +14,19 @@ class StudentCodeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final greetingText = userName.isNotEmpty ? 'Hi $userName!' : 'Hi there!';
 
-    return Scaffold(
+    final viewModel = context.read<StudentCodeViewModel>();
+    if (viewModel.state.userName.isEmpty && userName.isNotEmpty) {
+      viewModel.setUserName(userName);
+    }
+
+    try {
+      return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Column(
+      body: ListenableBuilder(
+        listenable: viewModel,
+        builder: (context, _) {
+          final s = viewModel.state;
+          return Column(
         children: [
           Expanded(
             flex: 3,
@@ -90,10 +99,7 @@ class StudentCodeView extends StatelessWidget {
 
                         const SizedBox(height: 20),
 
-                        Consumer<StudentCodeViewModel>(
-                          builder: (context, vm, _) {
-                            final File? imageFile = vm.capturedImage;
-                            return Column(
+                        Column(
                               children: [
                                 Container(
                                   width: double.infinity,
@@ -112,8 +118,8 @@ class StudentCodeView extends StatelessWidget {
                                       ),
                                     ],
                                   ),
-                                  child: TextField(
-                                    onChanged: vm.setCode,
+                    child: TextField(
+                                    onChanged: (_) {},
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                       fontSize: 18,
@@ -148,14 +154,14 @@ class StudentCodeView extends StatelessWidget {
                                             color: Colors.white,
                                             size: 24,
                                           ),
-                                          onPressed: vm.isLoading ? null : vm.openCamera,
+                                          onPressed: s.loading ? null : viewModel.openCamera,
                                         ),
                                       ),
                                     ),
                                   ),
                                 ),
 
-                                if (imageFile != null)
+                                if (s.imageFile != null)
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.of(context).push(
@@ -169,7 +175,7 @@ class StudentCodeView extends StatelessWidget {
                                                 onPressed: () => Navigator.of(context).pop(),
                                               ),
                                             ),
-                                            body: Center(child: Image.file(imageFile)),
+                                            body: Center(child: Image.file(s.imageFile!)),
                                           ),
                                         ),
                                       );
@@ -191,21 +197,19 @@ class StudentCodeView extends StatelessWidget {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.file(
-                                          imageFile,
+                                          s.imageFile!,
                                           height: 80,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
                                   ),
-                              ],
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                      ],
+                              ]
+                          ),
+                          const SizedBox(height: 20),
+                        ],
+                      ),
                     ),
-                  ),
                 ),
               ],
             ),
@@ -236,21 +240,19 @@ class StudentCodeView extends StatelessWidget {
                       right: 24.0,
                       bottom: 24.0,
                     ),
-                    child: Consumer<StudentCodeViewModel>(
-                      builder: (context, vm, _) {
-                        return SizedBox(
+                    child: SizedBox(
                           width: double.infinity,
                           height: 56,
                           child: ElevatedButton(
-                            onPressed: vm.isLoading || !vm.isValid
+                            onPressed: s.loading || !s.canSubmit
                                 ? null
                                 : () async {
-                                    await vm.validateAndFetch();
-                                    if (vm.errorMessage == null && context.mounted) {
+                                    await viewModel.submitVerification();
+                                    if (viewModel.state.isVerified && context.mounted) {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => const ExploreBuyerView(),
+                                          builder: (context) =>  HomeBuyerScreen(),
                                         ),
                                       );
                                     }
@@ -264,7 +266,7 @@ class StudentCodeView extends StatelessWidget {
                               elevation: 4,
                               shadowColor: Colors.black.withValues(alpha: 0.3),
                             ),
-                            child: vm.isLoading
+                            child: s.loading
                                 ? const SizedBox(
                                     width: 20,
                                     height: 20,
@@ -283,17 +285,23 @@ class StudentCodeView extends StatelessWidget {
                                     ),
                                   ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
                   ),
                 ],
               ),
             ),
           ),
         ],
+      );
+        },
       ),
     );
+    } catch (_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        notImplementedFunctionalitySnackbar(context);
+      });
+      return const SizedBox.shrink();
+    }
   }
 }
 

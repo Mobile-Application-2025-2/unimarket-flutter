@@ -21,34 +21,34 @@ class SignUpView extends StatelessWidget {
             final state = viewModel.state;
 
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                children: [
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            children: [
                   const SizedBox(height: 60),
 
                   // Logo and title
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'assets/images/sign.png',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.contain,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/sign.png',
+                      width: 120,
+                      height: 120,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(width: 20),
+                    const Text(
+                      'UNIMARKET',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFFFFC436),
+                        fontFamily: 'Poppins',
+                        letterSpacing: 2,
                       ),
-                      const SizedBox(width: 20),
-                      const Text(
-                        'UNIMARKET',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFFFFC436),
-                          fontFamily: 'Poppins',
-                          letterSpacing: 2,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
 
                   const SizedBox(height: 100),
 
@@ -74,7 +74,7 @@ class SignUpView extends StatelessWidget {
                       ),
                     ),
 
-                  // Sign Up button
+              // Sign Up button
                   PrimaryButton(
                     text: state.loading ? 'LOADING...' : 'SIGN UP',
                     onPressed: state.loading
@@ -82,33 +82,33 @@ class SignUpView extends StatelessWidget {
                         : () async {
                             await viewModel.startLoading();
                             if (context.mounted) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
                                   builder: (_) => const CreateAccountView(),
-                                ),
-                              );
+                        ),
+                      );
                             }
-                          },
-                  ),
+                },
+              ),
 
-                  const SizedBox(height: 24),
+              const SizedBox(height: 24),
 
-                  // Login link
+              // Login link
                   GestureDetector(
                     onTap: state.loading
                         ? null
                         : () async {
                             await viewModel.startLoading();
                             if (context.mounted) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
                                   builder: (_) => const LoginView(),
-                                ),
-                              );
+                        ),
+                      );
                             }
-                          },
+                    },
                     child: RichText(
                       text: const TextSpan(
                         style: TextStyle(fontSize: 16, fontFamily: 'Poppins'),
@@ -127,12 +127,12 @@ class SignUpView extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 40),
-                ],
               ),
-            );
+
+              const SizedBox(height: 40),
+            ],
+          ),
+    );
           },
         ),
       ),

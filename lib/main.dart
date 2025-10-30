@@ -14,7 +14,6 @@ import 'package:unimarket/ui/login/view_model/login_viewmodel.dart';
 import 'package:unimarket/ui/sign_up/view_model/sign_up_viewmodel.dart';
 import 'package:unimarket/ui/create_account/view_model/create_account_viewmodel.dart';
 import 'package:unimarket/ui/create_account/view_model/session_viewmodel.dart';
-import 'package:unimarket/viewmodel/catalog/student_code_viewmodel.dart';
 import 'package:unimarket/viewmodel/catalog/home_deliver_viewmodel.dart';
 // TODO: Reconnect ExploreBuyerViewModel and HomeBuyerViewModel with Firebase later
 // import 'package:unimarket/viewmodel/catalog/explore_buyer_viewmodel.dart';
@@ -87,9 +86,6 @@ class MyApp extends StatelessWidget {
         // Other ViewModels
         ChangeNotifierProvider(
           create: (_) => SignUpViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => StudentCodeViewModel(ctx.read<CameraService>()),
         ),
 
         ChangeNotifierProvider(
