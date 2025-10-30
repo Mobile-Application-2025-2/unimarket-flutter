@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../view/shared/widgets/custom_textfield.dart';
-import 'error_text.dart';
+import '../../core/ui/custom_textfield.dart';
+import 'package:unimarket/ui/login/widgets/error_text.dart';
 
 class NameField extends StatelessWidget {
   final String value;

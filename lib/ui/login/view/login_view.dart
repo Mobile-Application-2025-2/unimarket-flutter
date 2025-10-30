@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/login_viewmodel.dart';
-import '../widgets/email_field.dart';
-import '../widgets/password_field.dart';
+import 'package:unimarket/ui/core/ui/email_field.dart';
+import 'package:unimarket/ui/core/ui/password_field.dart';
 import '../widgets/login_button.dart';
 import '../widgets/error_banner.dart';
 import '../../../../ui/create_account/view/create_account_view.dart';
-import '../../../../view/catalog/explore_buyer_view.dart';
+import '../../../../ui/home_buyer/widgets/home_buyer_screen.dart';
 // notImplementedFunctionalitySnackbar used inside SocialMediaButtonGroup, no direct usage here
 import '../widgets/social_media_button.dart';
 
@@ -158,7 +158,7 @@ class LoginView extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ExploreBuyerView(),
+                            builder: (context) => HomeBuyerScreen(),
                           ),
                         );
                       } else if (viewModel.state.error != null) {

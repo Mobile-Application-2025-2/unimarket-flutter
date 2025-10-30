@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:unimarket/ui/core/ui/custom_textfield.dart';
 
-class ConfirmPasswordField extends StatelessWidget {
+class EmailField extends StatelessWidget {
   final String value;
-  final String? errorText;
-  final bool valid;
   final ValueChanged<String> onChanged;
+  final String? labelText;
+  final String? hintText;
+  final String? errorText;
+  final Widget? suffixIcon;
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
   final bool enabled;
 
-  const ConfirmPasswordField({
+  const EmailField({
     super.key,
     required this.value,
-    required this.valid,
     required this.onChanged,
+    this.labelText,
+    this.hintText,
     this.errorText,
+    this.suffixIcon,
     this.textInputAction,
     this.focusNode,
     this.enabled = true,
@@ -27,12 +31,12 @@ class ConfirmPasswordField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextField(
-          hintText: 'Confirm Password',
-          obscureText: true,
+          hintText: hintText ?? 'Email',
+          keyboardType: TextInputType.emailAddress,
           onChanged: enabled ? onChanged : null,
-          suffixIcon: value.isNotEmpty && valid && errorText == null
+          suffixIcon: suffixIcon ?? (value.isNotEmpty && errorText == null
               ? const Icon(Icons.check_circle, color: Color(0xFFFFC436), size: 20)
-              : null,
+              : null),
           // CustomTextField currently doesn't expose textInputAction/focusNode
         ),
         if (errorText != null)

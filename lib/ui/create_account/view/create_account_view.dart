@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/create_account_viewmodel.dart';
-import '../../../view/shared/widgets/back_button.dart';
-import '../../../view/shared/widgets/title_section.dart';
-import '../../../view/shared/widgets/primary_button.dart';
-import '../../../view/shared/widgets/divider_text.dart';
+import '../widgets/back_button.dart';
+import '../widgets/title_section.dart';
+import '../../core/ui/primary_button.dart';
+import '../widgets/divider_text.dart';
 import '../widgets/name_field.dart';
-import '../widgets/email_field.dart';
-import '../widgets/password_field.dart';
-import '../widgets/confirm_password_field.dart';
+import 'package:unimarket/ui/core/ui/email_field.dart';
+import 'package:unimarket/ui/core/ui/password_field.dart';
+import 'package:unimarket/ui/create_account/widgets/confirm_password_field.dart';
 import '../widgets/account_type_dropdown.dart';
 import '../widgets/privacy_checkbox.dart';
-import '../../../../view/catalog/student_code_view.dart';
-// notImplementedFunctionalitySnackbar used inside SocialMediaButtonGroup, no direct usage here
+import '../../student_code/view/student_code_view.dart';
 import '../../login/widgets/social_media_button.dart';
 
 class CreateAccountView extends StatelessWidget {

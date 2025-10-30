@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:unimarket/ui/core/ui/custom_textfield.dart';
 
-class ConfirmPasswordField extends StatelessWidget {
+class PasswordField extends StatelessWidget {
   final String value;
-  final String? errorText;
-  final bool valid;
   final ValueChanged<String> onChanged;
+  final String? hintText;
+  final String? errorText;
+  final bool obscure;
+  final bool visible;
+  final VoidCallback? onToggleVisibility;
   final TextInputAction? textInputAction;
   final FocusNode? focusNode;
   final bool enabled;
 
-  const ConfirmPasswordField({
+  const PasswordField({
     super.key,
     required this.value,
-    required this.valid,
     required this.onChanged,
+    this.hintText,
     this.errorText,
+    this.obscure = true,
+    this.visible = false,
+    this.onToggleVisibility,
     this.textInputAction,
     this.focusNode,
     this.enabled = true,
@@ -23,15 +29,19 @@ class ConfirmPasswordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasToggle = onToggleVisibility != null;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomTextField(
-          hintText: 'Confirm Password',
-          obscureText: true,
+          hintText: hintText ?? 'Password',
+          obscureText: hasToggle ? !visible : obscure,
           onChanged: enabled ? onChanged : null,
-          suffixIcon: value.isNotEmpty && valid && errorText == null
-              ? const Icon(Icons.check_circle, color: Color(0xFFFFC436), size: 20)
+          suffixIcon: hasToggle
+              ? IconButton(
+                  icon: Icon(visible ? Icons.visibility : Icons.visibility_off),
+                  onPressed: enabled ? onToggleVisibility : null,
+                )
               : null,
           // CustomTextField currently doesn't expose textInputAction/focusNode
         ),
