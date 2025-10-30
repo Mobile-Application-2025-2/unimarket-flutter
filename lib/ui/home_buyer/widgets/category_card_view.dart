@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket/domain/models/categories/category.dart';
 import 'package:unimarket/domain/models/products/product.dart';
 import 'package:unimarket/utils/generic_snackbar.dart';
 
