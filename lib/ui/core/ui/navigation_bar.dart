@@ -20,7 +20,7 @@ class UnimarketNavigationBar extends StatelessWidget {
         children: [
           // Home
           IconButton(
-            onPressed: () => context.go('/home-buyer'),
+            onPressed: () => context.go('/home_buyer'),
             icon: const Icon(
               Icons.add_business_rounded,
               color: Colors.white,
@@ -29,7 +29,7 @@ class UnimarketNavigationBar extends StatelessWidget {
           ),
 
           IconButton(
-            onPressed: () => context.go('/home-page-buyer'),
+            onPressed: () => context.go('/home_page_buyer'),
             icon: const Icon(Icons.search, color: Colors.white, size: 24),
           ),
 
