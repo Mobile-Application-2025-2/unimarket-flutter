@@ -11,8 +11,9 @@ import 'package:unimarket/ui/core/ui/password_field.dart';
 import 'package:unimarket/ui/create_account/widgets/confirm_password_field.dart';
 import '../widgets/account_type_dropdown.dart';
 import '../widgets/privacy_checkbox.dart';
-import '../../student_code/view/student_code_view.dart';
 import '../../login/widgets/social_media_button.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 class CreateAccountView extends StatelessWidget {
   const CreateAccountView({super.key});
@@ -149,12 +150,7 @@ class CreateAccountView extends StatelessWidget {
                                     duration: Duration(seconds: 4),
                                   ),
                                 );
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => StudentCodeView(userName: viewModel.state.name.trim()),
-                                  ),
-                                );
+                                context.go(Routes.login);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

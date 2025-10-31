@@ -7,6 +7,9 @@ import '../widget/profile_section_card.dart';
 import '../widget/profile_row_item.dart';
 import '../widget/profile_section_title_row.dart';
 import 'package:unimarket/ui/core/ui/navigation_bar.dart';
+import 'package:unimarket/ui/core/ui/unimarket_header.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 class ProfileBuyerView extends StatelessWidget {
   const ProfileBuyerView({super.key});
@@ -23,17 +26,22 @@ class ProfileBuyerView extends StatelessWidget {
           child: ListenableBuilder(
             listenable: viewModel,
             builder: (context, _) {
+              if (viewModel.loading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
               final name = viewModel.displayName;
 
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  UnimarketHeader(),
+
+                  const SizedBox(height: 16),
+
                   ProfileHeader(
-                    titleText: 'UniMarket',
                     userName: name,
-                    logo: const Icon(Icons.shopping_bag_outlined, size: 28, color: Color(0xFFFFC436)),
-                    onFavTap: () => notImplementedFunctionalitySnackbar(context),
-                    onDeliveriesTap: () => notImplementedFunctionalitySnackbar(context),
+                    onAvatarTap: () => notImplementedFunctionalitySnackbar(context),
                   ),
 
                   const SizedBox(height: 16),
@@ -110,7 +118,11 @@ class ProfileBuyerView extends StatelessWidget {
                         ProfileRowItem(
                           leadingIcon: Icons.logout,
                           title: 'Log Out',
-                          onTap: () => notImplementedFunctionalitySnackbar(context),
+                          onTap: () async {
+                            await viewModel.logout();
+                            if (!context.mounted) return;
+                            context.go(Routes.login);
+                          },
                         ),
                       ],
                     ),

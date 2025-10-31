@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../view_model/sign_up_viewmodel.dart';
 import '../widgets/primary_button.dart';
-import '../../login/view/login_view.dart';
-import '../../create_account/view/create_account_view.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 class SignUpView extends StatelessWidget {
   const SignUpView({super.key});
@@ -82,12 +82,7 @@ class SignUpView extends StatelessWidget {
                         : () async {
                             await viewModel.startLoading();
                             if (context.mounted) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                                  builder: (_) => const CreateAccountView(),
-                        ),
-                      );
+                              context.go(Routes.createAccount);
                             }
                 },
               ),
@@ -101,12 +96,7 @@ class SignUpView extends StatelessWidget {
                         : () async {
                             await viewModel.startLoading();
                             if (context.mounted) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                                  builder: (_) => const LoginView(),
-                        ),
-                      );
+                              context.go(Routes.login);
                             }
                     },
                     child: RichText(

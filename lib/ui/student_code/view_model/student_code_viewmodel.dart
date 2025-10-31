@@ -9,7 +9,7 @@ class StudentCodeViewModel extends ChangeNotifier {
   StudentCodeState _state = const StudentCodeState();
   StudentCodeState get state => _state;
 
-  StudentCodeViewModel(this._camera, {String? initialUserName, required CameraService cameraService}) {
+  StudentCodeViewModel(this._camera, {String? initialUserName}) {
     if (initialUserName != null && initialUserName.isNotEmpty) {
       _set(_state.copyWith(userName: initialUserName));
     }

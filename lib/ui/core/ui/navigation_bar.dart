@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 class UnimarketNavigationBar extends StatelessWidget {
   const UnimarketNavigationBar({super.key});
@@ -45,7 +46,7 @@ class UnimarketNavigationBar extends StatelessWidget {
 
             // Profile
             IconButton(
-              onPressed: () => context.go('/profile_buyer'),
+              onPressed: () => context.go(Routes.profileBuyer),
               icon: const Icon(Icons.person, color: Colors.white, size: 24),
             ),
           ],

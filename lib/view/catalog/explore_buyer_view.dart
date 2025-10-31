@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../viewmodel/catalog/explore_buyer_viewmodel.dart';
 import '../../../data/models/category.dart' as data;
-import '../../../view/catalog/home_deliver_view.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 class ExploreBuyerView extends StatelessWidget {
   const ExploreBuyerView({super.key});
@@ -296,11 +297,7 @@ class ExploreBuyerView extends StatelessWidget {
         children: [
           // Home
           IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const HomeDeliverView()),
-              );
-            },
+            onPressed: () { context.go(Routes.homeDeliver); },
             icon: const Icon(Icons.home, color: Colors.white, size: 24),
           ),
 
@@ -316,13 +313,13 @@ class ExploreBuyerView extends StatelessWidget {
 
           // Cart
           IconButton(
-            onPressed: () {},
+            onPressed: () { context.go(Routes.homeBuyer); },
             icon: const Icon(Icons.shopping_bag, color: Colors.white, size: 24),
           ),
 
           // Profile
           IconButton(
-            onPressed: () {},
+            onPressed: () { context.go(Routes.profileBuyer); },
             icon: const Icon(Icons.person, color: Colors.white, size: 24),
           ),
         ],

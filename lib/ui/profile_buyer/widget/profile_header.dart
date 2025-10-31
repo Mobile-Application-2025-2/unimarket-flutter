@@ -1,74 +1,49 @@
 import 'package:flutter/material.dart';
 
 class ProfileHeader extends StatelessWidget {
-  final String titleText;
   final String userName;
-  final Widget? logo;
-  final VoidCallback onFavTap;
-  final VoidCallback onDeliveriesTap;
+  final String? avatarUrl;
+  final VoidCallback? onAvatarTap;
 
   const ProfileHeader({
     super.key,
-    required this.titleText,
     required this.userName,
-    this.logo,
-    required this.onFavTap,
-    required this.onDeliveriesTap,
+    this.avatarUrl,
+    this.onAvatarTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                logo ?? const SizedBox.shrink(),
-                const SizedBox(width: 8),
-                Text(
-                  titleText,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'Poppins',
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.favorite_border, color: Colors.black87),
-                  onPressed: onFavTap,
-                ),
-                IconButton(
-                  icon: const Icon(Icons.local_shipping_outlined, color: Colors.black87),
-                  onPressed: onDeliveriesTap,
-                ),
-              ],
-            )
-          ],
-        ),
-        const SizedBox(height: 16),
-        Center(
+        GestureDetector(
+          onTap: onAvatarTap,
           child: CircleAvatar(
             radius: 60,
             backgroundColor: const Color(0xFFFFD1B9),
+            backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
+                ? NetworkImage(avatarUrl!)
+                : null,
+            child: (avatarUrl == null || avatarUrl!.isEmpty)
+                ? const Icon(
+                    Icons.person_outline,
+                    size: 60,
+                    color: Colors.white,
+                  )
+                : null,
           ),
         ),
         const SizedBox(height: 12),
-        Center(
-          child: Text(
-            userName,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              fontFamily: 'Poppins',
-            ),
+        Text(
+          userName,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Poppins',
+            color: Colors.black,
           ),
+          textAlign: TextAlign.center,
         ),
       ],
     );

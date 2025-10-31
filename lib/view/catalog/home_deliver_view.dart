@@ -3,7 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../viewmodel/catalog/home_deliver_viewmodel.dart';
-import '../../../view/catalog/explore_buyer_view.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 class HomeDeliverView extends StatelessWidget {
   const HomeDeliverView({super.key});
@@ -281,11 +282,7 @@ class _FooterBar extends StatelessWidget {
 
             // Search (Selected)
             IconButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const ExploreBuyerView()),
-                );
-              },
+              onPressed: () { context.go(Routes.exploreBuyer); },
               icon: const Icon(Icons.search, color: Colors.white, size: 24),
             ),
 

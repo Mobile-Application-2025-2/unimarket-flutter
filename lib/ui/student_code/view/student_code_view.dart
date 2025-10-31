@@ -164,23 +164,28 @@ class StudentCodeView extends StatelessWidget {
 
                                 if (s.imageFile != null)
                                   GestureDetector(
-                                    onTap: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) => Scaffold(
-                                            appBar: AppBar(
-                                              backgroundColor: const Color(0xFFFFC436),
-                                              title: const Text('Image Preview'),
-                                              leading: IconButton(
-                                                icon: const Icon(Icons.arrow_back),
-                                                onPressed: () => Navigator.of(context).pop(),
+                                          onTap: () {
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => Dialog(
+                                                child: Column(
+                                                  mainAxisSize: MainAxisSize.min,
+                                                  children: [
+                                                    AppBar(
+                                                      backgroundColor: const Color(0xFFFFC436),
+                                                      title: const Text('Image Preview'),
+                                                      leading: IconButton(
+                                                        icon: const Icon(Icons.close),
+                                                        onPressed: () => Navigator.of(context).pop(),
+                                                      ),
+                                                    ),
+                                                    if (s.imageFile != null)
+                                                      Image.file(s.imageFile!),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                            body: Center(child: Image.file(s.imageFile!)),
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                            );
+                                          },
                                     child: Container(
                                       margin: const EdgeInsets.only(
                                         top: 10,
