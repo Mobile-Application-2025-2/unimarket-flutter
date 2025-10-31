@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
-class ProfileHeader extends StatelessWidget {
+class ProfileAvatar extends StatelessWidget {
   final String userName;
   final String? avatarUrl;
   final VoidCallback? onAvatarTap;
+  final double radius;
 
-  const ProfileHeader({
+  const ProfileAvatar({
     super.key,
     required this.userName,
     this.avatarUrl,
     this.onAvatarTap,
+    this.radius = 60,
   });
 
   @override
@@ -20,15 +22,15 @@ class ProfileHeader extends StatelessWidget {
         GestureDetector(
           onTap: onAvatarTap,
           child: CircleAvatar(
-            radius: 60,
+            radius: radius,
             backgroundColor: const Color(0xFFFFD1B9),
             backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
                 ? NetworkImage(avatarUrl!)
                 : null,
             child: (avatarUrl == null || avatarUrl!.isEmpty)
-                ? const Icon(
+                ? Icon(
                     Icons.person_outline,
-                    size: 60,
+                    size: radius,
                     color: Colors.white,
                   )
                 : null,
@@ -49,5 +51,4 @@ class ProfileHeader extends StatelessWidget {
     );
   }
 }
-
 

@@ -34,4 +34,3 @@ class ProfileSectionCard extends StatelessWidget {
   }
 }
 
-

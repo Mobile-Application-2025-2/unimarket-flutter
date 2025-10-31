@@ -14,6 +14,8 @@ import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
 import 'package:unimarket/data/repositories/products/product_repository.dart';
 import 'package:unimarket/ui/profile_buyer/view/profile_buyer_view.dart';
 import 'package:unimarket/ui/profile_buyer/view_model/profile_buyer_viewmodel.dart';
+import 'package:unimarket/ui/profile_bussines/view/profile_bussines_view.dart';
+import 'package:unimarket/ui/profile_bussines/view_model/profile_bussines_viewmodel.dart';
 
 GoRouter router() => GoRouter(
       initialLocation: Routes.signUp,
@@ -58,6 +60,15 @@ GoRouter router() => GoRouter(
             return ChangeNotifierProvider(
               create: (_) => ProfileBuyerViewModel(),
               child: const ProfileBuyerView(),
+            );
+          },
+        ),
+        GoRoute(
+          path: Routes.profileBussines,
+          builder: (context, state) {
+            return ChangeNotifierProvider(
+              create: (_) => ProfileBussinesViewModel(),
+              child: const ProfileBussinesView(),
             );
           },
         ),

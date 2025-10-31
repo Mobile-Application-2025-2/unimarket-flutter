@@ -8,4 +8,5 @@ abstract final class Routes {
   static const homeDeliver = '/home_deliver';
   static const exploreBuyer = '/explore_buyer';
   static const profileBuyer = '/profile_buyer';
+  static const profileBussines = '/profile_bussines';
 }

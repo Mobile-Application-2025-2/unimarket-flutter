@@ -49,4 +49,3 @@ class ProfileSectionTitleRow extends StatelessWidget {
   }
 }
 
-

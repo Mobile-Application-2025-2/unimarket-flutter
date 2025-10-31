@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 
-class ProfileRowItem extends StatelessWidget {
-  final IconData leadingIcon;
-  final String title;
+class ProfileRowTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
   final String? subtitle;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final bool showChevron;
 
-  const ProfileRowItem({
+  const ProfileRowTile({
     super.key,
-    required this.leadingIcon,
-    required this.title,
+    required this.icon,
+    required this.label,
     this.subtitle,
-    required this.onTap,
+    this.onTap,
+    this.showChevron = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: onTap ?? () {},
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: Row(
@@ -29,7 +31,7 @@ class ProfileRowItem extends StatelessWidget {
                 color: const Color(0xFFFFF5DB),
                 shape: BoxShape.circle,
               ),
-              child: Icon(leadingIcon, color: const Color(0xFFFFC436)),
+              child: Icon(icon, color: const Color(0xFFFFC436)),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -37,7 +39,7 @@ class ProfileRowItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    label,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -56,12 +58,12 @@ class ProfileRowItem extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.chevron_right, color: Colors.black54),
+            if (showChevron)
+              const Icon(Icons.chevron_right, color: Colors.black54),
           ],
         ),
       ),
     );
   }
 }
-
 
