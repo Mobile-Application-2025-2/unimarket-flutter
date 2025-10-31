@@ -13,6 +13,7 @@ import 'package:unimarket/ui/sign_up/view_model/sign_up_viewmodel.dart';
 import 'package:unimarket/ui/create_account/view_model/create_account_viewmodel.dart';
 import 'package:unimarket/ui/create_account/view_model/session_viewmodel.dart';
 import 'package:unimarket/data/daos/create_account_dao.dart';
+import 'package:unimarket/data/daos/student_code_dao.dart';
 
 // Services
 import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
@@ -38,9 +39,13 @@ List<SingleChildWidget> get providers {
 
         // DAOs
         Provider(create: (_) => CreateAccountDao()),
+        Provider(create: (_) => StudentCodeDao()),
         // Auth ViewModels (Login & Create Account use Firebase)
         ChangeNotifierProvider(
-          create: (ctx) => LoginViewModel(ctx.read<FirebaseAuthService>()),
+          create: (ctx) => LoginViewModel(
+            ctx.read<FirebaseAuthService>(),
+            ctx.read<StudentCodeDao>(),
+          ),
         ),
         ChangeNotifierProvider(
           create: (ctx) => CreateAccountViewModel(dao: ctx.read<CreateAccountDao>()),

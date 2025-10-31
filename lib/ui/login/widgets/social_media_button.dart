@@ -15,7 +15,7 @@ class SocialMediaButtonGroup extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => notImplementedFunctionalitySnackbar(context),
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF0078D4),
+          backgroundColor: const Color(0xFF0078D4),
               foregroundColor: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
@@ -39,7 +39,7 @@ class SocialMediaButtonGroup extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => notImplementedFunctionalitySnackbar(context),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.white,
+          backgroundColor: Colors.white,
               foregroundColor: Colors.black,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),

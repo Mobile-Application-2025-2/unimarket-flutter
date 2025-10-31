@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../data/models/services/firebase_auth_service_adapter.dart';
 import '../widgets/login_state.dart';
 import 'package:unimarket/utils/result.dart';
+import 'package:unimarket/data/daos/student_code_dao.dart';
 
 enum LoginError {
   emailNotVerified,
@@ -11,10 +12,16 @@ enum LoginError {
   unknown,
 }
 
+enum LoginRoute {
+  studentCode,
+  homeBuyer,
+}
+
 class LoginViewModel extends ChangeNotifier {
   final FirebaseAuthService _auth;
+  final StudentCodeDao _studentCodeDao;
 
-  LoginViewModel(this._auth);
+  LoginViewModel(this._auth, this._studentCodeDao);
 
   LoginState _state = const LoginState();
 
@@ -88,8 +95,8 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
-  /// New login flow that returns the account type as Result<String>
-  Future<Result<String>> login(String email, String password) async {
+  /// New login flow that returns the route to navigate to after login
+  Future<Result<LoginRoute>> login(String email, String password) async {
     try {
       _set(_state.copyWith(loading: true, error: null));
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -112,10 +119,27 @@ class LoginViewModel extends ChangeNotifier {
 
       // Email verified → fetch account type
       final snap = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
-      final data = snap.data() as Map<String, dynamic>? ?? {};
+      final data = snap.data() ?? {};
       final accountType = (data['accountType']?.toString()) ?? 'buyer';
+
+      // If deliver, always go to home
+      if (accountType == 'deliver') {
+        _set(_state.copyWith(loading: false));
+        return Result.ok(LoginRoute.homeBuyer);
+      }
+
+      // For buyers → check if they already submitted student code
+      final submissionResult = await _studentCodeDao.hasSubmission(user.uid);
+
       _set(_state.copyWith(loading: false));
-      return Result.ok(accountType);
+
+      if (submissionResult is Ok<bool> && submissionResult.value == true) {
+        // Already submitted → go to home
+        return Result.ok(LoginRoute.homeBuyer);
+      } else {
+        // Not submitted yet → go to student code screen
+        return Result.ok(LoginRoute.studentCode);
+      }
     } on FirebaseAuthException catch (e) {
       _set(_state.copyWith(loading: false, error: _mapFirebaseAuthError(e)));
       return Result.error(e);

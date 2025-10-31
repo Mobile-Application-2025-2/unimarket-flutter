@@ -133,14 +133,15 @@ class LoginView extends StatelessWidget {
                     onPressed: () async {
                       final result = await viewModel.login(state.email, state.password);
                       if (!context.mounted) return;
-                      if (result is Ok<String>) {
-                        final type = result.value;
-                        if (type == 'buyer') {
-                          context.go(Routes.studentCode, extra: state.email.trim());
-                        } else if (type == 'deliver') {
-                          context.go(Routes.homeBuyer);
-                        } else {
-                          context.go(Routes.homeBuyer);
+                      if (result is Ok<LoginRoute>) {
+                        final route = result.value;
+                        switch (route) {
+                          case LoginRoute.studentCode:
+                            context.go(Routes.studentCode, extra: state.email.trim());
+                            break;
+                          case LoginRoute.homeBuyer:
+                            context.go(Routes.homeBuyer);
+                            break;
                         }
                       } else {
                         final snack = SnackBar(

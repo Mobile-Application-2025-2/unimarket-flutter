@@ -7,6 +7,7 @@ import 'package:unimarket/ui/sign_up/view/sign_up_view.dart';
 import 'package:unimarket/ui/create_account/view/create_account_view.dart';
 import 'package:unimarket/ui/student_code/view/student_code_view.dart';
 import 'package:unimarket/ui/student_code/view_model/student_code_viewmodel.dart';
+import 'package:unimarket/data/daos/student_code_dao.dart';
 import 'package:unimarket/data/models/services/camera_service.dart';
 import 'package:unimarket/ui/home_buyer/widgets/home_buyer_screen.dart';
 import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
@@ -35,8 +36,9 @@ GoRouter router() => GoRouter(
           builder: (context, state) {
             final name = (state.extra is String) ? state.extra as String : '';
             final camera = context.read<CameraService>();
+            final dao = context.read<StudentCodeDao>();
             return ChangeNotifierProvider(
-              create: (_) => StudentCodeViewModel(camera, initialUserName: name),
+              create: (_) => StudentCodeViewModel(camera, dao, initialUserName: name),
               builder: (ctx, _) => StudentCodeView(userName: name),
             );
           },
