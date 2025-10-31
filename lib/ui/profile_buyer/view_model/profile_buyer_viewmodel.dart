@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:unimarket/core/utils/singleton.dart';
+import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
 
 class ProfileBuyerViewModel extends ChangeNotifier {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuthService _authService = Singleton<FirebaseAuthService>().instance;
 
   String displayName = '';
   String email = '';
@@ -13,7 +14,7 @@ class ProfileBuyerViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadUserData() async {
-    final user = _auth.currentUser;
+    final user = _authService.currentUser;
     if (user != null) {
       displayName = user.displayName ?? user.email?.split('@').first ?? 'User';
       email = user.email ?? '';
@@ -28,7 +29,7 @@ class ProfileBuyerViewModel extends ChangeNotifier {
   /// Signs out the user from FirebaseAuth
   Future<void> logout() async {
     try {
-      await _auth.signOut();
+      await _authService.signOut();
       displayName = 'User Name Buyer';
       email = '';
       notifyListeners();
@@ -39,7 +40,7 @@ class ProfileBuyerViewModel extends ChangeNotifier {
 
   /// Allows manual refresh of user data (optional)
   Future<void> refreshUser() async {
-    await _auth.currentUser?.reload();
+    await _authService.currentUser?.reload();
     await _loadUserData();
   }
 }

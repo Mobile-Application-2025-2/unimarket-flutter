@@ -35,7 +35,7 @@ class ProfileBussinesView extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const UnimarketHeader(),
+                  const UnimarketHeader(title: 'UniMarket'),
 
                   const SizedBox(height: 16),
 

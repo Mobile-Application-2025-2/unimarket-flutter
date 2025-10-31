@@ -117,11 +117,11 @@ class ProfileBuyerView extends StatelessWidget {
                         const Divider(height: 1),
                         ProfileRowTile(
                           icon: Icons.logout,
-                          label: 'Log Out',
+                          label: 'Log-Out',
                           onTap: () async {
                             await viewModel.logout();
                             if (!context.mounted) return;
-                            context.go(Routes.login);
+                            context.go(Routes.signUp);
                           },
                         ),
                       ],

@@ -1,11 +1,5 @@
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:unimarket/data/repositories/products/product_repository.dart';
-import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
-import 'package:unimarket/ui/home_page_buyer/view_model/home_page_buyer_vm.dart';
-import 'package:unimarket/ui/home_page_buyer/widgets/home_page_buyer_screen.dart';
-import 'package:unimarket/ui/profile_buyer/view/profile_buyer_view.dart';
-import 'package:unimarket/ui/profile_buyer/view_model/profile_buyer_viewmodel.dart';
 
 import 'routes.dart';
 import 'package:unimarket/ui/login/view/login_view.dart';
@@ -18,6 +12,8 @@ import 'package:unimarket/data/models/services/camera_service.dart';
 import 'package:unimarket/ui/home_buyer/widgets/home_buyer_screen.dart';
 import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
 import 'package:unimarket/data/repositories/products/product_repository.dart';
+import 'package:unimarket/ui/home_page_buyer/widgets/home_page_buyer_screen.dart';
+import 'package:unimarket/ui/home_page_buyer/view_model/home_page_buyer_vm.dart';
 import 'package:unimarket/ui/profile_buyer/view/profile_buyer_view.dart';
 import 'package:unimarket/ui/profile_buyer/view_model/profile_buyer_viewmodel.dart';
 import 'package:unimarket/ui/profile_bussines/view/profile_bussines_view.dart';
