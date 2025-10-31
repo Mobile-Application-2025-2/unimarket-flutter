@@ -27,11 +27,11 @@ class StudentCodeView extends StatelessWidget {
             listenable: viewModel,
             builder: (context, _) {
               final s = viewModel.state;
-              
+
               return LayoutBuilder(
                 builder: (context, constraints) {
                   final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-                  
+
                   return SingleChildScrollView(
                     padding: EdgeInsets.fromLTRB(
                       24,

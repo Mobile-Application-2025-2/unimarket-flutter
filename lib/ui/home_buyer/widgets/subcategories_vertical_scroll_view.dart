@@ -23,7 +23,7 @@ class SubcategoriesVerticalScrollView extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 12,
             mainAxisSpacing: 12,
-            childAspectRatio: 0.75,
+            childAspectRatio: 0.79,
           ),
           itemCount: viewModel.filteredCategories.length,
           itemBuilder: (context, index) {

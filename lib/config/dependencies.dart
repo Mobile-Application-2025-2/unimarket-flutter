@@ -1,6 +1,8 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:unimarket/data/daos/business_dao.dart';
 import 'package:unimarket/data/daos/product_dao.dart';
+import 'package:unimarket/data/repositories/businesses/business_repository.dart';
 import 'package:unimarket/data/repositories/products/product_repository.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,11 +21,15 @@ import 'package:unimarket/data/daos/student_code_dao.dart';
 import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
 import 'package:unimarket/data/models/services/camera_service.dart';
 import 'package:unimarket/data/repositories/products/product_repository_firestore.dart';
+import 'package:unimarket/data/repositories/businesses/business_repository_firestore.dart';
 
 List<SingleChildWidget> _sharedProviders = [];
 
 List<SingleChildWidget> get providers {
   return [
+    Provider(
+      create: (_) => BusinessRepositoryFirestore(businessDao: BusinessDao()) as BusinessRepository
+    ),
     Provider(
       create: (_) => ProductRepositoryFirestore(productDao: ProductDao()) as ProductRepository,
     ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
+import 'package:unimarket/ui/home_page_buyer/view_model/home_page_buyer_vm.dart';
 
-/*class CategoriesHorizontalScrollView extends StatelessWidget {
-  final HomeBuyerViewModel viewModel;
+class CategoriesHorizontalScrollView extends StatelessWidget {
+  final HomePageBuyerViewModel viewModel;
 
   const CategoriesHorizontalScrollView({
     super.key,
@@ -16,9 +16,9 @@ import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          itemCount: viewModel.uniqueCategories.length,
+          itemCount: viewModel.uniqueBusinessCategories.length,
           itemBuilder: (context, index) {
-            final categoryType = viewModel.uniqueCategories[index];
+            final categoryType = viewModel.uniqueBusinessCategories[index];
             final isSelected = categoryType == viewModel.selectedCategory;
 
             return Padding(
@@ -56,4 +56,4 @@ import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
         ),
       );
   }
-}*/
+}
