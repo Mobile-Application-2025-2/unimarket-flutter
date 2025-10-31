@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../model/shared/services/places_service.dart';
+import '../../data/models/services/places_service.dart';
 
 class HomeDeliverViewModel extends ChangeNotifier {
   final PlacesService _placesService;
@@ -165,7 +164,7 @@ class HomeDeliverViewModel extends ChangeNotifier {
                     if (place.rating != null) ...[
                       const Icon(Icons.star, size: 16, color: Colors.amber),
                       const SizedBox(width: 4),
-                      Text('${place.rating!.toStringAsFixed(1)}'),
+                      Text(place.rating!.toStringAsFixed(1)),
                       const SizedBox(width: 12),
                     ],
                     if (priceText != null) Text(priceText, style: const TextStyle(color: Colors.black54)),
