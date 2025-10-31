@@ -15,7 +15,6 @@ class UnimarketHeader extends StatelessWidget {
           Image.asset('assets/images/sign.png', width: 30,),
           const SizedBox(width: 8),
 
-          // Title
           Text(
             title,
             style: TextStyle(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomBackButton extends StatelessWidget {
   final VoidCallback? onPressed;
@@ -25,7 +26,14 @@ class CustomBackButton extends StatelessWidget {
         ],
       ),
       child: IconButton(
-        onPressed: onPressed ?? () => Navigator.pop(context),
+        onPressed: onPressed ?? () {
+          final canPop = context.canPop();
+          if (canPop) {
+            context.pop();
+          } else {
+            context.go('/sign_up');
+          }
+        },
         icon: const Icon(
           Icons.arrow_back_ios_new,
           color: Colors.black,

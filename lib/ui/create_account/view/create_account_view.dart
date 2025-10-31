@@ -11,8 +11,9 @@ import 'package:unimarket/ui/core/ui/password_field.dart';
 import 'package:unimarket/ui/create_account/widgets/confirm_password_field.dart';
 import '../widgets/account_type_dropdown.dart';
 import '../widgets/privacy_checkbox.dart';
-import '../../student_code/view/student_code_view.dart';
 import '../../login/widgets/social_media_button.dart';
+import 'package:go_router/go_router.dart';
+import 'package:unimarket/routing/routes.dart';
 
 class CreateAccountView extends StatelessWidget {
   const CreateAccountView({super.key});
@@ -137,10 +138,10 @@ class CreateAccountView extends StatelessWidget {
                       onPressed: state.loading || !state.isValid
                           ? null
                           : () async {
-                              final name = await viewModel.createAccount();
+                              await viewModel.createAccount();
                               if (!context.mounted) return;
 
-                              if (name != null) {
+                              if (viewModel.state.errorMessage == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Account created! Please check your email to verify your account.'),
@@ -149,11 +150,8 @@ class CreateAccountView extends StatelessWidget {
                                     duration: Duration(seconds: 4),
                                   ),
                                 );
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(builder: (_) => StudentCodeView(userName: name.trim())),
-                                );
-                              } else if (viewModel.state.errorMessage != null) {
+                                context.go(Routes.login);
+                              } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(viewModel.state.errorMessage!),

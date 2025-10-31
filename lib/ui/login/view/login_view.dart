@@ -5,9 +5,10 @@ import 'package:unimarket/ui/core/ui/email_field.dart';
 import 'package:unimarket/ui/core/ui/password_field.dart';
 import '../widgets/login_button.dart';
 import '../widgets/error_banner.dart';
-import '../../../../ui/create_account/view/create_account_view.dart';
+import 'package:unimarket/ui/create_account/widgets/back_button.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unimarket/routing/routes.dart';
+import 'package:unimarket/utils/result.dart';
 
 // notImplementedFunctionalitySnackbar used inside SocialMediaButtonGroup, no direct usage here
 import '../widgets/social_media_button.dart';
@@ -35,32 +36,9 @@ class LoginView extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 20.0, bottom: 40.0),
                     child: Column(
                       children: [
-                        // Back button
-                        Align(
+                        const Align(
                           alignment: Alignment.centerLeft,
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: IconButton(
-                              onPressed: () => Navigator.pop(context),
-                              icon: const Icon(
-                                Icons.arrow_back_ios_new,
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                            ),
-                          ),
+                          child: CustomBackButton(),
                         ),
                         const SizedBox(height: 30),
                         Stack(
@@ -153,21 +131,39 @@ class LoginView extends StatelessWidget {
                     enabled: state.canSubmit,
                     loading: state.loading,
                     onPressed: () async {
-                      final success = await viewModel.signIn();
+                      final result = await viewModel.login(state.email, state.password);
                       if (!context.mounted) return;
-
-                      if (success) {
-                        if (!context.mounted) return;
-                        context.go(Routes.homeBuyer);
-                      } else if (viewModel.state.error != null) {
-                        // Show error in SnackBar
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(viewModel.state.error!),
-                            backgroundColor: Colors.red,
-                            behavior: SnackBarBehavior.floating,
+                      if (result is Ok<LoginRoute>) {
+                        final route = result.value;
+                        switch (route) {
+                          case LoginRoute.studentCode:
+                            context.go(Routes.studentCode, extra: state.email.trim());
+                            break;
+                          case LoginRoute.homeBuyer:
+                            context.go(Routes.homePageBuyer);
+                            break;
+                        }
+                      } else {
+                        final snack = SnackBar(
+                          content: Text(viewModel.state.error ?? 'Login failed'),
+                          action: SnackBarAction(
+                            label: 'Resend',
+                            onPressed: () async {
+                              final resend = await viewModel.resendVerification(state.email, state.password);
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(resend is Ok<void>
+                                      ? 'Verification email sent.'
+                                      : 'Could not resend. Try again.'),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            },
                           ),
+                          behavior: SnackBarBehavior.floating,
                         );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
                       }
                     },
                   ),
@@ -199,12 +195,7 @@ class LoginView extends StatelessWidget {
                       onTap: state.loading
                           ? null
                           : () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const CreateAccountView(),
-                                ),
-                              );
+                              context.go(Routes.createAccount);
                             },
                       child: RichText(
                         text: const TextSpan(

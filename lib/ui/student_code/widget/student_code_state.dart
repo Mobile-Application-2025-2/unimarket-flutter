@@ -3,44 +3,41 @@ import 'dart:io';
 class StudentCodeState {
   final bool loading;
   final String? error;
-
-  final bool hasPermission;
-  final File? imageFile;
   final String userName;
-
+  final String studentCodeText;
+  final File? imageFile; // Local-only preview
   final bool submitted;
   final bool isVerified;
 
   const StudentCodeState({
     this.loading = false,
     this.error,
-    this.hasPermission = false,
-    this.imageFile,
     this.userName = '',
+    this.studentCodeText = '',
+    this.imageFile,
     this.submitted = false,
     this.isVerified = false,
   });
 
+  bool get canSubmit => !loading && studentCodeText.trim().isNotEmpty;
+
   StudentCodeState copyWith({
     bool? loading,
     String? error,
-    bool? hasPermission,
-    File? imageFile,
     String? userName,
+    String? studentCodeText,
+    File? imageFile,
     bool? submitted,
     bool? isVerified,
   }) {
     return StudentCodeState(
       loading: loading ?? this.loading,
       error: error,
-      hasPermission: hasPermission ?? this.hasPermission,
-      imageFile: imageFile ?? this.imageFile,
       userName: userName ?? this.userName,
+      studentCodeText: studentCodeText ?? this.studentCodeText,
+      imageFile: imageFile ?? this.imageFile,
       submitted: submitted ?? this.submitted,
       isVerified: isVerified ?? this.isVerified,
     );
   }
-
-  bool get hasPhoto => imageFile != null;
-  bool get canSubmit => !loading && hasPhoto;
 }

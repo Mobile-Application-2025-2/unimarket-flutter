@@ -24,11 +24,11 @@ class UnimarketNavigationBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
-            onPressed: () => context.go(Routes.homeBuyer),
+            onPressed: () => context.go(Routes.homePageBuyer),
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Routes.homeBuyer == currentRoute
+                color: Routes.homePageBuyer == currentRoute
                     ? Colors.white.withOpacity(0.2)
                     : Colors.amber,
                 borderRadius: BorderRadius.circular(12),
@@ -42,11 +42,11 @@ class UnimarketNavigationBar extends StatelessWidget {
           ),
 
           IconButton(
-            onPressed: () => context.go(Routes.homePageBuyer),
+            onPressed: () => context.go(Routes.homeBuyer),
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Routes.homePageBuyer == currentRoute
+                color: Routes.homeBuyer == currentRoute
                     ? Colors.white.withOpacity(0.2)
                     : Colors.amber,
                 borderRadius: BorderRadius.circular(12),
@@ -68,11 +68,11 @@ class UnimarketNavigationBar extends StatelessWidget {
           ),
 
           IconButton(
-            onPressed: () => context.go(Routes.homePageBuyer),
+            onPressed: () => context.go(Routes.profileBuyer),
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Routes.homePageBuyer == currentRoute
+                color: Routes.profileBuyer == currentRoute
                     ? Colors.white.withOpacity(0.2)
                     : Colors.amber,
                 borderRadius: BorderRadius.circular(12),
