@@ -20,6 +20,7 @@ class StudentCodeState {
   });
 
   bool get canSubmit => !loading && studentCodeText.trim().isNotEmpty;
+  bool get hasPhoto => imageFile != null;
 
   StudentCodeState copyWith({
     bool? loading,

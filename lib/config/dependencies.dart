@@ -5,15 +5,13 @@ import 'package:unimarket/data/daos/product_dao.dart';
 import 'package:unimarket/data/repositories/businesses/business_repository.dart';
 import 'package:unimarket/data/repositories/products/product_repository.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+// Singleton utility
+import 'package:unimarket/core/utils/singleton.dart';
 
 // ViewModels
 import 'package:unimarket/ui/login/view_model/login_viewmodel.dart';
 import 'package:unimarket/ui/sign_up/view_model/sign_up_viewmodel.dart';
 import 'package:unimarket/ui/create_account/view_model/create_account_viewmodel.dart';
-import 'package:unimarket/ui/create_account/view_model/session_viewmodel.dart';
 import 'package:unimarket/data/daos/create_account_dao.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
 
@@ -27,41 +25,37 @@ List<SingleChildWidget> _sharedProviders = [];
 
 List<SingleChildWidget> get providers {
   return [
+    // Repositories use Singleton DAOs
     Provider(
-      create: (_) => BusinessRepositoryFirestore(businessDao: BusinessDao()) as BusinessRepository
+      create: (_) => BusinessRepositoryFirestore(businessDao: Singleton<BusinessDao>().instance) as BusinessRepository
     ),
     Provider(
-      create: (_) => ProductRepositoryFirestore(productDao: ProductDao()) as ProductRepository,
+      create: (_) => ProductRepositoryFirestore(productDao: Singleton<ProductDao>().instance) as ProductRepository,
     ),
-            Provider(
-          create: (_) => FirebaseAuthService(
-            FirebaseAuth.instance,
-            FirebaseFirestore.instance,
-          ),
-        ),
-                ChangeNotifierProvider(
-          create: (ctx) => SessionViewModel(ctx.read<FirebaseAuthService>()),
-        ),
+    // Services from Singleton
+    Provider(
+      create: (_) => Singleton<FirebaseAuthService>().instance,
+    ),
 
-        // DAOs
-        Provider(create: (_) => CreateAccountDao()),
-        Provider(create: (_) => StudentCodeDao()),
-        // Auth ViewModels (Login & Create Account use Firebase)
-        ChangeNotifierProvider(
-          create: (ctx) => LoginViewModel(
-            ctx.read<FirebaseAuthService>(),
-            ctx.read<StudentCodeDao>(),
-          ),
-        ),
-        ChangeNotifierProvider(
-          create: (ctx) => CreateAccountViewModel(dao: ctx.read<CreateAccountDao>()),
-        ),
-                // Other ViewModels
-        ChangeNotifierProvider(
-          create: (_) => SignUpViewModel(),
-        ),
-        // Other Services
-        Provider(create: (_) => CameraService()),
+    // DAOs from Singleton
+    Provider(create: (_) => Singleton<CreateAccountDao>().instance),
+    Provider(create: (_) => Singleton<StudentCodeDao>().instance),
+    // Auth ViewModels use Singleton instances
+    ChangeNotifierProvider(
+      create: (ctx) => LoginViewModel(
+        ctx.read<FirebaseAuthService>(),
+        ctx.read<StudentCodeDao>(),
+      ),
+    ),
+    ChangeNotifierProvider(
+      create: (ctx) => CreateAccountViewModel(dao: ctx.read<CreateAccountDao>()),
+    ),
+    // Other ViewModels
+    ChangeNotifierProvider(
+      create: (_) => SignUpViewModel(),
+    ),
+    // Services from Singleton
+    Provider(create: (_) => Singleton<CameraService>().instance),
     ..._sharedProviders,
   ];
 }

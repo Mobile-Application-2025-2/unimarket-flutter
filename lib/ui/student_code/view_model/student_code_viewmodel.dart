@@ -40,7 +40,9 @@ class StudentCodeViewModel extends ChangeNotifier {
   }
 
   void setStudentCodeText(String v) {
-    _set(state.copyWith(studentCodeText: v));
+    // Sanitize input: only digits
+    final onlyDigits = v.replaceAll(RegExp(r'[^0-9]'), '');
+    _set(state.copyWith(studentCodeText: onlyDigits));
   }
 
   Future<void> submitVerification() async {

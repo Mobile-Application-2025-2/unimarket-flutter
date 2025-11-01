@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:unimarket/utils/not_implemented_snackbar.dart';
-import '../view_model/profile_buyer_viewmodel.dart';
-import 'package:unimarket/ui/core/ui/navigation_bar.dart';
-import 'package:unimarket/ui/core/ui/unimarket_header.dart';
-import 'package:unimarket/ui/core/ui/profile_widgets/profile_avatar.dart';
-import 'package:unimarket/ui/core/ui/profile_widgets/profile_section_card.dart';
-import 'package:unimarket/ui/core/ui/profile_widgets/profile_row_tile.dart';
-import 'package:unimarket/ui/core/ui/profile_widgets/profile_section_title_row.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unimarket/routing/routes.dart';
+import 'package:unimarket/utils/not_implemented_snackbar.dart';
+import '../view_model/profile_bussines_viewmodel.dart';
+import '../../core/ui/unimarket_header.dart';
+import '../../core/ui/navigation_bar.dart';
+import '../../core/ui/profile_widgets/profile_avatar.dart';
+import '../../core/ui/profile_widgets/profile_section_card.dart';
+import '../../core/ui/profile_widgets/profile_row_tile.dart';
+import '../../core/ui/profile_widgets/profile_section_title_row.dart';
 
-class ProfileBuyerView extends StatelessWidget {
-  const ProfileBuyerView({super.key});
+class ProfileBussinesView extends StatelessWidget {
+  const ProfileBussinesView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<ProfileBuyerViewModel>();
+    final viewModel = context.read<ProfileBussinesViewModel>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -35,7 +35,7 @@ class ProfileBuyerView extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  UnimarketHeader(title: 'UniMarket'),
+                  const UnimarketHeader(title: 'UniMarket'),
 
                   const SizedBox(height: 16),
 
@@ -46,12 +46,13 @@ class ProfileBuyerView extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
+                  // Section 1: Business Info + Addresses
                   ProfileSectionCard(
                     child: Column(
                       children: [
                         ProfileRowTile(
-                          icon: Icons.person_outline,
-                          label: 'Personal Info',
+                          icon: Icons.badge_outlined,
+                          label: 'Bussiness Info',
                           onTap: () => notImplementedFunctionalitySnackbar(context),
                         ),
                         const Divider(height: 1),
@@ -66,25 +67,26 @@ class ProfileBuyerView extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
+                  // Section 2: Purchases (History equivalent)
                   ProfileSectionCard(
                     child: Column(
                       children: [
                         const ProfileSectionTitleRow(
                           leadingIcon: Icons.access_time,
-                          title: 'Historial',
-                          actionText: 'Ver todos',
+                          title: 'Compras',
+                          actionText: 'Ver todas',
                         ),
                         const SizedBox(height: 8),
                         ProfileRowTile(
-                          icon: Icons.payments_rounded,
-                          label: 'Car burguer',
+                          icon: Icons.person_outline,
+                          label: 'Juan Perez',
                           subtitle: '24 octubre',
                           onTap: () => notImplementedFunctionalitySnackbar(context),
                         ),
                         const Divider(height: 1),
                         ProfileRowTile(
-                          icon: Icons.payments_rounded,
-                          label: 'Subway',
+                          icon: Icons.person_outline,
+                          label: 'Juan Perez',
                           subtitle: '23 octubre',
                           onTap: () => notImplementedFunctionalitySnackbar(context),
                         ),
@@ -94,12 +96,13 @@ class ProfileBuyerView extends StatelessWidget {
 
                   const SizedBox(height: 16),
 
+                  // Section 3: Actions
                   ProfileSectionCard(
                     child: Column(
                       children: [
                         ProfileRowTile(
-                          icon: Icons.shopping_bag_outlined,
-                          label: 'Cart',
+                          icon: Icons.inventory_2_outlined,
+                          label: 'Productos',
                           onTap: () => notImplementedFunctionalitySnackbar(context),
                         ),
                         const Divider(height: 1),
@@ -110,7 +113,7 @@ class ProfileBuyerView extends StatelessWidget {
                         ),
                         const Divider(height: 1),
                         ProfileRowTile(
-                          icon: Icons.rate_review_outlined,
+                          icon: Icons.reviews_outlined,
                           label: 'User Reviews',
                           onTap: () => notImplementedFunctionalitySnackbar(context),
                         ),
@@ -121,7 +124,7 @@ class ProfileBuyerView extends StatelessWidget {
                           onTap: () async {
                             await viewModel.logout();
                             if (!context.mounted) return;
-                            context.go(Routes.signUp);
+                            context.go(Routes.login);
                           },
                         ),
                       ],
@@ -139,5 +142,4 @@ class ProfileBuyerView extends StatelessWidget {
     );
   }
 }
-
 
