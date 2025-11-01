@@ -140,7 +140,7 @@ class LoginView extends StatelessWidget {
                             context.go(Routes.studentCode, extra: state.email.trim());
                             break;
                           case LoginRoute.homeBuyer:
-                            context.go(Routes.homeBuyer);
+                            context.go(Routes.homePageBuyer);
                             break;
                         }
                       } else {

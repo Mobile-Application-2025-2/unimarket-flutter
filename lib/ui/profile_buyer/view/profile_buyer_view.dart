@@ -35,7 +35,7 @@ class ProfileBuyerView extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  UnimarketHeader(),
+                  UnimarketHeader(title: 'UniMarket'),
 
                   const SizedBox(height: 16),
 
