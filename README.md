@@ -6,16 +6,41 @@
 | Julian Rolon | j.rolont |
 | Javier Barrera | js.barrerat1 |
 
-## Getting Started
+## To work with flutter
 
-This project is a starting point for a Flutter application.
+Each developer has to run the following commands:
+```sh
+dart pub global activate flutterfire_cli
+flutterfire configure --project=<PROJECT_NAME>
+flutter pub get
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Setup Firebase
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Install de CLI of firebase.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```sh
+npm i -g firebase-tools
+```
 
+Login with your Google account:
+
+```sh
+firebase login
+```
+
+Install FlutterFire:
+
+```sh
+dart pub global activate flutterfire_cli
+```
+
+> [!note]
+> Each time you add a new service or product in your Firebase app you need to run `flutterfire configure` again.
+> ```sh
+> $ flutter pub add PLUGIN_NAME
+> $ flutterfire configure
+> $ flutter run
+> ```
+> 
+> Please see the [FlutterFire documentation](https://firebase.google.com/docs/flutter/setup?platform=android) if you have any trouble.

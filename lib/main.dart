@@ -1,16 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:unimarket/ui/catalog/view/sign_up.dart';
-import 'config/supabase_config.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_options.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:unimarket/routing/router.dart';
+import 'package:unimarket/config/dependencies.dart';
+import 'package:unimarket/core/utils/singleton.dart';
+import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
+import 'package:unimarket/data/models/services/camera_service.dart';
+import 'package:unimarket/data/daos/create_account_dao.dart';
+import 'package:unimarket/data/daos/student_code_dao.dart';
+import 'package:unimarket/data/daos/product_dao.dart';
+import 'package:unimarket/data/daos/business_dao.dart';
+import 'package:unimarket/data/models/services/connectivity_service.dart';
+import 'package:unimarket/data/models/services/ttl_store.dart';
+import 'package:unimarket/data/models/services/session_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  await Supabase.initialize(
-    url: SupabaseConfig.url,
-    anonKey: SupabaseConfig.anonKey,
+  // Initialize Firebase (once)
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
+  FlutterError.onError = (errorDetails) {
+    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+  };
+
+  // handle errors outside of Flutter framework
+  // PlatformDispatcher.instance.onError = (error, stack) {
+  //   FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+  //   return true;
+  // };
+
+  // Enable Firestore offline persistence
+  final fs = FirebaseFirestore.instance;
+  if (fs.settings.persistenceEnabled != true) {
+    fs.settings = const Settings(persistenceEnabled: true);
+  }
+
+  // Register all singleton services
+  Singleton.register<FirebaseAuthService>(
+    FirebaseAuthService(FirebaseAuth.instance, FirebaseFirestore.instance),
+  );
+  Singleton.register<CameraService>(CameraService());
+  Singleton.register<StudentCodeDao>(StudentCodeDao());
+  Singleton.register<CreateAccountDao>(CreateAccountDao());
+  Singleton.register<ProductDao>(ProductDao());
+  Singleton.register<BusinessDao>(BusinessDao());
+  Singleton.register<ConnectivityService>(ConnectivityService());
+  Singleton.register<TtlStore>(TtlStore());
+  Singleton.register<SessionRepository>(SessionRepository());
+
   runApp(const MyApp());
 }
 
@@ -19,46 +63,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'UniMarket',
-      theme: ThemeData(
-        textTheme: TextTheme(
-          bodyLarge: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.normal, color: Colors.black, fontFamily: 'Poppins'),
-          headlineMedium: const TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Poppins'),
-          headlineSmall: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.black, fontFamily: 'Poppins'),
-          titleLarge: const TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
-          titleMedium: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
-          titleSmall: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: Colors.black, fontFamily: 'Poppins'),
-        ),
-        colorScheme: const ColorScheme.light(
-          primary: Color(0xFFFFC436), // Color principal
-          onPrimary: Colors.white,
-          secondary: Color(0xFFF7D547),
-          tertiary: Color(0xFFFFD27C),
-          error: Colors.red,
-          onError: Colors.white,
-          outline: Color(0xFFB57C00),
-          shadow: Color(0xFFD09306),
-        ),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFECAB0F),
-          foregroundColor: Colors.white,
-          elevation: 2,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFFFC436),
-            foregroundColor: Colors.white,
-            elevation: 2,
-          ),
-        ),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFFFFC436),
-          foregroundColor: Colors.white,
-        )
-      ),
-      home: const SignUpScreen(),
-      debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers: providers,
+      child: MaterialApp.router(
+        routerConfig: router(),
+        title: 'UniMarket',
+        debugShowCheckedModeBanner: false,
+      )
     );
   }
 }
