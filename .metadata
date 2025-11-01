@@ -15,7 +15,11 @@ migration:
     - platform: root
       create_revision: ac4e799d237041cf905519190471f657b657155a
       base_revision: ac4e799d237041cf905519190471f657b657155a
+<<<<<<< HEAD
     - platform: android
+=======
+    - platform: web
+>>>>>>> 68cb1ef56e02d14abe0f2758dbc82b41a813cbcd
       create_revision: ac4e799d237041cf905519190471f657b657155a
       base_revision: ac4e799d237041cf905519190471f657b657155a
 

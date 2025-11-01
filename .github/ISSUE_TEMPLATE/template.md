@@ -1,5 +1,5 @@
 ---
-name: sprint1-issue-template
+name: sprint-issue-template
 about: This template will be used to track issues during our first sprint.
 title: ''
 labels: ['enhancement']

@@ -43,6 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+<<<<<<< HEAD
 
 /web/
 /ios/
@@ -52,3 +53,6 @@ app.*.map.json
 /android/
 
 lib/firebase_options.dart
+=======
+web/
+>>>>>>> 68cb1ef56e02d14abe0f2758dbc82b41a813cbcd
