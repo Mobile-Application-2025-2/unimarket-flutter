@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../view_model/student_code_viewmodel.dart';
-import 'package:unimarket/utils/not_implemented_snackbar.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unimarket/routing/routes.dart';
 
@@ -12,334 +12,261 @@ class StudentCodeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final greetingText = userName.isNotEmpty ? 'Hi $userName!' : 'Hi there!';
-
     final viewModel = context.read<StudentCodeViewModel>();
     if (viewModel.state.userName.isEmpty && userName.isNotEmpty) {
       viewModel.setUserName(userName);
     }
 
-    try {
-      return Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: SafeArea(
-          child: ListenableBuilder(
-            listenable: viewModel,
-            builder: (context, _) {
-              final s = viewModel.state;
+    return Scaffold(
+      backgroundColor: const Color(0xFFFEF7FB),
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: ListenableBuilder(
+          listenable: viewModel,
+          child: const _StaticHeroSection(),
+          builder: (context, child) {
+            final s = viewModel.state;
 
-              return LayoutBuilder(
-                builder: (context, constraints) {
-                  final bottomInset = MediaQuery.of(context).viewInsets.bottom;
-
-                  return SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(
-                      24,
-                      16,
-                      24,
-                      (bottomInset > 0 ? bottomInset : 16) + 16,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Header section with background
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxHeight: 280),
-                          child: Stack(
-                            clipBehavior: Clip.none,
+            return ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 560),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.fromLTRB(
+                  24,
+                  16,
+                  24,
+                  16,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Header Card with Logo and Input
+                    Container(
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFECAB0F),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Positioned.fill(
-                                child: Image.asset(
-                                  'assets/images/student-code-bg.png',
-                                  fit: BoxFit.cover,
-                                  alignment: Alignment.topCenter,
-                                ),
+                              Image.asset(
+                                'assets/images/sign.png',
+                                width: 18,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const SizedBox(height: 20),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/student-code-star.png',
-                                          width: 30,
-                                          height: 30,
-                                        ),
-                                        const SizedBox(width: 2),
-                                        const Text(
-                                          'UNIMARKET',
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white,
-                                            fontFamily: 'Poppins',
-                                            letterSpacing: 1.2,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Text(
-                                      greetingText,
-                                      style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontFamily: 'Poppins',
-                                      ),
-                                    ),
-                                    const SizedBox(height: 16),
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                                      child: Text(
-                                        'Before starting, we will need your student ID or identity ID for business outside college',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white,
-                                          fontFamily: 'Poppins',
-                                          height: 1.4,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                  ],
+                              const SizedBox(width: 8),
+                              const Text(
+                                'UNIMARKET',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 1.2,
+                                  fontFamily: 'Poppins',
                                 ),
                               ),
                             ],
                           ),
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // Student code input
-                        Container(
-                          width: double.infinity,
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
-                              ),
-                            ],
-                          ),
-                          child: TextField(
-                            onChanged: viewModel.setStudentCodeText,
-                            enabled: !s.loading,
+                          const SizedBox(height: 20),
+                          Text(
+                            'Hi ${s.userName.isNotEmpty ? s.userName : 'there'}!',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black,
+                              color: Colors.white,
+                              fontSize: 30,
+                              fontWeight: FontWeight.w800,
                               fontFamily: 'Poppins',
                             ),
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            'Before starting, we will need your student ID or identity ID for business outside college',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.white,
+                              height: 1.35,
+                              fontFamily: 'Poppins',
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          TextField(
+                            onChanged: viewModel.setStudentCodeText,
+                            onSubmitted: (_) =>
+                                (!s.canSubmit || s.loading)
+                                    ? null
+                                    : viewModel.submitVerification(),
+                            textInputAction: TextInputAction.done,
+                            enabled: !s.loading,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(30),
+                            ],
                             decoration: InputDecoration(
-                              hintText: 'Enter your student code',
+                              hintText: 'ID',
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: const Icon(
+                                  Icons.camera_alt_rounded,
+                                  color: Colors.black87,
+                                ),
+                                onPressed: s.loading
+                                    ? null
+                                    : viewModel.openCamera,
+                                tooltip: 'Open camera',
+                              ),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 14,
+                              ),
                               hintStyle: const TextStyle(
                                 color: Colors.grey,
-                                fontSize: 18,
                                 fontFamily: 'Poppins',
                               ),
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 20,
-                              ),
                             ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 12),
-
-                        // Camera button or preview
-                        s.imageFile == null
-                            ? Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFC436),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: IconButton(
-                                    icon: const Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.white,
-                                      size: 28,
-                                    ),
-                                    onPressed: s.loading ? null : viewModel.openCamera,
-                                  ),
-                                ),
-                              )
-                            : Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  // Thumbnail (fixed 96x96)
-                                  GestureDetector(
-                                    onTap: () => showDialog(
-                                      context: context,
-                                      builder: (_) => Dialog(
-                                        insetPadding: const EdgeInsets.all(16),
-                                        child: InteractiveViewer(
-                                          clipBehavior: Clip.none,
-                                          child: Image.file(s.imageFile!),
-                                        ),
-                                      ),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: SizedBox(
-                                        width: 96,
-                                        height: 96,
-                                        child: Image.file(
-                                          s.imageFile!,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Flexible(
-                                    child: Wrap(
-                                      spacing: 8,
-                                      runSpacing: 8,
-                                      crossAxisAlignment: WrapCrossAlignment.center,
-                                      children: [
-                                        OutlinedButton.icon(
-                                          icon: const Icon(Icons.visibility, size: 18),
-                                          label: const Text(
-                                            'Preview',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          onPressed: () => showDialog(
-                                            context: context,
-                                            builder: (_) => Dialog(
-                                              insetPadding: const EdgeInsets.all(16),
-                                              child: InteractiveViewer(
-                                                clipBehavior: Clip.none,
-                                                child: Image.file(s.imageFile!),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        TextButton.icon(
-                                          icon: const Icon(Icons.delete_outline, size: 18),
-                                          label: const Text(
-                                            'Remove',
-                                            style: TextStyle(
-                                              fontFamily: 'Poppins',
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          onPressed: viewModel.removePhoto,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                        if (s.error != null) ...[
-                          const SizedBox(height: 12),
-                          Text(
-                            s.error!,
                             style: const TextStyle(
-                              color: Colors.red,
-                              fontSize: 14,
                               fontFamily: 'Poppins',
+                              color: Colors.black87,
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ],
-
-                        const SizedBox(height: 24),
-
-                        // Icon illustration (constrained)
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxHeight: 220),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Image.asset(
-                              'assets/images/student-code-icon.png',
-                              width: 200,
-                              height: 200,
-                            ),
-                          ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // Submit button
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56,
-                          child: ElevatedButton(
-                            onPressed: s.loading || !s.canSubmit
-                                ? null
-                                : () async {
-                                    await viewModel.submitVerification();
-                                    if (!context.mounted) return;
-                                    if (viewModel.state.isVerified) {
-                                      context.go(Routes.homeBuyer);
-                                    }
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFFFB300),
-                              foregroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              elevation: 4,
-                              shadowColor: Colors.black.withValues(alpha: 0.3),
-                            ),
-                            child: s.loading
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : const Text(
-                                    'GET STARTED',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Poppins',
-                                      letterSpacing: 1.0,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
-                  );
-                },
-              );
-            },
-          ),
+
+                    // Photo preview (if exists)
+                    if (s.hasPhoto)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8, bottom: 8),
+                        child: Center(
+                          child: GestureDetector(
+                            onTap: () => showDialog(
+                              context: context,
+                              builder: (_) => Dialog(
+                                insetPadding: const EdgeInsets.all(16),
+                                child: InteractiveViewer(
+                                  clipBehavior: Clip.none,
+                                  child: Image.file(s.imageFile!),
+                                ),
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: SizedBox(
+                                width: 140,
+                                height: 100,
+                                child: Image.file(
+                                  s.imageFile!,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    // Error message (if exists)
+                    if (s.error != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        s.error!,
+                        style: const TextStyle(
+                          color: Colors.red,
+                          fontSize: 14,
+                          fontFamily: 'Poppins',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+
+                    const SizedBox(height: 12),
+
+                    // Static hero illustration
+                    child!,
+                  ],
+                ),
+              ),
+            );
+          },
         ),
-      );
-    } catch (_) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        notImplementedFunctionalitySnackbar(context);
-      });
-      return const SizedBox.shrink();
-    }
+      ),
+      bottomNavigationBar: ListenableBuilder(
+        listenable: viewModel,
+        builder: (context, _) {
+          final s = viewModel.state;
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: SizedBox(
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: (!s.canSubmit || s.loading)
+                      ? null
+                      : () async {
+                          FocusScope.of(context).unfocus();
+                          await viewModel.submitVerification();
+                          if (!context.mounted) return;
+                          if (viewModel.state.isVerified) {
+                            context.go(Routes.homeBuyer);
+                          }
+                        },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFECAB0F),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: s.loading
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text(
+                          'GET STARTED',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins',
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _StaticHeroSection extends StatelessWidget {
+  const _StaticHeroSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxHeight: 320),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Image.asset(
+          'assets/images/student-code-icon.png',
+          fit: BoxFit.contain,
+        ),
+      ),
+    );
   }
 }
 
