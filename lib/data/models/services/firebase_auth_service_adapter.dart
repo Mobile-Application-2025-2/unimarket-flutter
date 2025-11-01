@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth;
@@ -59,8 +60,21 @@ class FirebaseAuthService {
     return user;
   }
 
-  /// Sign out current user
-  Future<void> signOut() => _auth.signOut();
+  /// Sign out current user and clear persisted session
+  Future<void> signOut() async {
+    try {
+      debugPrint('Signing out...');
+      
+      // Firebase sign out
+      await _auth.signOut();
+      
+      debugPrint('Signed out successfully. currentUser = ${_auth.currentUser}');
+    } on FirebaseAuthException catch (e) {
+      debugPrint('FirebaseAuthException during logout: ${e.code}');
+    } catch (e) {
+      debugPrint('signOut failed: $e');
+    }
+  }
 
   /// Reset password for email
   Future<void> sendPasswordResetEmail({required String email}) async {

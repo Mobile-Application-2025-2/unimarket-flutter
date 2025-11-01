@@ -48,6 +48,11 @@ class LoginViewModel extends ChangeNotifier {
     _set(_state.copyWith(error: null));
   }
 
+  /// Clear email and password fields
+  void clearFields() {
+    _set(_state.copyWith(email: '', password: ''));
+  }
+
   /// Sign in with email and password
   /// Returns true if login was successful, false otherwise
   Future<bool> signIn() async {

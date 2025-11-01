@@ -13,8 +13,24 @@ import 'package:unimarket/utils/result.dart';
 // notImplementedFunctionalitySnackbar used inside SocialMediaButtonGroup, no direct usage here
 import '../widgets/social_media_button.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        final vm = context.read<LoginViewModel>();
+        vm.clearFields();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
