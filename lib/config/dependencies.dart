@@ -6,7 +6,7 @@ import 'package:unimarket/data/repositories/businesses/business_repository.dart'
 import 'package:unimarket/data/repositories/products/product_repository.dart';
 
 // Singleton utility
-import 'package:unimarket/core/utils/singleton.dart';
+import 'package:unimarket/utils/singleton.dart';
 
 // ViewModels
 import 'package:unimarket/ui/login/view_model/login_viewmodel.dart';

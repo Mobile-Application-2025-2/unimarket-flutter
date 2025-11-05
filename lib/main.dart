@@ -7,7 +7,7 @@ import 'firebase_options.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:unimarket/routing/router.dart';
 import 'package:unimarket/config/dependencies.dart';
-import 'package:unimarket/core/utils/singleton.dart';
+import 'package:unimarket/utils/singleton.dart';
 import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
 import 'package:unimarket/data/models/services/camera_service.dart';
 import 'package:unimarket/data/daos/create_account_dao.dart';
