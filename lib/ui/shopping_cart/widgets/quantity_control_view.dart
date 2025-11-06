@@ -14,9 +14,14 @@ class QuantityControl extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        children: const [
+        children: [
           SizedBox(width: 8),
-          Icon(Icons.remove, size: 16, color: Color(0xFFFFC107)),
+          GestureDetector(
+            child: Icon(Icons.remove, size: 16, color: Color(0xFFFFC107)),
+            onTap: () {
+              print('CART ITEM: reduce by one');
+            },
+          ),
           SizedBox(width: 8),
           Text(
             '2',
@@ -27,7 +32,10 @@ class QuantityControl extends StatelessWidget {
             ),
           ),
           SizedBox(width: 8),
-          Icon(Icons.add, size: 16, color: Color(0xFFFFC107)),
+          GestureDetector(
+            child: Icon(Icons.add, size: 16, color: Color(0xFFFFC107)),
+            onTap: () => {print('CART ITEM: add one')},
+          ),
           SizedBox(width: 8),
         ],
       ),

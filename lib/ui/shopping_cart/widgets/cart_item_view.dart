@@ -10,7 +10,7 @@ class CartItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,7 +30,7 @@ class CartItem extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Expanded(
                       child: Text(
                         'Pizza Calzone European',
@@ -42,7 +42,11 @@ class CartItem extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
+                    GestureDetector(
+                      child:
                     Icon(Icons.close, size: 20),
+                      onTap: () => { print("CART ITEM: Remove item") }
+                    )
                   ],
                 ),
                 const SizedBox(height: 4),
