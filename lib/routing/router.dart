@@ -6,6 +6,7 @@ import 'package:unimarket/ui/home_page_buyer/view_model/home_page_buyer_vm.dart'
 import 'package:unimarket/ui/home_page_buyer/widgets/home_page_buyer_screen.dart';
 import 'package:unimarket/ui/profile_buyer/view/profile_buyer_view.dart';
 import 'package:unimarket/ui/profile_buyer/view_model/profile_buyer_viewmodel.dart';
+import 'package:unimarket/ui/shopping_cart/widgets/shopping_cart_screen.dart';
 
 import 'routes.dart';
 import 'package:unimarket/ui/login/view/login_view.dart';
@@ -26,7 +27,7 @@ import 'package:unimarket/ui/profile_bussines/view/profile_bussines_view.dart';
 import 'package:unimarket/ui/profile_bussines/view_model/profile_bussines_viewmodel.dart';
 
 GoRouter router() => GoRouter(
-      initialLocation: Routes.signUp,
+      initialLocation: Routes.shoppingCart,
       debugLogDiagnostics: true,
       routes: [
         GoRoute(
@@ -87,6 +88,10 @@ GoRouter router() => GoRouter(
               child: const ProfileBussinesView(),
             );
           },
+        ),
+        GoRoute(
+          path: Routes.shoppingCart,
+          builder: (context, state) => const ShoppingCartScreen(),
         ),
       ],
     );
