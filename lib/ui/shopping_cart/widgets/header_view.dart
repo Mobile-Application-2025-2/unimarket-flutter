@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HeaderCart extends StatelessWidget {
   const HeaderCart({super.key});
@@ -8,9 +9,9 @@ class HeaderCart extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 20, left: 16, bottom: 15),
       child: Align(
-        alignment: Alignment.centerLeft, // 👈 fuerza el botón a la izquierda
+        alignment: Alignment.centerLeft,
         child: InkWell(
-          onTap: () => print("Back button in cart view was pressed"),
+          onTap: () => context.pop(),
           borderRadius: BorderRadius.circular(24),
           child: Container(
             width: 40,

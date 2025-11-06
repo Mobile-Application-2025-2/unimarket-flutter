@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
 import 'package:unimarket/ui/home_buyer/widgets/product_card_view.dart';
+import 'package:unimarket/ui/shopping_cart/view_model/shopping_cart_vm.dart';
 import 'package:unimarket/utils/generic_snackbar.dart';
 
 
 class SubcategoriesVerticalScrollView extends StatelessWidget {
   final HomeBuyerViewModel viewModel;
+  final ShoppingCartViewModel shoppingCartViewModel;
 
-  const SubcategoriesVerticalScrollView({super.key, required this.viewModel});
+  const SubcategoriesVerticalScrollView(
+      {super.key, required this.viewModel, required this.shoppingCartViewModel});
 
   @override
   Widget build(BuildContext context) {
     if (viewModel.filteredCategories.isEmpty) {
-      return const Expanded(child: Center(child: Text("No hay productos para mostrar.", style: TextStyle(fontSize: 16),)));
+      return const Expanded(child: Center(child: Text(
+        "No hay productos para mostrar.", style: TextStyle(fontSize: 16),)));
     }
 
     return Expanded(
@@ -29,8 +33,11 @@ class SubcategoriesVerticalScrollView extends StatelessWidget {
           itemBuilder: (context, index) {
             final category = viewModel.filteredCategories[index];
             return GestureDetector(
-                child: ProductCardView(product: category),
-                onTap: () => genericSnackbar(context, 'El detalle del producto no se encuentra disponible.', Colors.yellow, Colors.black),
+              child: ProductCardView(product: category, viewModel: shoppingCartViewModel),
+              onTap: () =>
+                  genericSnackbar(context,
+                      'El detalle del producto no se encuentra disponible.',
+                      Colors.yellow, Colors.black),
             );
           },
         ),
