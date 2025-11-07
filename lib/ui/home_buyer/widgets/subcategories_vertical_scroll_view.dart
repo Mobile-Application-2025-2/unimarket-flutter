@@ -33,7 +33,7 @@ class SubcategoriesVerticalScrollView extends StatelessWidget {
           itemBuilder: (context, index) {
             final category = viewModel.filteredCategories[index];
             return GestureDetector(
-              child: ProductCardView(product: category, viewModel: shoppingCartViewModel),
+              child: ProductCardView(product: category),
               onTap: () =>
                   genericSnackbar(context,
                       'El detalle del producto no se encuentra disponible.',

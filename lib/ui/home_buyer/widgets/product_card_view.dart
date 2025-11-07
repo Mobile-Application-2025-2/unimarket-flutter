@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:unimarket/domain/models/products/product.dart';
 import 'package:unimarket/ui/shopping_cart/view_model/shopping_cart_vm.dart';
 import 'package:unimarket/utils/generic_snackbar.dart';
 
 class ProductCardView extends StatelessWidget {
   final Product product;
-  final ShoppingCartViewModel viewModel;
 
   const ProductCardView({
     super.key,
     required this.product,
-    required this.viewModel,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Read ShoppingCartViewModel from the context
+    final ShoppingCartViewModel viewModel = context.read();
+
     return ListenableBuilder(
       listenable: viewModel,
       builder: (context, child) {
