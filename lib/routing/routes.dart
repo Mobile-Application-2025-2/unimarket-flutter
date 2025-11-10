@@ -9,5 +9,6 @@ abstract final class Routes {
   static const homePageBuyer = '/home_page_buyer';
   static const homeBuyer = '/home_buyer';
   static const profileBuyer = '/profile_buyer';
-  static const profileBussines = '/profile_bussines';
+  static const profilebusiness = '/profile_business';
+  static const businessData = '/business_data';
 }

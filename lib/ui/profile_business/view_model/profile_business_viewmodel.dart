@@ -2,24 +2,24 @@ import 'package:flutter/foundation.dart';
 import 'package:unimarket/utils/singleton.dart';
 import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
 
-class ProfileBussinesViewModel extends ChangeNotifier {
+class ProfileBusinessViewModel extends ChangeNotifier {
   final FirebaseAuthService _authService = Singleton<FirebaseAuthService>().instance;
 
   String displayName = '';
   String email = '';
   bool loading = true;
 
-  ProfileBussinesViewModel() {
+  ProfileBusinessViewModel() {
     _loadUserData();
   }
 
   Future<void> _loadUserData() async {
     final user = _authService.currentUser;
     if (user != null) {
-      displayName = user.displayName ?? user.email?.split('@').first ?? 'User Name Bussines';
+      displayName = user.displayName ?? user.email?.split('@').first ?? 'User Name Business';
       email = user.email ?? '';
     } else {
-      displayName = 'User Name Bussines';
+      displayName = 'User Name Business';
       email = '';
     }
     loading = false;
@@ -30,7 +30,7 @@ class ProfileBussinesViewModel extends ChangeNotifier {
   Future<void> logout() async {
     try {
       await _authService.signOut();
-      displayName = 'User Name Bussines';
+      displayName = 'User Name Business';
       email = '';
       notifyListeners();
     } catch (e) {
