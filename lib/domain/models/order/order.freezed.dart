@@ -27,6 +27,7 @@ mixin _$Order {
   List<int> get units => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
+  String get paymentMethod => throw _privateConstructorUsedError;
 
   /// Serializes this Order to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,6 +50,7 @@ abstract class $OrderCopyWith<$Res> {
     List<int> units,
     String userId,
     DateTime createdAt,
+    String paymentMethod,
   });
 }
 
@@ -73,6 +75,7 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
     Object? units = null,
     Object? userId = null,
     Object? createdAt = null,
+    Object? paymentMethod = null,
   }) {
     return _then(
       _value.copyWith(
@@ -100,6 +103,10 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
                 ? _value.createdAt
                 : createdAt // ignore: cast_nullable_to_non_nullable
                       as DateTime,
+            paymentMethod: null == paymentMethod
+                ? _value.paymentMethod
+                : paymentMethod // ignore: cast_nullable_to_non_nullable
+                      as String,
           )
           as $Val,
     );
@@ -121,6 +128,7 @@ abstract class _$$OrderImplCopyWith<$Res> implements $OrderCopyWith<$Res> {
     List<int> units,
     String userId,
     DateTime createdAt,
+    String paymentMethod,
   });
 }
 
@@ -144,6 +152,7 @@ class __$$OrderImplCopyWithImpl<$Res>
     Object? units = null,
     Object? userId = null,
     Object? createdAt = null,
+    Object? paymentMethod = null,
   }) {
     return _then(
       _$OrderImpl(
@@ -171,6 +180,10 @@ class __$$OrderImplCopyWithImpl<$Res>
             ? _value.createdAt
             : createdAt // ignore: cast_nullable_to_non_nullable
                   as DateTime,
+        paymentMethod: null == paymentMethod
+            ? _value.paymentMethod
+            : paymentMethod // ignore: cast_nullable_to_non_nullable
+                  as String,
       ),
     );
   }
@@ -186,6 +199,7 @@ class _$OrderImpl implements _Order {
     required final List<int> units,
     required this.userId,
     required this.createdAt,
+    required this.paymentMethod,
   }) : _products = products,
        _units = units;
 
@@ -216,10 +230,12 @@ class _$OrderImpl implements _Order {
   final String userId;
   @override
   final DateTime createdAt;
+  @override
+  final String paymentMethod;
 
   @override
   String toString() {
-    return 'Order(id: $id, businessId: $businessId, products: $products, units: $units, userId: $userId, createdAt: $createdAt)';
+    return 'Order(id: $id, businessId: $businessId, products: $products, units: $units, userId: $userId, createdAt: $createdAt, paymentMethod: $paymentMethod)';
   }
 
   @override
@@ -234,7 +250,9 @@ class _$OrderImpl implements _Order {
             const DeepCollectionEquality().equals(other._units, _units) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.paymentMethod, paymentMethod) ||
+                other.paymentMethod == paymentMethod));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -247,6 +265,7 @@ class _$OrderImpl implements _Order {
     const DeepCollectionEquality().hash(_units),
     userId,
     createdAt,
+    paymentMethod,
   );
 
   /// Create a copy of Order
@@ -271,6 +290,7 @@ abstract class _Order implements Order {
     required final List<int> units,
     required final String userId,
     required final DateTime createdAt,
+    required final String paymentMethod,
   }) = _$OrderImpl;
 
   factory _Order.fromJson(Map<String, dynamic> json) = _$OrderImpl.fromJson;
@@ -287,6 +307,8 @@ abstract class _Order implements Order {
   String get userId;
   @override
   DateTime get createdAt;
+  @override
+  String get paymentMethod;
 
   /// Create a copy of Order
   /// with the given fields replaced by the non-null parameter values.

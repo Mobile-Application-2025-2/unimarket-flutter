@@ -22,15 +22,16 @@ class ShoppingCartButtonView extends StatelessWidget {
           elevation: 0,
         ),
         onPressed: () async {
-          if (!(await viewModel.makeOrders())) {
+          if (!viewModel.makeOrders()) {
             genericSnackbar(context, "Tienes que agregar productos a tu carrito.", Colors.orange, Colors.white);
             return;
-          };
+          }
+
           genericSnackbar(context, "Se creo correctamente la orden.", Colors.green, Colors.white);
           context.pop();
         },
         child: Text(
-          'PEDIR',
+          'Pedir',
           style: TextStyle(
             color: Colors.white,
             fontSize: 17,

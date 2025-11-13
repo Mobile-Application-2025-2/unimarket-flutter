@@ -16,13 +16,13 @@ import 'package:unimarket/ui/create_account/view/create_account_view.dart';
 import 'package:unimarket/ui/student_code/view/student_code_view.dart';
 import 'package:unimarket/ui/student_code/view_model/student_code_viewmodel.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
-import 'package:unimarket/data/models/services/camera_service.dart';
+import 'package:unimarket/data/services/camera_service.dart';
 import 'package:unimarket/ui/home_buyer/widgets/home_buyer_screen.dart';
 import 'package:unimarket/ui/profile_bussines/view/profile_bussines_view.dart';
 import 'package:unimarket/ui/profile_bussines/view_model/profile_bussines_viewmodel.dart';
 
 GoRouter router() => GoRouter(
-  initialLocation: Routes.homeBuyer,
+  initialLocation: Routes.signUp,
   debugLogDiagnostics: true,
   routes: [
     GoRoute(

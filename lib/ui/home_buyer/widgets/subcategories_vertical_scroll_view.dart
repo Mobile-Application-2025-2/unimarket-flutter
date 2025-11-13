@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket/ui/core/ui/error_indicator.dart';
 import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
 import 'package:unimarket/ui/home_buyer/widgets/product_card_view.dart';
 import 'package:unimarket/ui/shopping_cart/view_model/shopping_cart_vm.dart';
@@ -26,7 +25,7 @@ class SubcategoriesVerticalScrollView extends StatelessWidget {
 
     /*
     if (viewModel.load.error) {
-      return ErrorIndicator(title: "Error cargando", label: "Intengar otra vez", onPressed: viewModel.load.execute );
+      return ErrorIndicator(title: "Error cargando", label: "Intentar otra vez", onPressed: viewModel.load.execute );
     }
     */
 

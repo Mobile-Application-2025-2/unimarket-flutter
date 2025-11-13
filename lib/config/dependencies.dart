@@ -20,8 +20,8 @@ import 'package:unimarket/data/daos/create_account_dao.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
 
 // Services
-import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
-import 'package:unimarket/data/models/services/camera_service.dart';
+import 'package:unimarket/data/services/firebase_auth_service_adapter.dart';
+import 'package:unimarket/data/services/camera_service.dart';
 import 'package:unimarket/data/repositories/products/product_repository_firestore.dart';
 import 'package:unimarket/data/repositories/businesses/business_repository_firestore.dart';
 
@@ -33,16 +33,16 @@ List<SingleChildWidget> get providers {
       create: (_) => BusinessRepositoryFirestore(businessDao: Singleton<BusinessDao>().instance) as BusinessRepository
     ),
     Provider(
+      create: (_) => Singleton<FirebaseAuthService>().instance,
+    ),
+    Provider(
       create: (_) => ProductRepositoryFirestore(productDao: Singleton<ProductDao>().instance) as ProductRepository,
     ),
     Provider(
-      create: (_) => OrderRepositoryFirestore(orderDao: OrderDao()) as OrderRepository
+      create: (context) => OrderRepositoryFirestore(orderDao: OrderDao(), firebaseAuthServiceAdapter: context.read<FirebaseAuthService>()) as OrderRepository
     ),
     ChangeNotifierProvider(
       create: (context) => ShoppingCartViewModel(orderRepository: context.read())
-    ),
-    Provider(
-      create: (_) => Singleton<FirebaseAuthService>().instance,
     ),
 
     Provider(create: (_) => Singleton<CreateAccountDao>().instance),

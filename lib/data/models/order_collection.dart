@@ -7,8 +7,9 @@ class OrderCollection {
   final List<int> units;
   final String userId;
   final DateTime createdAt;
+  final String paymentMethod;
 
-  OrderCollection({required this.id, required this.businessId, required this.products, required this.units, required this.userId, required this.createdAt});
+  OrderCollection({required this.id, required this.businessId, required this.products, required this.units, required this.userId, required this.createdAt, required this.paymentMethod});
 
   factory OrderCollection.fromFirestore(String id, Map<String, dynamic> data) {
     Timestamp? timestamp = data['date'] as Timestamp?;
@@ -20,18 +21,25 @@ class OrderCollection {
       products: List.from(data['products'] ?? []),
       units: List.from(data['units'] ?? []),
       userId: data['user_id'] ?? '',
-      createdAt: createdAt
+      createdAt: createdAt,
+      paymentMethod: data['payment_method'] ?? ''
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'businessId': businessId,
+      'business_id': businessId,
       'products': products,
       'units': units,
-      'userId': userId,
-      'date': createdAt
+      'user_id': userId,
+      'date': createdAt,
+      'payment_method': paymentMethod
     };
+  }
+
+  @override
+  String toString() {
+    return 'OrderCollection(id: $id, businessId: $businessId, products: $products, units: $units, userId: $userId, createdAt: $createdAt, paymentMethod: $paymentMethod)';
   }
 }

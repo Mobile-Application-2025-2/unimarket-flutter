@@ -15,23 +15,10 @@ class ShoppingCartViewModel extends ChangeNotifier {
   final List<Product> _cartItems = [];
   final Map<String, int> _itemCounts = {};
   int _total = 0;
-  String paymentMethod = "";
+  String _paymentMethod = "";
 
   UnmodifiableListView<Product> get cartItems =>
       UnmodifiableListView(_cartItems);
-
-  bool addToCart(Product product) {
-    if (_itemCounts.containsKey(product.id)) {
-      return false;
-    }
-
-    _cartItems.add(product);
-    _total += product.price.toInt();
-    _itemCounts[product.id] = 1;
-    notifyListeners();
-
-    return true;
-  }
 
   makeOrders() {
     if(_cartItems.isEmpty) return false;
@@ -60,6 +47,7 @@ class ShoppingCartViewModel extends ChangeNotifier {
           units: [count],
           userId: '',
           createdAt: DateTime.timestamp(),
+          paymentMethod: _paymentMethod,
         );
       }
     }
@@ -69,6 +57,20 @@ class ShoppingCartViewModel extends ChangeNotifier {
     _cartItems.clear();
     _itemCounts.clear();
     notifyListeners();
+
+    return true;
+  }
+
+  bool addToCart(Product product) {
+    if (_itemCounts.containsKey(product.id)) {
+      return false;
+    }
+
+    _cartItems.add(product);
+    _total += product.price.toInt();
+    _itemCounts[product.id] = 1;
+    notifyListeners();
+
     return true;
   }
 
@@ -104,5 +106,9 @@ class ShoppingCartViewModel extends ChangeNotifier {
       _total += item.price.toInt() * _itemCounts[item.id]!;
     }
     return _total;
+  }
+
+  void setPaymentMethod(String method) {
+    _paymentMethod = method;
   }
 }

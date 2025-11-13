@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:unimarket/ui/shopping_cart/view_model/shopping_cart_vm.dart';
 import 'package:unimarket/utils/not_implemented_snackbar.dart';
 
 class PaymentSection extends StatefulWidget {
-  const PaymentSection({super.key});
+  const PaymentSection({super.key, required this.viewModel});
 
+  final ShoppingCartViewModel viewModel;
   @override
   State<PaymentSection> createState() => _PaymentSectionState();
 }
@@ -14,6 +16,7 @@ class _PaymentSectionState extends State<PaymentSection> {
 
   @override
   Widget build(BuildContext context) {
+    widget.viewModel.setPaymentMethod(selectedMethod);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,6 +68,7 @@ class _PaymentSectionState extends State<PaymentSection> {
                 if (newValue != null) {
                   setState(() {
                     selectedMethod = newValue;
+                    widget.viewModel.setPaymentMethod(newValue);
                   });
                 }
               },

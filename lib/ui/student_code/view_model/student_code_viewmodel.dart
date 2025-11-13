@@ -4,7 +4,7 @@ import '../widget/student_code_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
 import 'package:unimarket/utils/result.dart';
-import 'package:unimarket/data/models/services/camera_service.dart';
+import 'package:unimarket/data/services/camera_service.dart';
 
 class StudentCodeViewModel extends ChangeNotifier {
   final CameraService _camera;

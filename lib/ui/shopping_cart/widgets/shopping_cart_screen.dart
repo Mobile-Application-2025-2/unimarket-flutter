@@ -56,7 +56,7 @@ class ShoppingCartScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      PaymentSection(),
+                      PaymentSection(viewModel: viewModel),
                       SizedBox(height: 16),
                       TotalSection(viewModel: viewModel),
                       SizedBox(height: 24),

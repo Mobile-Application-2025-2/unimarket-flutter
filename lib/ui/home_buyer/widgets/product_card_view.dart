@@ -120,7 +120,7 @@ class ProductCardView extends StatelessWidget {
                             ),
                             onTap: () {
                               if(viewModel.addToCart(product)) {
-                                genericSnackbar(context, 'Se añadio el producto al carrito de compras', Colors.blue, Colors.white);
+                                genericSnackbar(context, 'Se añadio el producto al carrito de compras', Colors.green, Colors.white);
                                 return;
                               }
 

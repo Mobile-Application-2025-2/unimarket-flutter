@@ -12,6 +12,7 @@ class Order with _$Order {
     required List<int> units,
     required String userId,
     required DateTime createdAt,
+    required String paymentMethod,
   }) = _Order;
 
   factory Order.fromJson(Map<String, dynamic> json) =>

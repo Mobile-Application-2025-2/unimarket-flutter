@@ -3,7 +3,7 @@ import 'package:unimarket/data/daos/product_dao.dart';
 import 'package:unimarket/data/daos/business_dao.dart';
 import 'package:unimarket/data/models/product_collection.dart';
 import 'package:unimarket/data/models/business_collection.dart';
-import 'package:unimarket/data/models/services/ttl_store.dart';
+import 'package:unimarket/data/services/ttl_store.dart';
 
 /// Repository for Home data with cache-then-network strategy
 /// Uses Firestore's native offline persistence + TTL management

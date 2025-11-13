@@ -17,6 +17,7 @@ _$OrderImpl _$$OrderImplFromJson(Map<String, dynamic> json) => _$OrderImpl(
       .toList(),
   userId: json['userId'] as String,
   createdAt: DateTime.parse(json['createdAt'] as String),
+  paymentMethod: json['paymentMethod'] as String,
 );
 
 Map<String, dynamic> _$$OrderImplToJson(_$OrderImpl instance) =>
@@ -27,4 +28,5 @@ Map<String, dynamic> _$$OrderImplToJson(_$OrderImpl instance) =>
       'units': instance.units,
       'userId': instance.userId,
       'createdAt': instance.createdAt.toIso8601String(),
+      'paymentMethod': instance.paymentMethod,
     };
