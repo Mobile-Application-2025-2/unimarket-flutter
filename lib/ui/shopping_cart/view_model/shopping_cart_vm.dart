@@ -1,14 +1,16 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
-import 'package:unimarket/data/repositories/products/product_repository.dart';
+import 'package:unimarket/data/repositories/orders/order_repository.dart';
+import 'package:unimarket/domain/models/order/order.dart';
 import 'package:unimarket/domain/models/products/product.dart';
+import 'package:uuid/uuid.dart';
 
 class ShoppingCartViewModel extends ChangeNotifier {
-  ShoppingCartViewModel({required ProductRepository productRepository})
-    : _productRepository = productRepository {}
+  ShoppingCartViewModel({required OrderRepository orderRepository})
+      : _orderRepository = orderRepository;
 
-  final ProductRepository _productRepository;
+  final OrderRepository _orderRepository;
 
   final List<Product> _cartItems = [];
   final Map<String, int> _itemCounts = {};
@@ -29,6 +31,42 @@ class ShoppingCartViewModel extends ChangeNotifier {
     notifyListeners();
 
     return true;
+  }
+
+  makeOrders() {
+    Map<String, Order> orders = {};
+
+    for (var item in _cartItems) {
+      final business = item.business;
+      final count = _itemCounts[item.id]!;
+
+      if (orders.containsKey(business)) {
+        final prev = orders[business]!;
+
+        final newProducts = [...prev.products, item.id];
+        final newUnits = [...prev.units, count];
+
+        orders[business] = prev.copyWith(
+          products: newProducts,
+          units: newUnits,
+        );
+      } else {
+        orders[business] = Order(
+          id: Uuid().v4().toString(),
+          businessId: business,
+          products: [item.id],
+          units: [count],
+          userId: '',
+          createdAt: DateTime.timestamp(),
+        );
+      }
+    }
+
+    _orderRepository.createOrders(orders.values.toList());
+
+    _cartItems.clear();
+    _itemCounts.clear();
+    notifyListeners();
   }
 
   getCounts(String id) => _itemCounts[id];

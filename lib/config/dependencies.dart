@@ -1,8 +1,11 @@
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:unimarket/data/daos/business_dao.dart';
+import 'package:unimarket/data/daos/order_dao.dart';
 import 'package:unimarket/data/daos/product_dao.dart';
 import 'package:unimarket/data/repositories/businesses/business_repository.dart';
+import 'package:unimarket/data/repositories/orders/order_repository.dart';
+import 'package:unimarket/data/repositories/orders/order_repository_firestore.dart';
 import 'package:unimarket/data/repositories/products/product_repository.dart';
 import 'package:unimarket/ui/shopping_cart/view_model/shopping_cart_vm.dart';
 
@@ -33,7 +36,10 @@ List<SingleChildWidget> get providers {
       create: (_) => ProductRepositoryFirestore(productDao: Singleton<ProductDao>().instance) as ProductRepository,
     ),
     Provider(
-      create: (context) => ShoppingCartViewModel(productRepository: context.read())
+      create: (_) => OrderRepositoryFirestore(orderDao: OrderDao()) as OrderRepository
+    ),
+    ChangeNotifierProvider(
+      create: (context) => ShoppingCartViewModel(orderRepository: context.read())
     ),
     Provider(
       create: (_) => Singleton<FirebaseAuthService>().instance,

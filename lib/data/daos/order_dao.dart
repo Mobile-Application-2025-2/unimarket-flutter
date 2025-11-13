@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unimarket/data/models/business_collection.dart';
-import 'package:unimarket/data/models/orders_collection.dart';
+import 'package:unimarket/data/models/order_collection.dart';
 import 'package:unimarket/utils/result.dart';
 
 class OrderDao {

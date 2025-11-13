@@ -23,8 +23,8 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
 mixin _$Order {
   String get id => throw _privateConstructorUsedError;
   String get businessId => throw _privateConstructorUsedError;
-  String get productId => throw _privateConstructorUsedError;
-  int get units => throw _privateConstructorUsedError;
+  List<String> get products => throw _privateConstructorUsedError;
+  List<int> get units => throw _privateConstructorUsedError;
   String get userId => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
@@ -45,8 +45,8 @@ abstract class $OrderCopyWith<$Res> {
   $Res call({
     String id,
     String businessId,
-    String productId,
-    int units,
+    List<String> products,
+    List<int> units,
     String userId,
     DateTime createdAt,
   });
@@ -69,7 +69,7 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
   $Res call({
     Object? id = null,
     Object? businessId = null,
-    Object? productId = null,
+    Object? products = null,
     Object? units = null,
     Object? userId = null,
     Object? createdAt = null,
@@ -84,14 +84,14 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
                 ? _value.businessId
                 : businessId // ignore: cast_nullable_to_non_nullable
                       as String,
-            productId: null == productId
-                ? _value.productId
-                : productId // ignore: cast_nullable_to_non_nullable
-                      as String,
+            products: null == products
+                ? _value.products
+                : products // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
             units: null == units
                 ? _value.units
                 : units // ignore: cast_nullable_to_non_nullable
-                      as int,
+                      as List<int>,
             userId: null == userId
                 ? _value.userId
                 : userId // ignore: cast_nullable_to_non_nullable
@@ -117,8 +117,8 @@ abstract class _$$OrderImplCopyWith<$Res> implements $OrderCopyWith<$Res> {
   $Res call({
     String id,
     String businessId,
-    String productId,
-    int units,
+    List<String> products,
+    List<int> units,
     String userId,
     DateTime createdAt,
   });
@@ -140,7 +140,7 @@ class __$$OrderImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? businessId = null,
-    Object? productId = null,
+    Object? products = null,
     Object? units = null,
     Object? userId = null,
     Object? createdAt = null,
@@ -155,14 +155,14 @@ class __$$OrderImplCopyWithImpl<$Res>
             ? _value.businessId
             : businessId // ignore: cast_nullable_to_non_nullable
                   as String,
-        productId: null == productId
-            ? _value.productId
-            : productId // ignore: cast_nullable_to_non_nullable
-                  as String,
+        products: null == products
+            ? _value._products
+            : products // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
         units: null == units
-            ? _value.units
+            ? _value._units
             : units // ignore: cast_nullable_to_non_nullable
-                  as int,
+                  as List<int>,
         userId: null == userId
             ? _value.userId
             : userId // ignore: cast_nullable_to_non_nullable
@@ -182,11 +182,12 @@ class _$OrderImpl implements _Order {
   const _$OrderImpl({
     required this.id,
     required this.businessId,
-    required this.productId,
-    required this.units,
+    required final List<String> products,
+    required final List<int> units,
     required this.userId,
     required this.createdAt,
-  });
+  }) : _products = products,
+       _units = units;
 
   factory _$OrderImpl.fromJson(Map<String, dynamic> json) =>
       _$$OrderImplFromJson(json);
@@ -195,10 +196,22 @@ class _$OrderImpl implements _Order {
   final String id;
   @override
   final String businessId;
+  final List<String> _products;
   @override
-  final String productId;
+  List<String> get products {
+    if (_products is EqualUnmodifiableListView) return _products;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_products);
+  }
+
+  final List<int> _units;
   @override
-  final int units;
+  List<int> get units {
+    if (_units is EqualUnmodifiableListView) return _units;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_units);
+  }
+
   @override
   final String userId;
   @override
@@ -206,7 +219,7 @@ class _$OrderImpl implements _Order {
 
   @override
   String toString() {
-    return 'Order(id: $id, businessId: $businessId, productId: $productId, units: $units, userId: $userId, createdAt: $createdAt)';
+    return 'Order(id: $id, businessId: $businessId, products: $products, units: $units, userId: $userId, createdAt: $createdAt)';
   }
 
   @override
@@ -217,9 +230,8 @@ class _$OrderImpl implements _Order {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.businessId, businessId) ||
                 other.businessId == businessId) &&
-            (identical(other.productId, productId) ||
-                other.productId == productId) &&
-            (identical(other.units, units) || other.units == units) &&
+            const DeepCollectionEquality().equals(other._products, _products) &&
+            const DeepCollectionEquality().equals(other._units, _units) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
@@ -231,8 +243,8 @@ class _$OrderImpl implements _Order {
     runtimeType,
     id,
     businessId,
-    productId,
-    units,
+    const DeepCollectionEquality().hash(_products),
+    const DeepCollectionEquality().hash(_units),
     userId,
     createdAt,
   );
@@ -255,8 +267,8 @@ abstract class _Order implements Order {
   const factory _Order({
     required final String id,
     required final String businessId,
-    required final String productId,
-    required final int units,
+    required final List<String> products,
+    required final List<int> units,
     required final String userId,
     required final DateTime createdAt,
   }) = _$OrderImpl;
@@ -268,9 +280,9 @@ abstract class _Order implements Order {
   @override
   String get businessId;
   @override
-  String get productId;
+  List<String> get products;
   @override
-  int get units;
+  List<int> get units;
   @override
   String get userId;
   @override

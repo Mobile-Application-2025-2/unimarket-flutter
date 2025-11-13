@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:unimarket/data/daos/product_dao.dart';
-import 'package:unimarket/data/repositories/products/product_repository_firestore.dart';
 import 'package:unimarket/ui/shopping_cart/view_model/shopping_cart_vm.dart';
 import 'package:unimarket/ui/shopping_cart/widgets/cart_item_view.dart';
 import 'package:unimarket/ui/shopping_cart/widgets/header_view.dart';
@@ -42,7 +40,7 @@ class ShoppingCartScreen extends StatelessWidget {
                         SizedBox(height: 16),
                         TotalSection(viewModel: viewModel),
                         SizedBox(height: 24),
-                        ShoppingCartButtonView(),
+                        ShoppingCartButtonView(viewModel: viewModel),
                       ]
                   )
               )

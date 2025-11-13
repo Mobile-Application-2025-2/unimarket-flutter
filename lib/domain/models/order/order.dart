@@ -8,8 +8,8 @@ class Order with _$Order {
   const factory Order({
     required String id,
     required String businessId,
-    required String productId,
-    required int units,
+    required List<String> products,
+    required List<int> units,
     required String userId,
     required DateTime createdAt,
   }) = _Order;

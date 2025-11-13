@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:unimarket/ui/shopping_cart/view_model/shopping_cart_vm.dart';
 
 class ShoppingCartButtonView extends StatelessWidget {
-  const ShoppingCartButtonView({super.key});
+  final ShoppingCartViewModel viewModel;
+
+  const ShoppingCartButtonView({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,7 @@ class ShoppingCartButtonView extends StatelessWidget {
           elevation: 0,
         ),
         onPressed: () {
-          print("Shopping cart screen: clic 'PEDIR' button");
+          viewModel.makeOrders();
         },
         child: Text(
           'PEDIR',
