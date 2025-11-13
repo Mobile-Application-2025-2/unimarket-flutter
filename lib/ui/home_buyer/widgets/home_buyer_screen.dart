@@ -21,11 +21,6 @@ class HomeBuyerScreen extends StatelessWidget {
         child: ListenableBuilder(
           listenable: viewModel,
           builder: (context, child) {
-            /*
-            if (viewModel.load.running) { return const Center(child: CircularProgressIndicator()); }
-            if (viewModel.load.error) { return ErrorIndicator(title: "Error cargando", label: "Intengar otra vez", onPressed: viewModel.load.execute ); }
-            */
-
             return Column(
               children: [
                 const UnimarketHeader(title: 'Explorar'),

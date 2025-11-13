@@ -10,6 +10,13 @@ class BusinessesVerticalScrollView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (viewModel.load.running) {
+      return const Padding(
+        padding: EdgeInsets.fromLTRB(16, 50, 16, 16),
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     if (viewModel.filteredBusinesses.isEmpty) {
       return const Expanded(
         child: Center(
