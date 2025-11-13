@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:unimarket/ui/shopping_cart/view_model/shopping_cart_vm.dart';
+import 'package:unimarket/utils/generic_snackbar.dart';
+import 'package:go_router/go_router.dart';
 
 class ShoppingCartButtonView extends StatelessWidget {
   final ShoppingCartViewModel viewModel;
@@ -19,8 +21,13 @@ class ShoppingCartButtonView extends StatelessWidget {
           ),
           elevation: 0,
         ),
-        onPressed: () {
-          viewModel.makeOrders();
+        onPressed: () async {
+          if (!(await viewModel.makeOrders())) {
+            genericSnackbar(context, "Tienes que agregar productos a tu carrito.", Colors.orange, Colors.white);
+            return;
+          };
+          genericSnackbar(context, "Se creo correctamente la orden.", Colors.green, Colors.white);
+          context.pop();
         },
         child: Text(
           'PEDIR',

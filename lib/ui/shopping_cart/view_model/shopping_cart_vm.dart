@@ -34,6 +34,8 @@ class ShoppingCartViewModel extends ChangeNotifier {
   }
 
   makeOrders() {
+    if(_cartItems.isEmpty) return false;
+
     Map<String, Order> orders = {};
 
     for (var item in _cartItems) {
@@ -67,6 +69,7 @@ class ShoppingCartViewModel extends ChangeNotifier {
     _cartItems.clear();
     _itemCounts.clear();
     notifyListeners();
+    return true;
   }
 
   getCounts(String id) => _itemCounts[id];

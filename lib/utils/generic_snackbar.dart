@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+bool _isSnackBarVisible = false;
+
 void genericSnackbar(BuildContext context, String message, Color bgColor, Color textColor) {
+  if (_isSnackBarVisible) return;
+
   final scaffoldMessenger = ScaffoldMessenger.of(context);
 
   scaffoldMessenger.hideCurrentSnackBar();
@@ -16,5 +20,9 @@ void genericSnackbar(BuildContext context, String message, Color bgColor, Color 
     behavior: SnackBarBehavior.floating,
   );
 
-  scaffoldMessenger.showSnackBar(snackBar);
+  _isSnackBarVisible = true;
+
+  scaffoldMessenger.showSnackBar(snackBar).closed.then((reason) {
+    _isSnackBarVisible = false;
+  });
 }

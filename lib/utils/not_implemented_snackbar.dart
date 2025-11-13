@@ -1,21 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:unimarket/utils/generic_snackbar.dart';
 
 void notImplementedFunctionalitySnackbar(BuildContext context) {
-  final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-  scaffoldMessenger.hideCurrentSnackBar();
-
-  final snackBar = SnackBar(
-    content: Text(
-      "¡Esta funcionalidad aún no está disponible!",
-      style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w500),
-      textAlign: TextAlign.center,
-    ),
-    backgroundColor: Colors.blueAccent,
-    margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-    duration: Duration(seconds: 1),
-    behavior: SnackBarBehavior.floating,
-  );
-
-  scaffoldMessenger.showSnackBar(snackBar);
+  genericSnackbar(context, "¡Esta funcionalidad aún no está disponible!", Colors.blueAccent, Colors.white);
 }
