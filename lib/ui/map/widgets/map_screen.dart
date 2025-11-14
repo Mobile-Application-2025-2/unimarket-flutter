@@ -43,9 +43,7 @@ class _MapScreenState extends State<MapScreen> {
 
       if (_mapController != null && !_isCameraMoved) {
         _mapController!.animateCamera(
-          CameraUpdate.newLatLng(
-            LatLng(newLoc.latitude!, newLoc.longitude!),
-          ),
+          CameraUpdate.newLatLng(LatLng(newLoc.latitude!, newLoc.longitude!)),
         );
         _isCameraMoved = true;
       }
@@ -58,28 +56,28 @@ class _MapScreenState extends State<MapScreen> {
       body: _currentLocation == null
           ? const Center(child: CircularProgressIndicator())
           : GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(
-            _currentLocation!.latitude!,
-            _currentLocation!.longitude!,
-          ),
-          zoom: 19,
-          tilt: 0.0,
-        ),
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-        compassEnabled: true,
-        onMapCreated: (controller) {
-          _mapController = controller;
-          _mapController!.setMapStyle('''
+              initialCameraPosition: CameraPosition(
+                target: LatLng(
+                  _currentLocation!.latitude!,
+                  _currentLocation!.longitude!,
+                ),
+                zoom: 19,
+                tilt: 0.0,
+              ),
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              compassEnabled: true,
+              onMapCreated: (controller) {
+                _mapController = controller;
+              },
+              style: '''
 [
   { "featureType": "poi", "stylers": [ {"visibility": "off"} ] },
   { "featureType": "transit", "stylers": [ {"visibility": "off"} ] },
   { "featureType": "road", "elementType": "labels", "stylers": [ {"visibility": "off"} ] }
 ]
-''');
-        },
-      ),
+''',
+            ),
       bottomNavigationBar: const UnimarketNavigationBar(),
     );
   }
