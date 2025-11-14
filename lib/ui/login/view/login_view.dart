@@ -155,6 +155,9 @@ class _LoginViewState extends State<LoginView> {
                           case LoginRoute.studentCode:
                             context.go(Routes.studentCode, extra: state.email.trim());
                             break;
+                          case LoginRoute.businessData:
+                            context.go(Routes.businessData, extra: state.email.trim());
+                            break;
                           case LoginRoute.homeBuyer:
                             context.go(Routes.homePageBuyer);
                             break;

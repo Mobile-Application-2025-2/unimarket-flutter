@@ -14,6 +14,7 @@ import 'package:unimarket/ui/sign_up/view_model/sign_up_viewmodel.dart';
 import 'package:unimarket/ui/create_account/view_model/create_account_viewmodel.dart';
 import 'package:unimarket/data/daos/create_account_dao.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
+import 'package:unimarket/data/daos/business_data_dao.dart';
 
 // Services
 import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
@@ -40,11 +41,13 @@ List<SingleChildWidget> get providers {
     // DAOs from Singleton
     Provider(create: (_) => Singleton<CreateAccountDao>().instance),
     Provider(create: (_) => Singleton<StudentCodeDao>().instance),
+    Provider(create: (_) => Singleton<BusinessDataDao>().instance),
     // Auth ViewModels use Singleton instances
     ChangeNotifierProvider(
       create: (ctx) => LoginViewModel(
         ctx.read<FirebaseAuthService>(),
         ctx.read<StudentCodeDao>(),
+        ctx.read<BusinessDataDao>(),
       ),
     ),
     ChangeNotifierProvider(

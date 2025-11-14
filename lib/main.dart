@@ -14,6 +14,7 @@ import 'package:unimarket/data/daos/create_account_dao.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
 import 'package:unimarket/data/daos/product_dao.dart';
 import 'package:unimarket/data/daos/business_dao.dart';
+import 'package:unimarket/data/daos/business_data_dao.dart';
 import 'package:unimarket/data/models/services/connectivity_service.dart';
 import 'package:unimarket/data/models/services/ttl_store.dart';
 import 'package:unimarket/data/models/services/session_repository.dart';
@@ -54,6 +55,7 @@ void main() async {
   Singleton.register<ConnectivityService>(ConnectivityService());
   Singleton.register<TtlStore>(TtlStore());
   Singleton.register<SessionRepository>(SessionRepository());
+  Singleton.register<BusinessDataDao>(BusinessDataDao());
 
   runApp(const MyApp());
 }

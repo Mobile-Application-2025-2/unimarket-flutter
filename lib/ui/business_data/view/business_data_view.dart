@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import '../view_model/student_code_viewmodel.dart';
+import '../view_model/business_data_viewmodel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unimarket/routing/routes.dart';
+import '../widgets/business_address_field.dart';
+import '../widgets/business_category_dropdown.dart';
 import 'package:unimarket/core/ui/painters/wave_background_painter.dart';
 
-class StudentCodeView extends StatelessWidget {
-  const StudentCodeView({super.key, required this.userName});
+class BusinessDataView extends StatelessWidget {
+  const BusinessDataView({super.key, this.userName});
 
-  final String userName;
+  final String? userName;
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<StudentCodeViewModel>();
-    if (viewModel.state.userName.isEmpty && userName.isNotEmpty) {
-      viewModel.setUserName(userName);
-    }
+    final viewModel = context.read<BusinessDataViewModel>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -89,7 +88,7 @@ class StudentCodeView extends StatelessWidget {
                               ),
                               const SizedBox(height: 12),
                               const Text(
-                                'Before starting, we will need your student ID or identity ID for business outside college',
+                                'Before starting, we need your business information',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -98,13 +97,14 @@ class StudentCodeView extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 16),
+                              // Business ID field with camera
                               TextField(
-                                onChanged: viewModel.setStudentCodeText,
+                                onChanged: viewModel.setBusinessId,
                                 onSubmitted: (_) =>
                                     (!s.canSubmit || s.loading)
                                         ? null
-                                        : viewModel.submitVerification(),
-                                textInputAction: TextInputAction.done,
+                                        : viewModel.submit(),
+                                textInputAction: TextInputAction.next,
                                 enabled: !s.loading,
                                 keyboardType: TextInputType.number,
                                 inputFormatters: [
@@ -112,7 +112,7 @@ class StudentCodeView extends StatelessWidget {
                                   LengthLimitingTextInputFormatter(30),
                                 ],
                                 decoration: InputDecoration(
-                                  hintText: 'ID',
+                                  hintText: 'Business ID',
                                   filled: true,
                                   fillColor: Colors.white,
                                   border: OutlineInputBorder(
@@ -178,6 +178,28 @@ class StudentCodeView extends StatelessWidget {
                             ),
                           ),
 
+                        const SizedBox(height: 16),
+
+                        // Address field
+                        BusinessAddressField(
+                          value: s.address,
+                          onChanged: viewModel.setAddress,
+                          enabled: !s.loading,
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // Category dropdown
+                        BusinessCategoryDropdown(
+                          value: s.category.isEmpty ? null : s.category,
+                          onChanged: (value) {
+                            if (value != null) {
+                              viewModel.setCategory(value);
+                            }
+                          },
+                          enabled: !s.loading,
+                        ),
+
                         // Error message (if exists)
                         if (s.error != null) ...[
                           const SizedBox(height: 12),
@@ -219,9 +241,9 @@ class StudentCodeView extends StatelessWidget {
                       ? null
                       : () async {
                           FocusScope.of(context).unfocus();
-                          await viewModel.submitVerification();
+                          await viewModel.submit();
                           if (!context.mounted) return;
-                          if (viewModel.state.isVerified) {
+                          if (viewModel.state.submitted) {
                             context.go(Routes.homeBuyer);
                           }
                         },
@@ -270,12 +292,11 @@ class _StaticHeroSection extends StatelessWidget {
       child: AspectRatio(
         aspectRatio: 1,
         child: Image.asset(
-          'assets/images/student-code-icon.png',
+          'assets/images/student-code-icon.png', // Reuse same icon or create business one
           fit: BoxFit.contain,
         ),
       ),
     );
   }
 }
-
 
