@@ -13,7 +13,7 @@ class CategoriesHorizontalScrollView extends StatelessWidget {
       height: 40,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: viewModel.uniqueBusinessCategories.length,
         itemBuilder: (context, index) {
           if (viewModel.load.running) {
@@ -73,7 +73,7 @@ class ShimmerTagWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 12.0),
+      padding: const EdgeInsets.only(right: 12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: Shimmer(

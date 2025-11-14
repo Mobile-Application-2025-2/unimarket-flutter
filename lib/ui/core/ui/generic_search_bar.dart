@@ -11,7 +11,7 @@ class GenericSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Container(
         height: 48,
         decoration: BoxDecoration(

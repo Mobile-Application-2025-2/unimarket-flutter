@@ -15,14 +15,14 @@ import 'package:unimarket/ui/home_buyer/view_model/home_buyer_vm.dart';
         height: 40,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           itemCount: viewModel.uniqueCategories.length,
           itemBuilder: (context, index) {
             final categoryType = viewModel.uniqueCategories[index];
             final isSelected = categoryType == viewModel.selectedCategory;
 
             return Padding(
-              padding: const EdgeInsets.only(right: 12.0),
+              padding: const EdgeInsets.only(right: 12),
               child: GestureDetector(
                 onTap: () => viewModel.setSelectedCategory(categoryType),
                 child: Container(
