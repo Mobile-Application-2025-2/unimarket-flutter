@@ -6,11 +6,12 @@
     <application
         android:label="unimarket"
         android:name="${applicationName}"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher">
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDwOCltXnqxeOB-7V15kWdSFp5zw4n-k1c" />
+            android:value="AIzaSyC3HSkLOqRT3ZQ3c1bO181vLG7CPgST2mA" />
 
         <activity
             android:name=".MainActivity"

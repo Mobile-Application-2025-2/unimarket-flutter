@@ -56,11 +56,13 @@ class UnimarketNavigationBar extends StatelessWidget {
           ),
 
           IconButton(
-            onPressed: () {},
+            onPressed: () => context.go(Routes.map),
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Colors.amber,
+                color: Routes.profileBuyer == currentRoute
+                    ? Colors.white.withOpacity(0.2)
+                    : Colors.amber,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(Icons.map_outlined, color: Colors.white, size: 24),
