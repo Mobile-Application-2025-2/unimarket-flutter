@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:unimarket/utils/singleton.dart';
-import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
+import 'package:unimarket/data/services/firebase_auth_service_adapter.dart';
 
 class ProfileBussinesViewModel extends ChangeNotifier {
   final FirebaseAuthService _authService = Singleton<FirebaseAuthService>().instance;

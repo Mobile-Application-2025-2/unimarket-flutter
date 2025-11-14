@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:unimarket/routing/routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:unimarket/utils/not_implemented_snackbar.dart';
 
 class UnimarketHeader extends StatelessWidget {
@@ -27,7 +29,6 @@ class UnimarketHeader extends StatelessWidget {
 
           const Spacer(),
 
-          // Icons
           Row(
             children: [
               IconButton(
@@ -39,7 +40,7 @@ class UnimarketHeader extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () => notImplementedFunctionalitySnackbar(context),
+                onPressed: () => context.push(Routes.shoppingCart),
                 icon: const Icon(
                   Icons.local_shipping,
                   color: Colors.black,
