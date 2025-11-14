@@ -1,42 +1,93 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
-import 'package:location/location.dart';
+import 'package:unimarket/data/daos/business_dao.dart';
 import 'package:unimarket/data/daos/geo_location_dao.dart';
 import 'package:unimarket/data/models/geo_location_collection.dart';
 
 class GeoRepository {
-  final _location = Location();
   final _geoLocationDao = GeoLocationDao();
+  final _businessDao = BusinessDao();
 
-  Stream<List<GeoLocationCollection>> getNearbyBusinesses(
-      double lat, double lng, double radiusKm) {
-
-    final center = GeoFirePoint(lat, longitude: lng);
-
-    return GeoflutterfirePlus.queryList(
-      collectionRef: _collectionRef,
-      center: center,
-      radiusInKm: radiusKm,
-      field: _geoField,
-      // Usamos el snapshotStream en lugar del get() para obtener un Stream en tiempo real
-      queryMode: QueryMode.snapshotStream,
-    );
+  Future<Map<String, int>> updateAllGeohashesIfEmpty() async {
+    final result = await _geoLocationDao.updateAllGeohashesIfEmpty();
+    return result;
   }
 
-  // Función 2: Combina Ubicación + GeoQuery (el Stream dinámico)
-  // Devuelve un Stream<List<DocumentSnapshot>> que se actualiza al mover el usuario.
-  Stream<List<GeoLocationCollection>> watchNearbyBusinesses() async* {
+  Stream<List<DocumentSnapshot<Map<String, dynamic>>>> getNearbyBusinesses(
+    double lat,
+    double lng,
+    double radiusKm,
+  ) {
+    final collectionRef = _geoLocationDao.collectionRef;
 
-    // El manejo de permisos debe ir antes de llamar a watchNearbyBusinesses
+    return GeoCollectionReference(collectionRef)
+        .subscribeWithin(
+          center: GeoFirePoint(GeoPoint(lat, lng)),
+          radiusInKm: radiusKm,
+          field: 'position',
+          geopointFrom: (data) {
+            if (data == null) {
+              throw Exception('Data is null');
+            }
+            final dataMap = data as Map<String, dynamic>;
+            final position = dataMap['position'] as Map<String, dynamic>?;
+            if (position == null) {
+              throw Exception('Position field is null');
+            }
+            final geoPoint = position['geopoint'];
+            if (geoPoint == null || geoPoint is! GeoPoint) {
+              throw Exception('GeoPoint is null or invalid');
+            }
+            return geoPoint;
+          },
+          strictMode: true,
+        )
+        .map((snapshots) {
+          return snapshots
+              .cast<DocumentSnapshot<Map<String, dynamic>>>()
+              .toList();
+        });
+  }
 
-    // 2. Usar asyncExpand para encadenar la ubicación y la query de Firestore
-    yield* _location.onLocationChanged.asyncExpand((pos) {
-      if (pos.latitude != null && pos.longitude != null) {
-        // Ejecuta getNearbyBusinesses con la nueva posición y lo inyecta en el Stream.
-        return getNearbyBusinesses(pos.latitude!, pos.longitude!, 2); // 2 km
+  List<GeoLocationCollection> _convertSnapshotsToModels(
+    List<DocumentSnapshot<Map<String, dynamic>>> snapshots,
+  ) {
+    final results = <GeoLocationCollection>[];
+    for (final doc in snapshots) {
+      try {
+        final data = doc.data();
+        if (data != null) {
+          final position = data['position'] as Map<String, dynamic>?;
+          if (position != null) {
+            final currentGeohash = position['geohash'] as String?;
+            if (currentGeohash == null ||
+                currentGeohash.isEmpty ||
+                currentGeohash.trim().isEmpty) {
+              _geoLocationDao
+                  .updateGeohashIfEmpty(doc.id)
+                  .catchError((e) => false);
+            }
+          }
+        }
+
+        final geoLocation = GeoLocationCollection.fromFirestore(doc);
+        results.add(geoLocation);
+      } catch (e) {
+        print(e);
       }
-      // Si la posición no es válida, no emite nada o emite una lista vacía
-      return Stream.value([]);
-    });
+    }
+    return results;
+  }
+
+  Stream<List<GeoLocationCollection>> getNearbyBusinessesAsModels(
+    double lat,
+    double lng,
+    double radiusKm,
+  ) {
+    return getNearbyBusinesses(
+      lat,
+      lng,
+      radiusKm,
+    ).map(_convertSnapshotsToModels);
   }
 }

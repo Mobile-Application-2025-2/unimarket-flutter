@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
 class Position {
   String geoHash;
@@ -20,9 +21,19 @@ class Position {
 
   factory Position.fromMap(Map<String, dynamic> map) {
     final GeoPoint geoPoint = map['geopoint'] as GeoPoint;
+    
+    String? geohashFromMap = map['geohash'] as String?;
+    String geoHash;
+    
+    if (geohashFromMap == null || geohashFromMap.isEmpty) {
+      final geoFirePoint = GeoFirePoint(geoPoint);
+      geoHash = geoFirePoint.geohash;
+    } else {
+      geoHash = geohashFromMap;
+    }
 
     return Position(
-      geoHash: map['geohash'] as String,
+      geoHash: geoHash,
       latitude: geoPoint.latitude,
       longitude: geoPoint.longitude,
     );
@@ -43,11 +54,7 @@ class GeoLocationCollection {
   }
 
   factory GeoLocationCollection.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>?;
-
-    if (data == null) {
-      throw Exception("Documento nulo o vacío");
-    }
+    final data = doc.data() as Map<String, dynamic>;
 
     final positionMap = data['position'] as Map<String, dynamic>;
 

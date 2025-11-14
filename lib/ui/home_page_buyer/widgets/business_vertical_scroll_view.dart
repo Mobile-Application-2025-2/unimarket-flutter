@@ -30,7 +30,7 @@ class BusinessesVerticalScrollView extends StatelessWidget {
 
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 1,
