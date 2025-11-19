@@ -56,7 +56,7 @@ dependencies:
   google_maps_flutter: ^2.7.0
   permission_handler: ^12.0.1
   location: ^5.0.0
-  geoflutterfire_plus: 0.0.33
+  geoflutterfire_plus: ^0.0.33
 
 dev_dependencies:
   flutter_test:
