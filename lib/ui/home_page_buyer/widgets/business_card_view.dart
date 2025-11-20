@@ -15,7 +15,7 @@ class BusinessCardView extends StatelessWidget {
         border: Border.all(color: const Color(0xFFE0C36B), width: 1.6),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withOpacity(0.05),
             blurRadius: 5,
             offset: const Offset(0, 3),
           ),
