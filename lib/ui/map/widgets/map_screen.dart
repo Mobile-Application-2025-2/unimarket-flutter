@@ -3,6 +3,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:unimarket/ui/core/ui/navigation_bar.dart';
 import 'package:unimarket/ui/map/view_model/map_vm.dart';
 
+
+/// Displays a map with nearby businesses and the user's current location.
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
 

@@ -60,7 +60,7 @@ class UnimarketNavigationBar extends StatelessWidget {
             icon: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: Routes.profileBuyer == currentRoute
+                color: Routes.map == currentRoute
                     ? Colors.white.withOpacity(0.2)
                     : Colors.amber,
                 borderRadius: BorderRadius.circular(12),

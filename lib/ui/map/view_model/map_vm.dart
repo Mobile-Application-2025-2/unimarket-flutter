@@ -11,6 +11,8 @@ import 'package:unimarket/data/models/geo_location_collection.dart';
 import 'package:unimarket/data/repositories/geo/geo_repository.dart';
 import 'package:unimarket/utils/result.dart';
 
+
+/// ViewModel for managing map state, user location, and nearby businesses.
 class MapViewModel extends ChangeNotifier {
   MapViewModel() {
     _initializeGeohashes();
@@ -26,7 +28,9 @@ class MapViewModel extends ChangeNotifier {
   Future<void> _initializeGeohashes() async {
     try {
       await _repository.updateAllGeohashesIfEmpty();
-    } catch (e) {}
+    } catch (e) {
+      debugPrint('Failed to initialize geohashes: $e');
+    }
   }
   
   List<GeoLocationCollection> _nearbyBusinesses = [];

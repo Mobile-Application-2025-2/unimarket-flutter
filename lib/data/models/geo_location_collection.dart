@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 
+
+/// Represents a geographic position with latitude, longitude, and geohash.
 class Position {
   String geoHash;
   double latitude;
@@ -40,6 +42,8 @@ class Position {
   }
 }
 
+
+/// Represents a business location with geographic positioning data.
 class GeoLocationCollection {
   String businessId;
   Position position;

@@ -2,6 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
 import 'package:unimarket/data/models/geo_location_collection.dart';
 
+
+/// Data Access Object for managing business location data in Firestore.
+///
+/// Provides methods to retrieve business locations and update geohash fields
+/// for location-based queries.
 class GeoLocationDao {
   final CollectionReference _collection =
       FirebaseFirestore.instance.collection('businesses_locations');

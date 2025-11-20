@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:geoflutterfire_plus/geoflutterfire_plus.dart';
-import 'package:unimarket/data/daos/business_dao.dart';
 import 'package:unimarket/data/daos/geo_location_dao.dart';
 import 'package:unimarket/data/models/geo_location_collection.dart';
 
+
+/// Repository for managing geographic location data and geohash operations.
 class GeoRepository {
   final _geoLocationDao = GeoLocationDao();
-  final _businessDao = BusinessDao();
+  // final _businessDao = BusinessDao();
 
   Future<Map<String, int>> updateAllGeohashesIfEmpty() async {
     final result = await _geoLocationDao.updateAllGeohashesIfEmpty();
@@ -73,7 +75,7 @@ class GeoRepository {
         final geoLocation = GeoLocationCollection.fromFirestore(doc);
         results.add(geoLocation);
       } catch (e) {
-        print(e);
+        debugPrint("$e");
       }
     }
     return results;
