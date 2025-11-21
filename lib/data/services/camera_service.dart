@@ -1,6 +1,7 @@
 import 'dart:io';
-
 import 'package:image_picker/image_picker.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+
 
 class CameraService {
   final ImagePicker _picker = ImagePicker();
@@ -13,6 +14,15 @@ class CameraService {
     if (image == null) return null;
     return File(image.path);
   }
+
+  Future<String> extractTextFromImage(File imageFile) async {
+    final inputImage = InputImage.fromFile(imageFile);
+    final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
+
+    final RecognizedText recognizedText = await textRecognizer.processImage(inputImage);
+
+    textRecognizer.close();
+
+    return recognizedText.text;
+  }
 }
-
-
