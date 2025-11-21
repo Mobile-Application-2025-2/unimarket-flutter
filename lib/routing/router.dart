@@ -21,7 +21,7 @@ import 'package:unimarket/data/services/camera_service.dart';
 import 'package:unimarket/ui/home_buyer/widgets/home_buyer_screen.dart';
 
 GoRouter router() => GoRouter(
-  initialLocation: Routes.studentCode,
+  initialLocation: Routes.signUp,
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
