@@ -5,6 +5,7 @@ import '../../../data/services/firebase_auth_service_adapter.dart';
 import '../widgets/login_state.dart';
 import 'package:unimarket/utils/result.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
+import 'package:unimarket/data/daos/business_data_dao.dart';
 
 enum LoginError {
   emailNotVerified,
@@ -14,14 +15,16 @@ enum LoginError {
 
 enum LoginRoute {
   studentCode,
+  businessData,
   homeBuyer,
 }
 
 class LoginViewModel extends ChangeNotifier {
   final FirebaseAuthService _auth;
   final StudentCodeDao _studentCodeDao;
+  final BusinessDataDao _businessDataDao;
 
-  LoginViewModel(this._auth, this._studentCodeDao);
+  LoginViewModel(this._auth, this._studentCodeDao, this._businessDataDao);
 
   LoginState _state = const LoginState();
 
@@ -127,10 +130,19 @@ class LoginViewModel extends ChangeNotifier {
       final data = snap.data() ?? {};
       final accountType = (data['accountType']?.toString()) ?? 'buyer';
 
-      // If deliver, always go to home
-      if (accountType == 'deliver') {
+
+      // For business users → check if they already submitted business data
+      if (accountType == 'business') {
+        final hasBusinessData = await _businessDataDao.hasSubmission(user.uid);
         _set(_state.copyWith(loading: false));
-        return Result.ok(LoginRoute.homeBuyer);
+        
+        if (hasBusinessData) {
+          // Already submitted → go to home
+          return Result.ok(LoginRoute.homeBuyer);
+        } else {
+          // Not submitted yet → go to business data screen
+          return Result.ok(LoginRoute.businessData);
+        }
       }
 
       // For buyers → check if they already submitted student code

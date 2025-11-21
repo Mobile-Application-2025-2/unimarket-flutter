@@ -93,7 +93,7 @@ class StudentCodeView extends StatelessWidget {
                           ),
                           const SizedBox(height: 16),
                           TextField(
-                            controller: viewModel.studentCodeController,
+                            onChanged: viewModel.setStudentCodeText,
                             onSubmitted: (_) =>
                                 (!s.canSubmit || s.loading)
                                     ? null
@@ -239,7 +239,7 @@ class StudentCodeView extends StatelessWidget {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Poppins',
-                            letterSpacing: 1,
+                            letterSpacing: 1.0,
                           ),
                         ),
                 ),

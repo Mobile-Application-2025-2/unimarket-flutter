@@ -7,8 +7,9 @@ import 'package:unimarket/ui/home_page_buyer/widgets/home_page_buyer_screen.dart
 import 'package:unimarket/ui/map/widgets/map_screen.dart';
 import 'package:unimarket/ui/profile_buyer/view/profile_buyer_view.dart';
 import 'package:unimarket/ui/profile_buyer/view_model/profile_buyer_viewmodel.dart';
+import 'package:unimarket/ui/profile_business/view/profile_business_view.dart';
+import 'package:unimarket/ui/profile_business/view_model/profile_business_viewmodel.dart';
 import 'package:unimarket/ui/shopping_cart/widgets/shopping_cart_screen.dart';
-
 import 'routes.dart';
 import 'package:unimarket/ui/login/view/login_view.dart';
 import 'package:unimarket/ui/sign_up/view/sign_up_view.dart';
@@ -18,11 +19,9 @@ import 'package:unimarket/ui/student_code/view_model/student_code_viewmodel.dart
 import 'package:unimarket/data/daos/student_code_dao.dart';
 import 'package:unimarket/data/services/camera_service.dart';
 import 'package:unimarket/ui/home_buyer/widgets/home_buyer_screen.dart';
-import 'package:unimarket/ui/profile_bussines/view/profile_bussines_view.dart';
-import 'package:unimarket/ui/profile_bussines/view_model/profile_bussines_viewmodel.dart';
 
 GoRouter router() => GoRouter(
-  initialLocation: Routes.signUp,
+  initialLocation: Routes.studentCode,
   debugLogDiagnostics: true,
   routes: [
     GoRoute(
@@ -75,11 +74,11 @@ GoRouter router() => GoRouter(
       },
     ),
     GoRoute(
-      path: Routes.profileBussines,
+      path: Routes.profileBusiness,
       builder: (context, state) {
         return ChangeNotifierProvider(
-          create: (_) => ProfileBussinesViewModel(),
-          child: const ProfileBussinesView(),
+          create: (_) => ProfileBusinessViewModel(),
+          child: const ProfileBusinessView(),
         );
       },
     ),

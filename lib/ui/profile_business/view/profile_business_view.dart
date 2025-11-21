@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:unimarket/routing/routes.dart';
 import 'package:unimarket/utils/not_implemented_snackbar.dart';
-import '../view_model/profile_bussines_viewmodel.dart';
+import '../view_model/profile_business_viewmodel.dart';
 import '../../core/ui/unimarket_header.dart';
 import '../../core/ui/navigation_bar.dart';
 import '../../core/ui/profile_widgets/profile_avatar.dart';
@@ -11,12 +11,12 @@ import '../../core/ui/profile_widgets/profile_section_card.dart';
 import '../../core/ui/profile_widgets/profile_row_tile.dart';
 import '../../core/ui/profile_widgets/profile_section_title_row.dart';
 
-class ProfileBussinesView extends StatelessWidget {
-  const ProfileBussinesView({super.key});
+class ProfileBusinessView extends StatelessWidget {
+  const ProfileBusinessView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.read<ProfileBussinesViewModel>();
+    final viewModel = context.read<ProfileBusinessViewModel>();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -52,7 +52,7 @@ class ProfileBussinesView extends StatelessWidget {
                       children: [
                         ProfileRowTile(
                           icon: Icons.badge_outlined,
-                          label: 'Bussiness Info',
+                          label: 'Businesss Info',
                           onTap: () => notImplementedFunctionalitySnackbar(context),
                         ),
                         const Divider(height: 1),
