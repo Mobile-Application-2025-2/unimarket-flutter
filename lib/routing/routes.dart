@@ -11,4 +11,5 @@ abstract final class Routes {
   static const profileBuyer = '/profile_buyer';
   static const profileBussines = '/profile_bussines';
   static const shoppingCart = '/shopping_cart';
+  static const map = '/map';
 }

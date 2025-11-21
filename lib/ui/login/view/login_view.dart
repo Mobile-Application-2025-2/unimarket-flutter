@@ -45,11 +45,11 @@ class _LoginViewState extends State<LoginView> {
             final state = viewModel.state;
 
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 20.0, bottom: 40.0),
+                    padding: const EdgeInsets.only(top: 20, bottom: 40),
                     child: Column(
                       children: [
                         const Align(
@@ -206,7 +206,7 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(height: 40),
 
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 32.0),
+                    padding: const EdgeInsets.only(bottom: 32),
                     child: GestureDetector(
                       onTap: state.loading
                           ? null

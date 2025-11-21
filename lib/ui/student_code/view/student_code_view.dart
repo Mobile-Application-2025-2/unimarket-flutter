@@ -239,7 +239,7 @@ class StudentCodeView extends StatelessWidget {
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             fontFamily: 'Poppins',
-                            letterSpacing: 1.0,
+                            letterSpacing: 1,
                           ),
                         ),
                 ),
