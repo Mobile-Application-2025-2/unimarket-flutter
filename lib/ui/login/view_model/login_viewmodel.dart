@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../data/models/services/firebase_auth_service_adapter.dart';
+import '../../../data/services/firebase_auth_service_adapter.dart';
 import '../widgets/login_state.dart';
 import 'package:unimarket/utils/result.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';

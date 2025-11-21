@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../widgets/business_data_state.dart';
 import 'package:unimarket/data/daos/business_data_dao.dart';
 import 'package:unimarket/utils/result.dart';
-import 'package:unimarket/data/models/services/camera_service.dart';
+import 'package:unimarket/data/services/camera_service.dart';
 
 class BusinessDataViewModel extends ChangeNotifier {
   final CameraService _camera;

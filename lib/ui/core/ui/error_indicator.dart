@@ -24,7 +24,7 @@ class ErrorIndicator extends StatelessWidget {
       children: [
         IntrinsicWidth(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Center(
               child: Row(
                 children: [
