@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:unimarket/utils/singleton.dart';
 import 'package:unimarket/data/services/firebase_auth_service_adapter.dart';
+import 'package:unimarket/data/services/cache_service.dart';
 
 class ProfileBusinessViewModel extends ChangeNotifier {
   final FirebaseAuthService _authService = Singleton<FirebaseAuthService>().instance;
+  final CacheService _cache = Singleton<CacheService>().instance;
 
   String displayName = '';
   String email = '';
@@ -26,10 +28,11 @@ class ProfileBusinessViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Signs out the user from FirebaseAuth
+  /// Signs out the user from FirebaseAuth and clears cache
   Future<void> logout() async {
     try {
       await _authService.signOut();
+      await _cache.clearSession();
       displayName = 'User Name Business';
       email = '';
       notifyListeners();

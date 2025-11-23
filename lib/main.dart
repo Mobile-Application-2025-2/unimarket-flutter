@@ -18,6 +18,7 @@ import 'package:unimarket/data/daos/business_data_dao.dart';
 import 'package:unimarket/data/services/connectivity_service.dart';
 import 'package:unimarket/data/services/ttl_store.dart';
 import 'package:unimarket/data/services/session_repository.dart';
+import 'package:unimarket/data/services/cache_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +57,10 @@ void main() async {
   Singleton.register<TtlStore>(TtlStore());
   Singleton.register<SessionRepository>(SessionRepository());
   Singleton.register<BusinessDataDao>(BusinessDataDao());
+  
+  final prefsService = CacheService();
+  await prefsService.init();
+  Singleton.register<CacheService>(prefsService);
 
   runApp(const MyApp());
 }

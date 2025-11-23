@@ -4,6 +4,7 @@ class LoginState {
   final String password;
   final bool showPassword;
   final String? error;
+  final bool rememberMe;
 
   const LoginState({
     this.loading = false,
@@ -11,6 +12,7 @@ class LoginState {
     this.password = '',
     this.showPassword = false,
     this.error,
+    this.rememberMe = false,
   });
 
   LoginState copyWith({
@@ -19,6 +21,7 @@ class LoginState {
     String? password,
     bool? showPassword,
     String? error,
+    bool? rememberMe,
   }) {
     return LoginState(
       loading: loading ?? this.loading,
@@ -26,6 +29,7 @@ class LoginState {
       password: password ?? this.password,
       showPassword: showPassword ?? this.showPassword,
       error: error,
+      rememberMe: rememberMe ?? this.rememberMe,
     );
   }
 

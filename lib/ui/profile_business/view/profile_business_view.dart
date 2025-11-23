@@ -124,7 +124,7 @@ class ProfileBusinessView extends StatelessWidget {
                           onTap: () async {
                             await viewModel.logout();
                             if (!context.mounted) return;
-                            context.go(Routes.login);
+                            context.go(Routes.signUp);
                           },
                         ),
                       ],

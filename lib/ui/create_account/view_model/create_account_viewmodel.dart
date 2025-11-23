@@ -2,13 +2,25 @@ import 'package:flutter/foundation.dart';
 import 'package:unimarket/data/daos/create_account_dao.dart';
 import '../widgets/create_account_state.dart';
 import 'package:unimarket/utils/result.dart';
+import 'package:unimarket/utils/singleton.dart';
+import 'package:unimarket/data/services/cache_service.dart';
 
 class CreateAccountViewModel extends ChangeNotifier {
   final CreateAccountDao _dao;
+  final CacheService _cache = Singleton<CacheService>().instance;
 
-  CreateAccountViewModel({required CreateAccountDao dao}) : _dao = dao;
+  CreateAccountViewModel({required CreateAccountDao dao}) : _dao = dao {
+    _loadCachedAccountType();
+  }
 
   CreateAccountState _state = const CreateAccountState();
+  
+  void _loadCachedAccountType() {
+    final cachedType = _cache.lastChosenAccountType;
+    if (cachedType != null && cachedType.isNotEmpty) {
+      _set(_state.copyWith(accountType: cachedType));
+    }
+  }
 
   CreateAccountState get state => _state;
 
@@ -54,6 +66,7 @@ class CreateAccountViewModel extends ChangeNotifier {
       accountType: value,
       errorMessage: null,
     ));
+    _cache.setLastChosenAccountType(value);
   }
 
   void setAcceptedPrivacy(bool value) {

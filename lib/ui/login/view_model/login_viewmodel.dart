@@ -6,6 +6,8 @@ import '../widgets/login_state.dart';
 import 'package:unimarket/utils/result.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
 import 'package:unimarket/data/daos/business_data_dao.dart';
+import 'package:unimarket/utils/singleton.dart';
+import 'package:unimarket/data/services/cache_service.dart';
 
 enum LoginError {
   emailNotVerified,
@@ -23,10 +25,20 @@ class LoginViewModel extends ChangeNotifier {
   final FirebaseAuthService _auth;
   final StudentCodeDao _studentCodeDao;
   final BusinessDataDao _businessDataDao;
+  final CacheService _cache = Singleton<CacheService>().instance;
 
-  LoginViewModel(this._auth, this._studentCodeDao, this._businessDataDao);
+  LoginViewModel(this._auth, this._studentCodeDao, this._businessDataDao) {
+    _loadCachedEmail();
+  }
 
   LoginState _state = const LoginState();
+  
+  void _loadCachedEmail() {
+    final cachedEmail = _cache.lastLoginEmail;
+    if (cachedEmail != null && cachedEmail.isNotEmpty) {
+      _set(_state.copyWith(email: cachedEmail));
+    }
+  }
 
   LoginState get state => _state;
 
@@ -45,6 +57,10 @@ class LoginViewModel extends ChangeNotifier {
 
   void togglePasswordVisibility() {
     _set(_state.copyWith(showPassword: !_state.showPassword));
+  }
+
+  void setRememberMe(bool value) {
+    _set(_state.copyWith(rememberMe: value));
   }
 
   void clearError() {
@@ -85,7 +101,6 @@ class LoginViewModel extends ChangeNotifier {
           loading: false,
           error: 'Please verify your email before logging in. Check your inbox.',
         ));
-        // Sign out the user since email is not verified
         await _auth.signOut();
         return false;
       }
@@ -111,7 +126,6 @@ class LoginViewModel extends ChangeNotifier {
         email: email.trim(),
         password: password,
       );
-      // Reload to ensure fresh verification state
       await FirebaseAuth.instance.currentUser?.reload();
       final user = FirebaseAuth.instance.currentUser;
       if (user == null) {
@@ -119,33 +133,40 @@ class LoginViewModel extends ChangeNotifier {
         return Result.error(Exception('auth/unknown'));
       }
       if (!user.emailVerified) {
-        // Block unverified users
         await FirebaseAuth.instance.signOut();
         _set(_state.copyWith(loading: false, error: 'Please verify your email before logging in.'));
         return Result.error(Exception('auth/email-not-verified'));
       }
 
-      // Email verified → fetch account type
       final snap = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
       final data = snap.data() ?? {};
       final accountType = (data['accountType']?.toString()) ?? 'buyer';
 
+      // Save session to cache if rememberMe is enabled
+      if (_state.rememberMe) {
+        await _cache.saveSession(
+          uid: user.uid,
+          email: user.email ?? email.trim(),
+          accountType: accountType,
+          displayName: user.displayName,
+          rememberMe: true,
+        );
+      }
+      
+      // Always cache last login email for UI convenience
+      await _cache.setLastLoginEmail(user.email ?? email.trim());
 
-      // For business users → check if they already submitted business data
       if (accountType == 'business') {
         final hasBusinessData = await _businessDataDao.hasSubmission(user.uid);
         _set(_state.copyWith(loading: false));
         
         if (hasBusinessData) {
-          // Already submitted → go to home
           return Result.ok(LoginRoute.homeBuyer);
         } else {
-          // Not submitted yet → go to business data screen
           return Result.ok(LoginRoute.businessData);
         }
       }
 
-      // For buyers → check if they already submitted student code
       final submissionResult = await _studentCodeDao.hasSubmission(user.uid);
 
       _set(_state.copyWith(loading: false));

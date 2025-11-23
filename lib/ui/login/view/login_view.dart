@@ -140,7 +140,32 @@ class _LoginViewState extends State<LoginView> {
                     enabled: !state.loading,
                   ),
 
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 16),
+
+                  // Remember me checkbox
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: state.rememberMe,
+                        onChanged: state.loading
+                            ? null
+                            : (value) {
+                                viewModel.setRememberMe(value ?? false);
+                              },
+                        activeColor: const Color(0xFFFFC436),
+                      ),
+                      const Text(
+                        'Remember me',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black87,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 16),
 
                   // Login button
                   LoginButton(
