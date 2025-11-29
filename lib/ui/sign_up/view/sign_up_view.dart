@@ -21,7 +21,7 @@ class SignUpView extends StatelessWidget {
             final state = viewModel.state;
 
             return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
                   const SizedBox(height: 60),

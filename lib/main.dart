@@ -7,16 +7,17 @@ import 'firebase_options.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:unimarket/routing/router.dart';
 import 'package:unimarket/config/dependencies.dart';
-import 'package:unimarket/core/utils/singleton.dart';
-import 'package:unimarket/data/models/services/firebase_auth_service_adapter.dart';
-import 'package:unimarket/data/models/services/camera_service.dart';
+import 'package:unimarket/utils/singleton.dart';
+import 'package:unimarket/data/services/firebase_auth_service_adapter.dart';
+import 'package:unimarket/data/services/camera_service.dart';
 import 'package:unimarket/data/daos/create_account_dao.dart';
 import 'package:unimarket/data/daos/student_code_dao.dart';
 import 'package:unimarket/data/daos/product_dao.dart';
 import 'package:unimarket/data/daos/business_dao.dart';
-import 'package:unimarket/data/models/services/connectivity_service.dart';
-import 'package:unimarket/data/models/services/ttl_store.dart';
-import 'package:unimarket/data/models/services/session_repository.dart';
+import 'package:unimarket/data/daos/business_data_dao.dart';
+import 'package:unimarket/data/services/connectivity_service.dart';
+import 'package:unimarket/data/services/ttl_store.dart';
+import 'package:unimarket/data/services/session_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,6 +55,7 @@ void main() async {
   Singleton.register<ConnectivityService>(ConnectivityService());
   Singleton.register<TtlStore>(TtlStore());
   Singleton.register<SessionRepository>(SessionRepository());
+  Singleton.register<BusinessDataDao>(BusinessDataDao());
 
   runApp(const MyApp());
 }

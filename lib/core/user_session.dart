@@ -1,3 +1,5 @@
+// TODO: move this UserSession class to the correct folder in our architecture
+
 class UserSession {
   // Singleton implementation
   static final UserSession _instance = UserSession._internal();

@@ -31,11 +31,11 @@ class CreateAccountView extends StatelessWidget {
             final state = viewModel.state;
 
             return SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 20.0, bottom: 40.0),
+                    padding: const EdgeInsets.only(top: 20, bottom: 40),
                     child: Column(
                       children: const [
                         Align(alignment: Alignment.centerLeft, child: CustomBackButton()),
@@ -132,7 +132,7 @@ class CreateAccountView extends StatelessWidget {
 
                   // Create account button
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 32.0),
+                    padding: const EdgeInsets.only(bottom: 32),
                     child: PrimaryButton(
                       text: state.loading ? 'CREATING...' : 'CREATE ACCOUNT',
                       onPressed: state.loading || !state.isValid

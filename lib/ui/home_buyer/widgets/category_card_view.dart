@@ -58,7 +58,7 @@ class ProductCardView extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
