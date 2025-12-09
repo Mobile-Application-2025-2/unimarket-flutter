@@ -42,7 +42,6 @@ class BusinessCardView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Título
                 Text(
                   business.name,
                   style: TextStyle(
@@ -61,11 +60,9 @@ class BusinessCardView extends StatelessWidget {
 
                 const SizedBox(height: 8),
 
-                // Fila inferior con rating, precio y tiempo
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // ⭐ Rating
                     Row(
                       children: [
                         Icon(Icons.star, color: Color(0xFFFFC107), size: 18),
@@ -79,32 +76,12 @@ class BusinessCardView extends StatelessWidget {
                         ),
                         SizedBox(width: 2),
                         Text(
-                          '(124)',
+                          '(27)',
                           style: TextStyle(fontSize: 12, color: Colors.black54),
                         ),
                       ],
                     ),
 
-                    // 💰 Precio
-                    Row(
-                      children: const [
-                        Icon(
-                          Icons.attach_money,
-                          color: Color(0xFFE0C36B),
-                          size: 18,
-                        ),
-                        SizedBox(width: 2),
-                        Text(
-                          '1.300',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    // ⏱️ Tiempo
                     Row(
                       children: const [
                         Icon(

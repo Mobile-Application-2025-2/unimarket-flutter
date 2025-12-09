@@ -31,7 +31,7 @@ class BusinessCollection {
           piso: data['address']['piso'] ?? '',
           salon: data['address']['salon'] ?? '',
       ),
-      categories: mappedCategories ?? [],
+      categories: mappedCategories,
       logo: data['logo'] ?? "",
       name: data['name'] ?? "",
       products: List<String>.from(data['products'] ?? []),

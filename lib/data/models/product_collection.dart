@@ -30,10 +30,10 @@ class ProductCollection {
       description: data['description'] ?? '',
       image: data['image'] ?? '',
       name: data['name'] ?? '',
-      price: double.tryParse(data['price'].toString()) ?? 0.0,
+      price: double.tryParse(data['price'].toString()) ?? 0,
       rating: (data['rating'] is int)
           ? (data['rating'] as int).toDouble()
-          : (data['rating'] ?? 0.0),
+          : (data['rating'] ?? 0),
     );
   }
 
